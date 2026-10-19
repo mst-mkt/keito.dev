@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "lib": ["esnext"],
+    "module": "preserve",
+    "types": ["vite-plus/client"],
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noUncheckedSideEffectImports": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true,
+    "paths": {
+      "gleam:prelude": ["./build/dev/javascript/prelude.d.mts"],
+      "gleam:*": [
+        "./build/dev/javascript/keito_dev/*.d.mts",
+        "./build/dev/javascript/gleam_stdlib/*.d.mts"
+      ]
+    }
+  },
+  "include": ["entry", "src", "vite.config.ts", "cloudflare.config.ts", ".cloudflare/types"]
+}

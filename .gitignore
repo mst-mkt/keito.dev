@@ -1,1 +1,8 @@
 .direnv/
+
+node_modules/
+build/
+dist/
+.cloudflare/
+
+.dev.vars
