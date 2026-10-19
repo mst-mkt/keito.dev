@@ -1,15 +1,20 @@
 import { gleamImportPlugin } from "@chouquette/gleam-vite-loader";
 import { cloudflare } from "@cloudflare/vite-plugin";
+import tailwindcss from "@tailwindcss/vite";
 import { defineConfig, lazyPlugins } from "vite-plus";
 
 export default defineConfig({
-  plugins: lazyPlugins(() => [gleamImportPlugin(), cloudflare()]),
+  plugins: lazyPlugins(() => [gleamImportPlugin(), tailwindcss(), cloudflare()]),
   environments: {
     client: {
       build: {
         rolldownOptions: {
-          input: { client: "entry/client.ts" },
-          output: { entryFileNames: "assets/[name].js" },
+          input: { client: "entry/client.ts", style: "entry/style.css" },
+          output: {
+            entryFileNames: "assets/[name].js",
+            assetFileNames: ({ names }) =>
+              names.includes("style.css") ? "entry/[name][extname]" : "assets/[name][extname]",
+          },
         },
       },
     },

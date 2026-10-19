@@ -16,6 +16,10 @@ pub fn document(
         attribute.content("width=device-width, initial-scale=1"),
       ]),
       html.title([], title <> " | keito.dev"),
+      html.link([
+        attribute.rel("stylesheet"),
+        attribute.href("/entry/style.css"),
+      ]),
       ..list.map(scripts, fn(src) {
         html.script([attribute.type_("module"), attribute.src(src)], "")
       })
