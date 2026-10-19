@@ -34,6 +34,10 @@ export default defineConfig({
     rules: { "vite-plus/prefer-vite-plus-imports": "error" },
     options: { typeAware: true, typeCheck: true },
   },
+  staged: {
+    "*.gleam": ["gleam run --no-print-progress -m sort_classes", "gleam format"],
+    "*.{ts,json}": "vp check --fix",
+  },
   run: {
     tasks: {
       dev: {
