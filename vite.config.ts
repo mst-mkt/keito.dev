@@ -1,10 +1,17 @@
 import { gleamImportPlugin } from "@chouquette/gleam-vite-loader";
 import { cloudflare } from "@cloudflare/vite-plugin";
 import tailwindcss from "@tailwindcss/vite";
+import { cn } from "cn/vite";
 import { defineConfig, lazyPlugins } from "vite-plus";
 
 export default defineConfig({
-  plugins: lazyPlugins(() => [gleamImportPlugin(), tailwindcss(), cloudflare()]),
+  plugins: lazyPlugins(() => [
+    gleamImportPlugin(),
+    tailwindcss(),
+    cn({ content: ["src/**/*.gleam"], out: ".generated/cn-tables.ts" }),
+    cloudflare(),
+  ]),
+  resolve: { alias: { "cn-tables": "/.generated/cn-tables.ts" } },
   environments: {
     client: {
       build: {
@@ -36,7 +43,11 @@ export default defineConfig({
       fmt: ["vp fmt", "gleam format src"],
       check: {
         command: ["gleam format --check src", "vp check"],
-        dependsOn: ["gleam:build", "cf:types"],
+        dependsOn: ["gleam:build", "cf:types", "cn:build"],
+      },
+      "cn:build": {
+        command: "cn build --content 'src/**/*.gleam' -o .generated/cn-tables.ts",
+        cache: { input: [{ auto: true }, "!.generated/**"] },
       },
       "gleam:build": {
         command: "gleam build --target javascript",
