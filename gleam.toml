@@ -11,3 +11,8 @@ hinoto = { git = "https://github.com/Comamoca/hinoto", ref = "e023b62fe3fb459161
 
 [javascript]
 typescript_declarations = true
+
+[dev_dependencies]
+glance = ">= 7.0.0 and < 8.0.0"
+argv = ">= 1.1.0 and < 2.0.0"
+bigi = ">= 4.1.1 and < 5.0.0"

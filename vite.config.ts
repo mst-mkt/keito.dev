@@ -40,9 +40,13 @@ export default defineConfig({
         command: "vp dev",
         cache: false,
       },
-      fmt: ["vp fmt", "gleam format src"],
+      fmt: ["gleam run --no-print-progress -m sort_classes", "vp fmt", "gleam format src dev"],
       check: {
-        command: ["gleam format --check src", "vp check"],
+        command: [
+          "gleam run --no-print-progress -m sort_classes -- --check",
+          "gleam format --check src dev",
+          "vp check",
+        ],
         dependsOn: ["gleam:build", "cf:types", "cn:build"],
       },
       "cn:build": {
