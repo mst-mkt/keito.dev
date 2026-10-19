@@ -9,6 +9,14 @@
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    agent-skills = {
+      url = "github:Kyure-A/agent-skills-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    cloudflare-skills = {
+      url = "github:cloudflare/skills";
+      flake = false;
+    };
   };
 
   outputs =
@@ -17,6 +25,8 @@
       nixpkgs,
       nix-vite-plus,
       treefmt-nix,
+      agent-skills,
+      cloudflare-skills,
       ...
     }:
     let
@@ -37,6 +47,32 @@
             statix.enable = true;
           };
         };
+
+      skillsHookOf =
+        pkgs:
+        let
+          agentLib = agent-skills.lib.agent-skills;
+          sources.cloudflare = {
+            path = cloudflare-skills;
+            subdir = "skills";
+          };
+          selection = agentLib.selectSkills {
+            inherit sources;
+            catalog = agentLib.discoverCatalog sources;
+            allowlist = [
+              "cf-cli"
+              "workers-best-practices"
+            ];
+          };
+        in
+        agentLib.mkShellHook {
+          inherit pkgs;
+          bundle = agentLib.mkBundle { inherit pkgs selection; };
+          targets.claude = agentLib.defaultLocalTargets.claude // {
+            enable = true;
+          };
+          quiet = true;
+        };
     in
     {
       devShells = forAllSystems (pkgs: {
@@ -50,6 +86,7 @@
           shellHook = ''
             export SSL_CERT_FILE="${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"
             export NIX_SSL_CERT_FILE="$SSL_CERT_FILE"
+            ${skillsHookOf pkgs}
           '';
         };
       });
