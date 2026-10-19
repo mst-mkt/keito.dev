@@ -17,6 +17,10 @@ overrides:
 importers:
 
   .:
+    dependencies:
+      cn:
+        specifier: ^0.5.0
+        version: 0.5.0
     devDependencies:
       '@chouquette/gleam-vite-loader':
         specifier: ^1.0.3
@@ -1267,6 +1271,11 @@ packages:
   chownr@3.0.0:
     resolution: {integrity: sha512-+IxzY9BZOQd/XuYPRmrvEVjF/nqj5kgT4kEq7VofrDoM1MxoRjEWkrCC3EtLi59TVawxTAn+orJwFQcrqEN1+g==}
     engines: {node: '>=18'}
+
+  cn@0.5.0:
+    resolution: {integrity: sha512-JGEixZEpfFXm1P5uXwvEobOFLlHwIWi5v4tjd1ZwfiYmcEilkuD2l+054rvJcYCR1B+uVThHeUbgmNz1FwuxuA==}
+    engines: {node: '>=22'}
+    hasBin: true
 
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
@@ -2565,6 +2574,8 @@ snapshots:
   chai@6.3.0: {}
 
   chownr@3.0.0: {}
+
+  cn@0.5.0: {}
 
   convert-source-map@2.0.0: {}
 
