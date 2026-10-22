@@ -12,6 +12,7 @@ export default defineConfig({
     cloudflare(),
   ]),
   resolve: { alias: { "cn-tables": "/.generated/cn-tables.ts" } },
+  server: { watch: { ignored: ["**/build/**"] } },
   environments: {
     client: {
       build: {
