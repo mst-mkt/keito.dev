@@ -11,8 +11,11 @@ catalog:
 overrides:
   vite@*: "catalog:"
   vitest@*: "catalog:"
+  "@chouquette/gleam": "-" # use gleam from flake.nix, not the npm binary
 
 peerDependencyRules:
+  ignoreMissing:
+    - "@chouquette/gleam"
   allowAny:
     - vite
     - vitest
