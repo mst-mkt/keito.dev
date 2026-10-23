@@ -17,6 +17,10 @@ pub fn document(
         attribute.name("viewport"),
         attribute.content("width=device-width, initial-scale=1"),
       ]),
+      html.meta([
+        attribute.name("color-scheme"),
+        attribute.content("light dark"),
+      ]),
       html.title([], title <> " | keito.dev"),
       html.link([
         attribute.rel("stylesheet"),

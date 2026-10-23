@@ -1,1 +1,69 @@
 @import "tailwindcss" source("../src");
+
+@theme {
+  --color-bg: light-dark(oklch(0.98 0 0), oklch(0.24 0 0));
+  --color-fg: light-dark(oklch(0.2 0 0), oklch(0.92 0 0));
+  --color-muted: color-mix(in oklch, var(--color-fg) 70%, var(--color-bg));
+  --color-border: color-mix(in oklch, var(--color-fg) 10%, var(--color-bg));
+
+  --font-sans:
+    "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Noto Sans JP",
+    sans-serif;
+}
+
+@view-transition {
+  navigation: auto;
+}
+
+@layer base {
+  :root {
+    color-scheme: light dark;
+    accent-color: var(--color-fg);
+    scrollbar-gutter: stable;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-bg text-fg antialiased;
+    line-height: 1.75;
+    font-synthesis-style: none;
+    text-autospace: normal;
+    line-break: strict;
+    overflow-wrap: break-word;
+  }
+
+  :is(h1, h2, h3, h4, h5, h6) {
+    text-wrap: balance;
+    word-break: auto-phrase;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :root {
+      scroll-behavior: smooth;
+    }
+  }
+}
+
+@layer reduced-motion {
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms;
+      animation-delay: 0s;
+      animation-iteration-count: 1;
+      transition-duration: 0.01ms;
+      transition-delay: 0s;
+    }
+
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+      animation: none;
+    }
+  }
+}
