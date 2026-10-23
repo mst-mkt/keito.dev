@@ -6,7 +6,11 @@ import lustre/element/html
 pub fn view() -> Element(Nil) {
   base.document(
     "Home",
-    [html.h1([attribute.class("text-2xl font-bold")], [html.text("keito.dev")])],
-    [],
+    left: [],
+    content: [
+      html.h1([attribute.class("text-2xl font-bold")], [html.text("keito.dev")]),
+    ],
+    right: [],
+    scripts: [],
   )
 }

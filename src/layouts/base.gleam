@@ -5,8 +5,10 @@ import lustre/element/html
 
 pub fn document(
   title: String,
-  content: List(Element(Nil)),
-  scripts: List(String),
+  left left: List(Element(Nil)),
+  content content: List(Element(Nil)),
+  right right: List(Element(Nil)),
+  scripts scripts: List(String),
 ) -> Element(Nil) {
   html.html([attribute.lang("ja")], [
     html.head([], [
@@ -24,6 +26,23 @@ pub fn document(
         html.script([attribute.type_("module"), attribute.src(src)], "")
       })
     ]),
-    html.body([], [html.main([], content)]),
+    html.body([], [
+      html.div([attribute.class("flex justify-center gap-x-6 px-6 py-24")], [
+        sidebar(left),
+        html.main([attribute.class("w-full max-w-2xl min-w-0")], content),
+        sidebar(right),
+      ]),
+    ]),
   ])
+}
+
+fn sidebar(content: List(Element(Nil))) -> Element(Nil) {
+  html.aside(
+    [
+      attribute.class(
+        "sticky top-24 hidden w-3xs shrink-0 self-start empty:invisible xl:block",
+      ),
+    ],
+    content,
+  )
 }
