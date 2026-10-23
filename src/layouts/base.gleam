@@ -23,6 +23,16 @@ pub fn document(
       ]),
       html.title([], title <> " | keito.dev"),
       html.link([
+        attribute.rel("icon"),
+        attribute.type_("image/svg+xml"),
+        attribute.href("https://serenity.keito.dev/%F0%9F%A7%B6/svg"),
+      ]),
+      html.link([
+        attribute.rel("icon"),
+        attribute.href("https://serenity.keito.dev/%F0%9F%A7%B6/ico"),
+        attribute.attribute("sizes", "any"),
+      ]),
+      html.link([
         attribute.rel("stylesheet"),
         attribute.href("/entry/style.css"),
       ]),
