@@ -164,7 +164,8 @@ fn rewrite(
     |> list.filter(fn(literal) { !string.contains(literal.value, "\\") })
     |> list.sort(fn(a, b) { int.compare(b.location.start, a.location.start) })
     |> list.fold(bit_array.from_string(source), fn(bytes, literal) {
-      let Literal(location: glance.Span(start:, end:), value:) = literal
+      let Literal(location:, value:) = literal
+      let glance.Span(start:, end:) = byte_span(source, location)
       let assert Ok(before) = bit_array.slice(bytes, 0, start + 1)
       let assert Ok(after) =
         bit_array.slice(bytes, end - 1, bit_array.byte_size(bytes) - end + 1)
@@ -172,6 +173,24 @@ fn rewrite(
     })
     |> bit_array.to_string
   sorted
+}
+
+fn byte_span(source: String, span: Span) -> Span {
+  let glance.Span(start:, end:) = span
+  let #(_, offset) =
+    string.to_graphemes(source)
+    |> list.fold_until(#(0, 0), fn(position, grapheme) {
+      let #(units, bytes) = position
+      case units < start {
+        True ->
+          list.Continue(#(
+            units + bit_array.byte_size(<<grapheme:utf16>>) / 2,
+            bytes + string.byte_size(grapheme),
+          ))
+        False -> list.Stop(position)
+      }
+    })
+  glance.Span(start: offset, end: offset + end - start)
 }
 
 fn class_literals(module: glance.Module) -> List(Literal) {
