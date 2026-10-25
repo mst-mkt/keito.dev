@@ -6,6 +6,9 @@ export default defineConfig({
     name: "keito-dev",
     compatibilityDate: "2026-10-06",
     entrypoint,
+    domains: ["keito.dev"],
+    workersDev: false,
+    previewUrls: false,
     observability: {
       enabled: true,
       logs: { enabled: true },
