@@ -49,6 +49,7 @@ export default defineConfig({
       check: {
         command: [
           "gleam run --no-print-progress -m sort_classes -- --check",
+          "gleam run --no-print-progress -m generate_icons -- update --check",
           "gleam format --check src dev",
           "vp check",
         ],
