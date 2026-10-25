@@ -4,6 +4,7 @@
   --color-bg: light-dark(oklch(0.98 0 0), oklch(0.24 0 0));
   --color-fg: light-dark(oklch(0.2 0 0), oklch(0.92 0 0));
   --color-muted: color-mix(in oklch, var(--color-fg) 70%, var(--color-bg));
+  --color-subtle: color-mix(in oklch, var(--color-fg) 60%, var(--color-bg));
   --color-border: color-mix(in oklch, var(--color-fg) 10%, var(--color-bg));
 
   --font-sans:
