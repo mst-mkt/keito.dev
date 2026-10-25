@@ -38,6 +38,9 @@ importers:
       cf:
         specifier: ^1.0.0-beta.18
         version: 1.0.0-beta.18(@types/node@24.19.2)
+      iconoir:
+        specifier: ^7.12.1
+        version: 7.12.1
       tailwindcss:
         specifier: ^4.3.3
         version: 4.3.3
@@ -1330,6 +1333,9 @@ packages:
 
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
+
+  iconoir@7.12.1:
+    resolution: {integrity: sha512-7ei4jd1bss0Ukyz/bbM9Zc96aLfZuwTEkSW8u5fx5h3X9912MsnmWwPw9LyTUtcf0ShfTzQeQ9oG7IslW3hrLg==}
 
   jiti@2.7.0:
     resolution: {integrity: sha512-AC/7JofJvZGrrneWNaEnJeOLUx+JlGt7tNa0wZiRPT4MY1wmfKjt2+6O2p2uz2+skll8OZZmJMNqeke7kKbNgQ==}
@@ -2678,6 +2684,8 @@ snapshots:
     optional: true
 
   graceful-fs@4.2.11: {}
+
+  iconoir@7.12.1: {}
 
   jiti@2.7.0: {}
 

@@ -14,6 +14,7 @@
     "@tailwindcss/node": "4.3.3",
     "@tailwindcss/vite": "^4.3.3",
     "cf": "^1.0.0-beta.18",
+    "iconoir": "^7.12.1",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
     "vite-plus": "catalog:"
