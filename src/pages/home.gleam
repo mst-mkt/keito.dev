@@ -1,4 +1,5 @@
 import components/avatar
+import components/icons
 import components/text_link
 import gleam/list
 import layouts/base
@@ -38,16 +39,20 @@ pub fn view() -> Element(Nil) {
           ]),
           html.p([], [
             html.text("Computer science undergraduate at "),
-            text_link.view("INIAD", "https://www.iniad.org/"),
+            text_link.with_icon("INIAD", "https://www.iniad.org/", icons.iniad),
             html.text("."),
             html.br([]),
             html.text("Working part-time at "),
-            text_link.view("Hatena", "https://hatena.co.jp/"),
+            text_link.with_icon("Hatena", "https://hatena.co.jp/", icons.hatena),
             html.text("."),
           ]),
           html.p([], [
             html.text("Building and maintaining "),
-            text_link.view("nuten", "https://nuten.keito.dev/"),
+            text_link.with_icon(
+              "Nuten",
+              "https://nuten.keito.dev/",
+              icons.nuten,
+            ),
             html.text(", "),
             text_link.view(
               "mixi2-application-sdk-ts",
