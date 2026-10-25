@@ -1,3 +1,4 @@
+import components/avatar
 import components/text_link
 import gleam/list
 import layouts/base
@@ -19,13 +20,7 @@ pub fn view() -> Element(Nil) {
     content: [
       html.div([attribute.class("grid enter gap-y-12")], [
         html.header([attribute.class("grid gap-y-4")], [
-          html.img([
-            attribute.src("/avatar.png"),
-            attribute.alt(""),
-            attribute.width(96),
-            attribute.height(96),
-            attribute.class("size-24 rounded-xl"),
-          ]),
+          avatar.view(),
           html.hgroup([], [
             html.h1([attribute.class("text-2xl font-bold")], [
               html.text("mst-mkt"),
