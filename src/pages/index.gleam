@@ -73,14 +73,16 @@ fn view() -> Element(Nil) {
               icons.nuten,
             ),
             html.text(", "),
-            text_link.view(
+            text_link.with_icon(
               "mixi2-application-sdk-ts",
               "https://github.com/mst-mkt/mixi2-application-sdk-ts",
+              icons.mixi2_application_sdk_ts,
             ),
             html.text(", "),
-            text_link.view(
+            text_link.with_icon(
               "autopair.nu",
               "https://github.com/mst-mkt/autopair.nu",
+              icons.autopair_nu,
             ),
             html.text(", "),
             text_link.view(
