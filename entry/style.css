@@ -6,6 +6,9 @@
   --color-muted: color-mix(in oklch, var(--color-fg) 70%, var(--color-bg));
   --color-subtle: color-mix(in oklch, var(--color-fg) 60%, var(--color-bg));
   --color-border: color-mix(in oklch, var(--color-fg) 10%, var(--color-bg));
+  --color-danger: light-dark(oklch(0.55 0.2 27), oklch(0.72 0.16 27));
+  --color-control: color-mix(in oklch, var(--color-fg) 5%, transparent);
+  --color-control-hover: color-mix(in oklch, var(--color-fg) 8%, transparent);
 
   --font-sans:
     "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Noto Sans JP",

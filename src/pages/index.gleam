@@ -1,6 +1,7 @@
 import components/avatar
 import components/icons
 import components/text_link
+import gleam/http.{Get}
 import gleam/http/request.{type Request}
 import gleam/http/response.{type Response}
 import gleam/javascript/promise.{type Promise}
@@ -11,6 +12,7 @@ import lustre/attribute
 import lustre/element.{type Element}
 import lustre/element/html
 import server/context.{type Context}
+import server/middleware
 import server/respond
 
 const links = [
@@ -21,9 +23,11 @@ const links = [
 ]
 
 pub fn handle(
-  _req: Request(Body),
+  req: Request(Body),
   _context: Context,
 ) -> Promise(Response(Body)) {
+  use <- middleware.require_methods(req, [Get])
+
   promise.resolve(respond.html(200, view()))
 }
 
