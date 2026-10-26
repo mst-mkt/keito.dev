@@ -1,6 +1,7 @@
 import components/avatar
 import components/icons
 import components/text_link
+import features/links/link
 import gleam/http.{Get}
 import gleam/http/request.{type Request}
 import gleam/http/response.{type Response}
@@ -8,6 +9,7 @@ import gleam/javascript/promise.{type Promise}
 import gleam/list
 import hinoto/body.{type Body}
 import layouts/base
+import lib/cn.{cn}
 import lustre/attribute
 import lustre/element.{type Element}
 import lustre/element/html
@@ -16,10 +18,10 @@ import server/middleware
 import server/respond
 
 const links = [
-  #("GitHub", "mst-mkt", "https://github.com/mst-mkt"),
-  #("Twitter", "mst_mkt_", "https://twitter.com/mst_mkt_"),
-  #("Discord", "mst_mkt", "https://discord.com/users/1089919802702823614"),
-  #("mixi2", "mst_mkt", "https://mixi.social/@mst_mkt"),
+  #("GitHub", "mst-mkt", "github"),
+  #("Twitter", "mst_mkt_", "twitter"),
+  #("Discord", "mst_mkt", "discord"),
+  #("mixi2", "mst_mkt", "mixi2"),
 ]
 
 pub fn handle(
@@ -88,42 +90,63 @@ fn view() -> Element(Nil) {
             html.text(", and more."),
           ]),
         ]),
-        html.ul(
-          [attribute.aria_label("Links"), attribute.class("grid gap-y-1")],
-          list.map(links, fn(entry) {
-            let #(service, id, href) = entry
-            html.li([], [
-              html.a(
-                [
-                  attribute.href(href),
-                  attribute.class(
-                    "group flex items-center gap-x-3 rounded-sm outline-offset-4 focus-visible:outline-2 focus-visible:outline-fg",
-                  ),
-                ],
-                [
-                  html.span([], [html.text(service)]),
-                  html.span(
-                    [
-                      attribute.aria_hidden(True),
-                      attribute.class(
-                        "flex-1 border-t border-dashed border-border transition-colors group-hover:border-muted group-focus-visible:border-muted",
-                      ),
-                    ],
-                    [],
-                  ),
-                  html.span(
-                    [
-                      attribute.class(
-                        "text-subtle transition-colors group-hover:text-fg group-focus-visible:text-fg",
-                      ),
-                    ],
-                    [html.text(id)],
-                  ),
-                ],
+        html.div([attribute.class("grid gap-y-3")], [
+          html.ul(
+            [attribute.aria_label("Links"), attribute.class("grid gap-y-1")],
+            list.map(links, fn(entry) {
+              let #(service, account, id) = entry
+              html.li([], [
+                html.a(
+                  [
+                    attribute.href(link.redirect_path(id)),
+                    attribute.class(
+                      "group flex items-center gap-x-3 rounded-sm outline-offset-4 focus-visible:outline-2 focus-visible:outline-fg",
+                    ),
+                  ],
+                  [
+                    html.span([], [html.text(service)]),
+                    html.span(
+                      [
+                        attribute.aria_hidden(True),
+                        attribute.class(
+                          "flex-1 border-t border-dashed border-border transition-colors group-hover:border-muted group-focus-visible:border-muted",
+                        ),
+                      ],
+                      [],
+                    ),
+                    html.span(
+                      [
+                        attribute.class(
+                          "text-subtle transition-colors group-hover:text-fg group-focus-visible:text-fg",
+                        ),
+                      ],
+                      [html.text(account)],
+                    ),
+                  ],
+                ),
+              ])
+            }),
+          ),
+          html.a(
+            [
+              attribute.href(link.list_path),
+              attribute.class(
+                cn([
+                  "flex w-fit items-center gap-x-1 justify-self-end rounded-sm text-sm",
+                  "text-subtle transition-colors hover:text-fg focus-visible:text-fg",
+                  "outline-offset-4 focus-visible:outline-2 focus-visible:outline-fg",
+                ]),
               ),
-            ])
-          }),
-        ),
+            ],
+            [
+              html.text("more"),
+              icons.arrow_up_right([
+                attribute.aria_hidden(True),
+                attribute.class("size-3.5"),
+              ]),
+            ],
+          ),
+        ]),
       ]),
     ],
     right: [],
