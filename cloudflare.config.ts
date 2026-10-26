@@ -1,4 +1,4 @@
-import { defineConfig } from "cf/config";
+import { bindings, defineConfig } from "cf/config";
 import * as entrypoint from "./entry/worker.ts" with { type: "cf-worker" };
 
 export default defineConfig({
@@ -15,6 +15,8 @@ export default defineConfig({
       traces: { enabled: true },
       issues: { enabled: true },
     },
-    env: {},
+    env: {
+      LINKS: bindings.kv(),
+    },
   },
 });

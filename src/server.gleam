@@ -1,8 +1,8 @@
+import bindings/env.{type Env}
 import gleam/javascript/promise.{type Promise}
 import hinoto.{type JsRequest, type JsResponse}
 import hinoto/runtime/workers.{type WorkersContext}
 import server/context.{Context}
-import server/env.{type Env}
 import server/router
 
 pub fn handler(
