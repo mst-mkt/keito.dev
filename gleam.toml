@@ -9,6 +9,7 @@ gleam_javascript = ">= 1.0.1 and < 2.0.0"
 lustre = ">= 5.7.1 and < 6.0.0"
 hinoto = { git = "https://github.com/Comamoca/hinoto", ref = "e023b62fe3fb45916174e6b9c9dc3f5ca8157bed", path = "packages/hinoto" }
 glqr = ">= 1.2.0 and < 2.0.0"
+plinth = ">= 0.11.0 and < 1.0.0"
 
 [javascript]
 typescript_declarations = true
