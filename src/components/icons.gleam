@@ -38,6 +38,56 @@ fn icon(
   )
 }
 
+// ## /dev/null
+// Source: https://dev-null.sh/brand (dev-null-mark-black.svg)
+// Terms: https://dev-null.sh/brand
+
+pub fn dev_null(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("1.6 1.5 45 45", attributes, [
+    svg.path([
+      attribute.attribute("d", "M2 42h10L26 6H16Z"),
+      attribute.attribute("fill", "currentColor"),
+      attribute.attribute("stroke", "none"),
+      attribute.attribute("stroke-width", "1"),
+      attribute.attribute("stroke-linecap", "butt"),
+      attribute.attribute("stroke-linejoin", "miter"),
+    ]),
+    svg.path([
+      attribute.attribute("fill-rule", "evenodd"),
+      attribute.attribute("clip-rule", "evenodd"),
+      attribute.attribute(
+        "d",
+        "M17.81 43.5h13.22L46.19 4.5H32.97ZM22.19 40.5l12.84-33h6.78l-12.84 33Z",
+      ),
+      attribute.attribute("fill", "currentColor"),
+      attribute.attribute("stroke", "none"),
+      attribute.attribute("stroke-width", "1"),
+      attribute.attribute("stroke-linecap", "butt"),
+      attribute.attribute("stroke-linejoin", "miter"),
+    ]),
+  ])
+}
+
+// ## Bluesky
+// Source: https://bsky.social/about/support/icons (bluesky_media_kit_logo_transparent_4.svg)
+// Terms: https://bsky.social/about/support/branding
+
+pub fn bluesky(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 568 501", attributes, [
+    svg.path([
+      attribute.attribute(
+        "d",
+        "M123.121 33.6637C188.241 82.5526 258.281 181.681 284 234.873C309.719 181.681 379.759 82.5526 444.879 33.6637C491.866 -1.61183 568 -28.9064 568 57.9464C568 75.2916 558.055 203.659 552.222 224.501C531.947 296.954 458.067 315.434 392.347 304.249C507.222 323.8 536.444 388.56 473.333 453.32C353.473 576.312 301.061 422.461 287.631 383.039C285.169 375.812 284.017 372.431 284 375.306C283.983 372.431 282.831 375.812 280.369 383.039C266.939 422.461 214.527 576.312 94.6667 453.32C31.5556 388.56 60.7778 323.8 175.653 304.249C109.933 315.434 36.0535 296.954 15.7778 224.501C9.94525 203.659 0 75.2916 0 57.9464C0 -28.9064 76.1345 -1.61183 123.121 33.6637Z",
+      ),
+      attribute.attribute("fill", "currentColor"),
+      attribute.attribute("stroke", "none"),
+      attribute.attribute("stroke-width", "1"),
+      attribute.attribute("stroke-linecap", "butt"),
+      attribute.attribute("stroke-linejoin", "miter"),
+    ]),
+  ])
+}
+
 // ## Discord
 // Source: https://discord.com/branding (Discord-Symbol-Black.svg)
 // Terms: https://discord.com/branding#brand-guidelines
@@ -291,6 +341,94 @@ pub fn iniad(attributes: List(Attribute(msg))) -> Element(msg) {
   ])
 }
 
+// ## JSR
+// Source: https://github.com/jsr-io/jsr/blob/1624825e0783b6921e99693e10e30ae67b44119b/frontend/static/logo.svg
+// License: MIT
+//
+// MIT License
+//
+// Copyright 2024 the JSR authors
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy of
+// this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to
+// use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+// the Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+// FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+// COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+// IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+// CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+pub fn jsr(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 13 7", attributes, [
+    svg.path([
+      attribute.attribute("fill-rule", "evenodd"),
+      attribute.attribute(
+        "d",
+        "M0 6h4v1h7V5h2V1H9V0H2v2H0 M4 5V1H3v3H2V3H1v2h6V4H5V1h3v1h4v2h-1V3h-1v3H9V2H6v1h2v3H5V5",
+      ),
+      attribute.attribute("fill", "currentColor"),
+      attribute.attribute("stroke", "none"),
+      attribute.attribute("stroke-width", "1"),
+      attribute.attribute("stroke-linecap", "butt"),
+      attribute.attribute("stroke-linejoin", "miter"),
+    ]),
+  ])
+}
+
+// ## Twitch
+// Source: https://brand.twitch.com/ (Twitch-Brand.zip, glitch_flat_white.svg)
+// Terms: https://legal.twitch.com/legal/trademark/
+
+pub fn twitch(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 2400 2800", attributes, [
+    svg.g([], [
+      svg.g([attribute.attribute("id", "Layer_1-2")], [
+        svg.path([
+          attribute.attribute(
+            "d",
+            "M500,0L0,500v1800h600v500l500-500h400l900-900V0H500z M2200,1300l-400,400h-400l-350,350v-350H600V200h1600    V1300z",
+          ),
+          attribute.attribute("fill", "currentColor"),
+          attribute.attribute("stroke", "none"),
+          attribute.attribute("stroke-width", "1"),
+          attribute.attribute("stroke-linecap", "butt"),
+          attribute.attribute("stroke-linejoin", "miter"),
+        ]),
+        svg.rect([
+          attribute.attribute("x", "1700"),
+          attribute.attribute("y", "550"),
+          attribute.attribute("width", "200"),
+          attribute.attribute("height", "600"),
+          attribute.attribute("fill", "currentColor"),
+          attribute.attribute("stroke", "none"),
+          attribute.attribute("stroke-width", "1"),
+          attribute.attribute("stroke-linecap", "butt"),
+          attribute.attribute("stroke-linejoin", "miter"),
+        ]),
+        svg.rect([
+          attribute.attribute("x", "1150"),
+          attribute.attribute("y", "550"),
+          attribute.attribute("width", "200"),
+          attribute.attribute("height", "600"),
+          attribute.attribute("fill", "currentColor"),
+          attribute.attribute("stroke", "none"),
+          attribute.attribute("stroke-width", "1"),
+          attribute.attribute("stroke-linecap", "butt"),
+          attribute.attribute("stroke-linejoin", "miter"),
+        ]),
+      ]),
+    ]),
+  ])
+}
+
 // ## Twitter
 // Source: https://web.archive.org/web/20220601000000/https://about.twitter.com/en/who-we-are/brand-toolkit (twitter-logo-01282021.zip, Logo black.svg)
 // Terms: https://web.archive.org/web/2022/https://about.twitter.com/content/dam/about-twitter/en/brand-toolkit/downloads/twitter-external-brand-guidelines-01272021.pdf
@@ -303,6 +441,62 @@ pub fn twitter(attributes: List(Attribute(msg))) -> Element(msg) {
         attribute.attribute(
           "d",
           "M221.95,51.29c0.15,2.17,0.15,4.34,0.15,6.53c0,66.73-50.8,143.69-143.69,143.69v-0.04   C50.97,201.51,24.1,193.65,1,178.83c3.99,0.48,8,0.72,12.02,0.73c22.74,0.02,44.83-7.61,62.72-21.66   c-21.61-0.41-40.56-14.5-47.18-35.07c7.57,1.46,15.37,1.16,22.8-0.87C27.8,117.2,10.85,96.5,10.85,72.46c0-0.22,0-0.43,0-0.64   c7.02,3.91,14.88,6.08,22.92,6.32C11.58,63.31,4.74,33.79,18.14,10.71c25.64,31.55,63.47,50.73,104.08,52.76   c-4.07-17.54,1.49-35.92,14.61-48.25c20.34-19.12,52.33-18.14,71.45,2.19c11.31-2.23,22.15-6.38,32.07-12.26   c-3.77,11.69-11.66,21.62-22.2,27.93c10.01-1.18,19.79-3.86,29-7.95C240.37,35.29,231.83,44.14,221.95,51.29z",
+        ),
+        attribute.attribute("fill", "currentColor"),
+        attribute.attribute("stroke", "none"),
+        attribute.attribute("stroke-width", "1"),
+        attribute.attribute("stroke-linecap", "butt"),
+        attribute.attribute("stroke-linejoin", "miter"),
+      ]),
+    ]),
+  ])
+}
+
+// ## Zenn
+// Source: https://zenn.dev/mediakit (zenn-logo.zip, logo-only.svg)
+// Terms: https://zenn.dev/mediakit
+
+pub fn zenn(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 88.3 88.3", attributes, [
+    svg.g([], [
+      svg.path([
+        attribute.attribute(
+          "d",
+          "M3.9,83.3h17c0.9,0,1.7-0.5,2.2-1.2L69.9,5.2c0.6-1-0.1-2.2-1.3-2.2H52.5c-0.8,0-1.5,0.4-1.9,1.1L3.1,81.9   C2.8,82.5,3.2,83.3,3.9,83.3z",
+        ),
+        attribute.attribute("fill", "currentColor"),
+        attribute.attribute("stroke", "none"),
+        attribute.attribute("stroke-width", "1"),
+        attribute.attribute("stroke-linecap", "butt"),
+        attribute.attribute("stroke-linejoin", "miter"),
+      ]),
+      svg.path([
+        attribute.attribute(
+          "d",
+          "M62.5,82.1l22.1-35.5c0.7-1.1-0.1-2.5-1.4-2.5h-16c-0.6,0-1.2,0.3-1.5,0.8L43,81.2c-0.6,0.9,0.1,2.1,1.2,2.1   h16.3C61.3,83.3,62.1,82.9,62.5,82.1z",
+        ),
+        attribute.attribute("fill", "currentColor"),
+        attribute.attribute("stroke", "none"),
+        attribute.attribute("stroke-width", "1"),
+        attribute.attribute("stroke-linecap", "butt"),
+        attribute.attribute("stroke-linejoin", "miter"),
+      ]),
+    ]),
+  ])
+}
+
+// ## mewst
+// Source: https://github.com/mewstcom/mewst/blob/develop/rails/app/assets/images/icons/logo.svg
+// License: AGPL-3.0
+// Terms: https://mewst.com/terms
+
+pub fn mewst(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 700 700", attributes, [
+    svg.g([attribute.attribute("transform", "translate(-85 0)")], [
+      svg.path([
+        attribute.attribute(
+          "d",
+          "m256.96 538.28-56.203-56.199c-11.918-11.918-20.609-32.918-20.609-49.789v-102.82c0-6.2891-4.3047-17.422-8.5312-22.07l-82.07-90.277c-3.9219-4.3164-3.543-10.816 0.70312-14.676l15.09-13.719c4.3125-3.9219 10.816-3.5508 14.676 0.69531l82.07 90.277c11.117 12.23 19.238 33.242 19.238 49.77v102.82c0 5.9531 4.3555 16.477 8.5508 20.672l40.43 40.43 56.91-175.48c29.195 26.344 67.863 42.379 110.29 42.379 42.418 0 81.09-16.035 110.29-42.379l64.938 200.23c32.055 98.844-28.242 181.86-132.08 181.86h-86.281c-96.707 0-155.63-72.016-137.4-161.72zm277.96-530.88c12.328-14.793 36.406-6.0742 36.406 13.184v174.94c0 73.945-59.902 133.88-133.82 133.88-73.918 0-133.82-59.93-133.82-133.88v-174.94c0-19.258 24.078-27.977 36.406-13.184l45.297 54.359h104.24z",
         ),
         attribute.attribute("fill", "currentColor"),
         attribute.attribute("stroke", "none"),
