@@ -341,6 +341,120 @@ pub fn iniad(attributes: List(Attribute(msg))) -> Element(msg) {
   ])
 }
 
+// ## Iconoir
+// Source: https://iconoir.com/
+// License: MIT
+//
+// MIT License
+//
+// Copyright (c) 2021 Luca Burgio
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+pub fn arrow_up_right(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 24 24", attributes, [
+    svg.path([
+      attribute.attribute(
+        "d",
+        "M6.00005 19L19 5.99996M19 5.99996V18.48M19 5.99996H6.52005",
+      ),
+    ]),
+  ])
+}
+
+pub fn edit_pencil(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 24 24", attributes, [
+    svg.path([
+      attribute.attribute(
+        "d",
+        "M14.3632 5.65156L15.8431 4.17157C16.6242 3.39052 17.8905 3.39052 18.6716 4.17157L20.0858 5.58579C20.8668 6.36683 20.8668 7.63316 20.0858 8.41421L18.6058 9.8942M14.3632 5.65156L4.74749 15.2672C4.41542 15.5993 4.21079 16.0376 4.16947 16.5054L3.92738 19.2459C3.87261 19.8659 4.39148 20.3848 5.0115 20.33L7.75191 20.0879C8.21972 20.0466 8.65806 19.8419 8.99013 19.5099L18.6058 9.8942M14.3632 5.65156L18.6058 9.8942",
+      ),
+    ]),
+  ])
+}
+
+pub fn fast_arrow_left(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 24 24", attributes, [
+    svg.path([attribute.attribute("d", "M11 6L5 12L11 18")]),
+    svg.path([attribute.attribute("d", "M19 6L13 12L19 18")]),
+  ])
+}
+
+pub fn link(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 24 24", attributes, [
+    svg.path([
+      attribute.attribute(
+        "d",
+        "M14 11.9976C14 9.5059 11.683 7 8.85714 7C8.52241 7 7.41904 7.00001 7.14286 7.00001C4.30254 7.00001 2 9.23752 2 11.9976C2 14.376 3.70973 16.3664 6 16.8714C6.36756 16.9525 6.75006 16.9952 7.14286 16.9952",
+      ),
+    ]),
+    svg.path([
+      attribute.attribute(
+        "d",
+        "M10 11.9976C10 14.4893 12.317 16.9952 15.1429 16.9952C15.4776 16.9952 16.581 16.9952 16.8571 16.9952C19.6975 16.9952 22 14.7577 22 11.9976C22 9.6192 20.2903 7.62884 18 7.12383C17.6324 7.04278 17.2499 6.99999 16.8571 6.99999",
+      ),
+    ]),
+  ])
+}
+
+pub fn nav_arrow_left(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 24 24", attributes, [
+    svg.path([attribute.attribute("d", "M15 6L9 12L15 18")]),
+  ])
+}
+
+pub fn open_new_window(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 24 24", attributes, [
+    svg.path([attribute.attribute("d", "M21 3L15 3M21 3L12 12M21 3V9")]),
+    svg.path([
+      attribute.attribute(
+        "d",
+        "M21 13V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3H11",
+      ),
+      attribute.attribute("stroke-linejoin", "miter"),
+    ]),
+  ])
+}
+
+pub fn plus(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 24 24", attributes, [
+    svg.path([attribute.attribute("d", "M6 12H12M18 12H12M12 12V6M12 12V18")]),
+  ])
+}
+
+pub fn trash(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 24 24", attributes, [
+    svg.path([
+      attribute.attribute(
+        "d",
+        "M20 9L18.005 20.3463C17.8369 21.3026 17.0062 22 16.0353 22H7.96474C6.99379 22 6.1631 21.3026 5.99496 20.3463L4 9",
+      ),
+    ]),
+    svg.path([
+      attribute.attribute(
+        "d",
+        "M21 6L15.375 6M3 6L8.625 6M8.625 6V4C8.625 2.89543 9.52043 2 10.625 2H13.375C14.4796 2 15.375 2.89543 15.375 4V6M8.625 6L15.375 6",
+      ),
+    ]),
+  ])
+}
+
 // ## JSR
 // Source: https://github.com/jsr-io/jsr/blob/1624825e0783b6921e99693e10e30ae67b44119b/frontend/static/logo.svg
 // License: MIT
