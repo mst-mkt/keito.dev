@@ -1,11 +1,17 @@
 import components/avatar
 import components/icons
 import components/text_link
+import gleam/http/request.{type Request}
+import gleam/http/response.{type Response}
+import gleam/javascript/promise.{type Promise}
 import gleam/list
+import hinoto/body.{type Body}
 import layouts/base
 import lustre/attribute
 import lustre/element.{type Element}
 import lustre/element/html
+import server/context.{type Context}
+import server/respond
 
 const links = [
   #("GitHub", "mst-mkt", "https://github.com/mst-mkt"),
@@ -14,7 +20,14 @@ const links = [
   #("mixi2", "mst_mkt", "https://mixi.social/@mst_mkt"),
 ]
 
-pub fn view() -> Element(Nil) {
+pub fn handle(
+  _req: Request(Body),
+  _context: Context,
+) -> Promise(Response(Body)) {
+  promise.resolve(respond.html(200, view()))
+}
+
+fn view() -> Element(Nil) {
   base.document(
     "Home",
     left: [],
