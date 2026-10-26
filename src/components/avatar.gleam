@@ -97,10 +97,14 @@ fn view_reveal(cell: Cell) -> Element(msg) {
     attribute.attribute("rx", "1.25"),
     attribute.class(
       cn([
-        "origin-center scale-120 transform-fill",
+        "scale-120",
         "starting:invisible starting:scale-80",
         "transition-all duration-500 ease-out motion-reduce:transition-none",
       ]),
+    ),
+    attribute.style(
+      "transform-origin",
+      int.to_string(cell.x + 5) <> "px " <> int.to_string(cell.y + 5) <> "px",
     ),
     attribute.style("transition-delay", int.to_string(cell.delay) <> "ms"),
   ])
