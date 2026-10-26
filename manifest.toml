@@ -20,6 +20,7 @@ packages = [
   { name = "gleam_stdlib", version = "1.0.5", build_tools = ["gleam"], requirements = [], otp_app = "gleam_stdlib", source = "hex", outer_checksum = "CEE5B6C076A85B45F60C585F4316C63EC8B7127C119D5738C3958A9C4D50404E" },
   { name = "glexer", version = "2.5.0", build_tools = ["gleam"], requirements = ["gleam_stdlib", "splitter"], otp_app = "glexer", source = "hex", outer_checksum = "D423CF63B8D4F9654EF53D0AF4904B249EB0679BD41C63440170AC508C9CC65E" },
   { name = "glisten", version = "9.0.1", build_tools = ["gleam"], requirements = ["gleam_erlang", "gleam_otp", "gleam_stdlib", "logging"], otp_app = "glisten", source = "hex", outer_checksum = "7795AA50830656F3A0316A6B26595F893C83272DA901B3405E31339CAA31A10B" },
+  { name = "glqr", version = "1.2.0", build_tools = ["gleam"], requirements = ["gleam_stdlib"], otp_app = "glqr", source = "hex", outer_checksum = "CA26F098C1B64EA4AD9548CB03752663A381E3C1FED2C4A6EF24270DD8D9D83B" },
   { name = "gramps", version = "6.0.1", build_tools = ["gleam"], requirements = ["gleam_crypto", "gleam_erlang", "gleam_http", "gleam_stdlib"], otp_app = "gramps", source = "hex", outer_checksum = "D55636072DEE173F6586A5679D3C02EC7A0DE3F8646B78C351B72908FF223DF7" },
   { name = "hinoto", version = "0.0.1", build_tools = ["gleam"], requirements = ["gleam_erlang", "gleam_http", "gleam_javascript", "gleam_stdlib", "mist"], source = "git", repo = "https://github.com/Comamoca/hinoto", commit = "e023b62fe3fb45916174e6b9c9dc3f5ca8157bed", path = "packages/hinoto" },
   { name = "houdini", version = "1.2.1", build_tools = ["gleam"], requirements = [], otp_app = "houdini", source = "hex", outer_checksum = "6F8AC2F12974567FB744BEA66AC93CEB76AAEA19AD28564623F76CDA9BC26A85" },
@@ -37,5 +38,6 @@ glance = { version = ">= 7.0.0 and < 8.0.0" }
 gleam_http = { version = ">= 4.5.0 and < 5.0.0" }
 gleam_javascript = { version = ">= 1.0.1 and < 2.0.0" }
 gleam_stdlib = { version = ">= 1.0.5 and < 2.0.0" }
+glqr = { version = ">= 1.2.0 and < 2.0.0" }
 hinoto = { git = "https://github.com/Comamoca/hinoto", ref = "e023b62fe3fb45916174e6b9c9dc3f5ca8157bed", path = "packages/hinoto" }
 lustre = { version = ">= 5.7.1 and < 6.0.0" }
