@@ -57,11 +57,11 @@ fn page(
       html.link([
         attribute.rel("icon"),
         attribute.type_("image/svg+xml"),
-        attribute.href("https://serenity.keito.dev/%F0%9F%A7%B6/svg"),
+        attribute.href("https://serenity.keito.dev/%F0%9F%A7%B6/svg?square"),
       ]),
       html.link([
         attribute.rel("icon"),
-        attribute.href("https://serenity.keito.dev/%F0%9F%A7%B6/ico"),
+        attribute.href("https://serenity.keito.dev/%F0%9F%A7%B6/ico?square"),
         attribute.attribute("sizes", "any"),
       ]),
       html.link([
