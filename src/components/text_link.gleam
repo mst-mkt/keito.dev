@@ -1,3 +1,5 @@
+import components/icons
+import lib/story.{type Story}
 import lustre/attribute.{type Attribute}
 import lustre/element.{type Element}
 import lustre/element/html
@@ -32,4 +34,28 @@ fn link(href: String, children: List(Element(a))) -> Element(a) {
     ],
     children,
   )
+}
+
+@internal
+pub fn stories() -> List(Story) {
+  [
+    story.new("default", {
+      use text <- story.text("text", "keito.dev")
+
+      story.render(
+        html.p([], [html.text("Visit "), view(text, "#"), html.text(".")]),
+      )
+    }),
+    story.new("icon", {
+      use text <- story.text("text", "Hatena")
+
+      story.render(
+        html.p([], [
+          html.text("Working part-time at "),
+          with_icon(text, "#", icons.hatena),
+          html.text("."),
+        ]),
+      )
+    }),
+  ]
 }

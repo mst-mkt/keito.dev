@@ -1,4 +1,7 @@
+import components/icons
+import gleam/list
 import lib/cn.{cn}
+import lib/story.{type Story}
 import lustre/attribute.{type Attribute}
 import lustre/element.{type Element}
 import lustre/element/html
@@ -76,4 +79,55 @@ fn classes(button: Button) -> Attribute(msg) {
       button.class,
     ]),
   )
+}
+
+@internal
+pub fn stories() -> List(Story) {
+  let variants = [
+    #("secondary", Secondary),
+    #("primary", Primary),
+    #("ghost", Ghost),
+    #("danger", Danger),
+  ]
+  let variant_story = fn(option: #(String, Variant)) {
+    story.new(option.0, {
+      use label <- story.text("label", "Button")
+      use disabled <- story.bool("disabled", False)
+
+      story.render(
+        new()
+        |> variant(option.1)
+        |> view([attribute.disabled(disabled)], [html.text(label)]),
+      )
+    })
+  }
+
+  list.append(list.map(variants, variant_story), [
+    story.new("icon", {
+      use label <- story.text("label", "Open link")
+      use selected <- story.select("variant", Ghost, variants)
+
+      story.render(
+        new()
+        |> variant(selected)
+        |> size(Icon)
+        |> link("#", [attribute.aria_label(label)], [
+          icons.open_new_window([attribute.aria_hidden(True)]),
+        ]),
+      )
+    }),
+    story.new("link", {
+      use label <- story.text("label", "Open")
+      use selected <- story.select("variant", Secondary, variants)
+
+      story.render(
+        new()
+        |> variant(selected)
+        |> link("#", [], [
+          icons.arrow_up_right([attribute.aria_hidden(True)]),
+          html.text(label),
+        ]),
+      )
+    }),
+  ])
 }

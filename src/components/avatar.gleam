@@ -4,6 +4,7 @@ import gleam/list
 import gleam/result
 import gleam/string
 import lib/cn.{cn}
+import lib/story.{type Story}
 import lustre/attribute
 import lustre/element.{type Element}
 import lustre/element/html
@@ -121,4 +122,9 @@ fn delay(x: Int, y: Int, filled: Bool) -> Int {
   }
 
   1000 + float.round(distance *. 70.0) + checker + outside
+}
+
+@internal
+pub fn stories() -> List(Story) {
+  [story.new("default", story.render(view()))]
 }

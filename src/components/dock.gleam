@@ -4,6 +4,7 @@ import gleam/int
 import gleam/list
 import gleam/result
 import lib/cn.{cn}
+import lib/story.{type Story}
 import lustre/attribute.{type Attribute}
 import lustre/element.{type Element}
 import lustre/element/html
@@ -199,4 +200,39 @@ fn view_panel(panel: #(String, String, List(Element(msg)))) -> Element(msg) {
 
 fn panel_id(index: Int) -> String {
   "dock-panel-" <> int.to_string(index)
+}
+
+@internal
+pub fn stories() -> List(Story) {
+  [
+    story.new("default", {
+      use label <- story.text("label", "Menu")
+
+      story.render(
+        view(label, [
+          Link("Home", "#", icons.home_simple_door),
+          Link("Add link", "#", icons.plus),
+        ]),
+      )
+    }),
+    story.new("panel", {
+      use label <- story.text("label", "Menu")
+      let links =
+        list.map(["GitHub", "Twitter", "Discord", "mixi2"], fn(name) {
+          html.li([], [html.a([attribute.href("#")], [html.text(name)])])
+        })
+
+      story.render(
+        view(label, [
+          Link("Home", "#", icons.home_simple_door),
+          Panel(
+            "Links",
+            [html.ul([attribute.class("grid gap-y-2")], links)],
+            icons.list,
+          ),
+          Link("Add link", "#", icons.plus),
+        ]),
+      )
+    }),
+  ]
 }

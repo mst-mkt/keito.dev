@@ -2,6 +2,7 @@ import gleam/int
 import gleam/list
 import gleam/string
 import glqr
+import lib/story.{type Story}
 import lustre/attribute
 import lustre/element.{type Element}
 import lustre/element/html
@@ -62,4 +63,19 @@ fn view_modules(modules: List(List(Bool)), label: String) -> Element(msg) {
     ],
     [svg.path([attribute.attribute("d", path), attribute.class("fill-fg")])],
   )
+}
+
+@internal
+pub fn stories() -> List(Story) {
+  [
+    story.new("default", {
+      use text <- story.text("text", "https://keito.dev/l/example")
+
+      story.render(
+        html.div([attribute.class("max-w-xs")], [
+          view(text, "QR code for " <> text),
+        ]),
+      )
+    }),
+  ]
 }

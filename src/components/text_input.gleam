@@ -1,5 +1,6 @@
 import gleam/option.{type Option, None, Some}
 import lib/cn.{cn}
+import lib/story.{type Story}
 import lustre/attribute.{type Attribute}
 import lustre/element.{type Element}
 import lustre/element/html
@@ -69,4 +70,69 @@ pub fn view(
       },
     ),
   ])
+}
+
+@internal
+pub fn stories() -> List(Story) {
+  [
+    field_story(
+      "empty",
+      name: "name",
+      label: "Name",
+      value: "",
+      required: False,
+      error: "",
+      attributes: [],
+    ),
+    field_story(
+      "filled",
+      name: "name",
+      label: "Name",
+      value: "keito",
+      required: False,
+      error: "",
+      attributes: [],
+    ),
+    field_story(
+      "required",
+      name: "url",
+      label: "URL",
+      value: "",
+      required: True,
+      error: "",
+      attributes: [attribute.type_("url"), attribute.placeholder("https://")],
+    ),
+    field_story(
+      "error",
+      name: "id",
+      label: "ID",
+      value: "my link",
+      required: True,
+      error: "ID can only contain a-z, 0-9, \"-\", \"_\", and \".\".",
+      attributes: [],
+    ),
+  ]
+}
+
+fn field_story(
+  story_name: String,
+  name name: String,
+  label label: String,
+  value value: String,
+  required required: Bool,
+  error error: String,
+  attributes attributes: List(Attribute(msg)),
+) -> Story {
+  story.new(story_name, {
+    use label <- story.text("label", label)
+    use value <- story.text("value", value)
+    use required <- story.bool("required", required)
+    use error <- story.text("error", error)
+    let error = case error {
+      "" -> None
+      error -> Some(error)
+    }
+
+    story.render(view(name:, label:, value:, required:, error:, attributes:))
+  })
 }

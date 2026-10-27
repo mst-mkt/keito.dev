@@ -1,5 +1,7 @@
+import components/icons
 import gleam/list
 import lib/cn.{cn}
+import lib/story.{type Story}
 import lustre/attribute.{type Attribute}
 import lustre/element.{type Element}
 import lustre/element/html
@@ -37,4 +39,20 @@ fn view_item(item: Item(msg)) -> Element(msg) {
       ],
     ),
   ])
+}
+
+@internal
+pub fn stories() -> List(Story) {
+  [
+    story.new("default", {
+      use label <- story.text("label", "Navigation")
+
+      story.render(
+        view(label, [
+          Item("Back to top", "#", icons.fast_arrow_left),
+          Item("All links", "#", icons.nav_arrow_left),
+        ]),
+      )
+    }),
+  ]
 }
