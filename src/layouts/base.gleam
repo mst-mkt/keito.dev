@@ -42,7 +42,7 @@ fn page(
   head: List(Element(Nil)),
   body: List(Element(Nil)),
 ) -> Element(Nil) {
-  html.html([attribute.lang("ja")], [
+  html.html([attribute.lang("en")], [
     html.head([], [
       html.meta([attribute.charset("utf-8")]),
       html.meta([
