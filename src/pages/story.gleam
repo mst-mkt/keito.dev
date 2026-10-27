@@ -5,11 +5,10 @@ import gleam/javascript/array.{type Array}
 import gleam/javascript/promise.{type Promise}
 import gleam/list
 import gleam/result
-import gleam/string
 import gleam/uri
 import hinoto/body.{type Body}
 import layouts/base
-import lib/story.{type Story}
+import lib/story.{type Module, type Route, type Story, Canvas, Docs, Show}
 import lustre/attribute
 import lustre/element.{type Element}
 import lustre/element/html
@@ -17,15 +16,6 @@ import pages/not_found
 import server/context.{type Context}
 import server/middleware
 import server/respond
-
-type Module =
-  #(String, List(Story))
-
-type Page {
-  Docs(module: String, stories: List(Story))
-  Show(module: String, story: Story)
-  Canvas(story: Story)
-}
 
 const default_viewport = #("desktop", "1440px")
 
@@ -43,74 +33,35 @@ pub fn handle(
   let modules = array.to_list(story_modules())
   let query = request.get_query(req) |> result.unwrap([])
 
-  case segments, modules, resolve(modules, segments) {
+  case segments, modules, story.resolve(modules, segments) {
     [], [#(module, _), ..], _ ->
-      promise.resolve(respond.redirect(302, docs_path(module)))
-    _, _, Ok(page) ->
-      promise.resolve(respond.html(200, view(context, modules, page, query)))
+      promise.resolve(respond.redirect(302, story.docs_path(module)))
+    _, _, Ok(resolved) ->
+      promise.resolve(respond.html(200, view(context, modules, resolved, query)))
     _, _, Error(Nil) -> not_found.handle(req, context)
   }
-}
-
-fn resolve(modules: List(Module), segments: List(String)) -> Result(Page, Nil) {
-  let module = string.join(segments, "/")
-  use <- result.lazy_or(
-    list.key_find(modules, module)
-    |> result.map(fn(stories) { Docs(module:, stories:) }),
-  )
-  use <- result.lazy_or(case list.reverse(segments) {
-    ["canvas", name, ..rest] ->
-      find(modules, list.reverse(rest), name)
-      |> result.map(fn(found) { Canvas(story: found.1) })
-    _ -> Error(Nil)
-  })
-
-  case list.reverse(segments) {
-    [name, ..rest] ->
-      find(modules, list.reverse(rest), name)
-      |> result.map(fn(found) { Show(module: found.0, story: found.1) })
-    [] -> Error(Nil)
-  }
-}
-
-fn find(
-  modules: List(Module),
-  segments: List(String),
-  name: String,
-) -> Result(#(String, Story), Nil) {
-  let module = string.join(segments, "/")
-  use stories <- result.try(list.key_find(modules, module))
-  use story <- result.map(
-    list.find(stories, fn(story) { story.name(story) == name }),
-  )
-
-  #(module, story)
-}
-
-fn docs_path(module: String) -> String {
-  "/story/" <> module
-}
-
-fn story_path(module: String, story: Story) -> String {
-  docs_path(module) <> "/" <> story.name(story)
 }
 
 fn view(
   context: Context,
   modules: List(Module),
-  page: Page,
+  resolved: Route,
   query: List(#(String, String)),
 ) -> Element(Nil) {
-  case page {
+  case resolved {
     Docs(module:, stories:) ->
       base.shell(module, context.client_entry, [
-        view_layout(modules, docs_path(module), view_docs(module, stories)),
+        view_layout(
+          modules,
+          story.docs_path(module),
+          view_docs(module, stories),
+        ),
       ])
     Show(module:, story:) ->
       base.shell(module <> "/" <> story.name(story), context.client_entry, [
         view_layout(
           modules,
-          story_path(module, story),
+          story.path(module, story),
           view_story(module, story, query),
         ),
       ])
@@ -146,7 +97,7 @@ fn view_docs(module: String, stories: List(Story)) -> List(Element(Nil)) {
       [
         html.h1([attribute.class("text-2xl font-bold")], [html.text(module)]),
         ..list.map(stories, fn(story) {
-          let path = story_path(module, story)
+          let path = story.path(module, story)
 
           html.section([attribute.class("grid gap-y-3")], [
             html.h2([], [
@@ -177,7 +128,7 @@ fn view_story(
   story: Story,
   query: List(#(String, String)),
 ) -> List(Element(Nil)) {
-  let path = story_path(module, story)
+  let path = story.path(module, story)
   let #(_, controls) = story.run(story, query)
   let #(viewport, width) =
     list.key_find(query, "viewport")
@@ -232,7 +183,7 @@ fn view_sidebar(modules: List(Module), current: String) -> Element(Nil) {
 
           html.li([attribute.class("grid gap-y-1")], [
             view_link(
-              docs_path(name),
+              story.docs_path(name),
               current,
               "px-2 py-1 text-xs font-medium text-subtle hover:text-fg aria-[current=page]:text-fg",
               name,
@@ -242,7 +193,7 @@ fn view_sidebar(modules: List(Module), current: String) -> Element(Nil) {
               list.map(stories, fn(story) {
                 html.li([], [
                   view_link(
-                    story_path(name, story),
+                    story.path(name, story),
                     current,
                     "px-2 py-1.5 text-sm hover:bg-control-hover aria-[current=page]:bg-control aria-[current=page]:font-medium",
                     story.name(story),

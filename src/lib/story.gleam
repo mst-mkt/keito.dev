@@ -1,6 +1,7 @@
 import gleam/dict.{type Dict}
 import gleam/list
 import gleam/result
+import gleam/string
 import lustre/element.{type Element}
 
 pub opaque type Story {
@@ -15,6 +16,15 @@ pub type Control {
   Text(name: String, value: String)
   Bool(name: String, value: Bool)
   Select(name: String, value: String, options: List(String))
+}
+
+pub type Module =
+  #(String, List(Story))
+
+pub type Route {
+  Docs(module: String, stories: List(Story))
+  Show(module: String, story: Story)
+  Canvas(story: Story)
 }
 
 pub fn new(name: String, args: Args(Element(msg))) -> Story {
@@ -72,6 +82,46 @@ pub fn run(
   query: List(#(String, String)),
 ) -> #(Element(Nil), List(Control)) {
   story.args.run(dict.from_list(query))
+}
+
+pub fn resolve(
+  modules: List(Module),
+  segments: List(String),
+) -> Result(Route, Nil) {
+  let module = string.join(segments, "/")
+
+  case list.key_find(modules, module), list.reverse(segments) {
+    Ok(stories), _ -> Ok(Docs(module:, stories:))
+    Error(_), ["canvas", story_name, ..rest] ->
+      find(modules, list.reverse(rest), story_name)
+      |> result.map(fn(found) { Canvas(story: found.1) })
+    Error(_), [story_name, ..rest] ->
+      find(modules, list.reverse(rest), story_name)
+      |> result.map(fn(found) { Show(module: found.0, story: found.1) })
+    Error(_), [] -> Error(Nil)
+  }
+}
+
+pub fn docs_path(module: String) -> String {
+  "/story/" <> module
+}
+
+pub fn path(module: String, story: Story) -> String {
+  docs_path(module) <> "/" <> story.name
+}
+
+fn find(
+  modules: List(Module),
+  segments: List(String),
+  story_name: String,
+) -> Result(#(String, Story), Nil) {
+  let module = string.join(segments, "/")
+  use stories <- result.try(list.key_find(modules, module))
+  use story <- result.map(
+    list.find(stories, fn(story) { story.name == story_name }),
+  )
+
+  #(module, story)
 }
 
 fn control(
