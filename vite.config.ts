@@ -11,7 +11,6 @@ export default defineConfig({
     cn({ content: ["src/**/*.gleam"], out: ".generated/cn-tables.ts" }),
     cloudflare(),
   ]),
-  resolve: { alias: { "cn-tables": "/.generated/cn-tables.ts" } },
   server: { watch: { ignored: ["**/build/**"] } },
   environments: {
     client: {

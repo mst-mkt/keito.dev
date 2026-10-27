@@ -14,7 +14,6 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
     "paths": {
-      "cn-tables": ["./.generated/cn-tables.ts"],
       "gleam:prelude": ["./build/dev/javascript/prelude.d.mts"],
       "gleam:*": [
         "./build/dev/javascript/keito_dev/*.d.mts",

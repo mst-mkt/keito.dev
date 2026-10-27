@@ -2,6 +2,9 @@
   "name": "keito.dev",
   "private": true,
   "type": "module",
+  "imports": {
+    "#cn-tables": "./.generated/cn-tables.ts"
+  },
   "scripts": {
     "prepare": "vp config --no-agent"
   },

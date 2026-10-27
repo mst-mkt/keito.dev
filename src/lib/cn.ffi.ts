@@ -1,5 +1,5 @@
 import { createCn } from "cn/engine";
-import tables from "cn-tables";
+import tables from "#cn-tables";
 import type { List } from "gleam:prelude";
 
 const cn = createCn(tables);
