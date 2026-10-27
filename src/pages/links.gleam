@@ -68,6 +68,7 @@ fn view(context: Context, links: List(Link)) -> Element(Nil) {
       dock.Link("Home", "/", icons.home_simple_door),
       dock.Link("Add link", link.new_path, icons.plus),
     ],
+    head: [],
     client_entry: context.client_entry,
   )
 }
@@ -107,6 +108,7 @@ fn view_item(item: Link) -> Element(Nil) {
       |> button.link(
         item.url,
         [
+          attribute.rel("me"),
           attribute.aria_label("Open " <> item.name),
           attribute.title(display_url),
         ],

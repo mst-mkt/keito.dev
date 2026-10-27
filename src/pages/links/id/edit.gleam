@@ -94,6 +94,7 @@ fn view(
       ),
       dock.Link("Delete", link.delete_path(current.id), icons.trash),
     ],
+    head: [],
     client_entry: context.client_entry,
   )
 }

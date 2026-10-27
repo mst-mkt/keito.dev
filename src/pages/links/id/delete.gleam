@@ -82,6 +82,7 @@ fn view(context: Context, current: Link) -> Element(Nil) {
         icons.arrow_left,
       ),
     ],
+    head: [],
     client_entry: context.client_entry,
   )
 }

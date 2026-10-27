@@ -67,6 +67,7 @@ fn view(context: Context, draft: Draft, errors: Errors) -> Element(Nil) {
       dock.Link("Home", "/", icons.home_simple_door),
       dock.Link("All links", link.list_path, icons.list),
     ],
+    head: [],
     client_entry: context.client_entry,
   )
 }

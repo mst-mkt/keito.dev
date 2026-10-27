@@ -1,7 +1,8 @@
 import components/avatar
 import components/icons
 import components/text_link
-import features/links/link
+import features/links/link.{type Link}
+import features/links/store
 import gleam/http.{Get}
 import gleam/http/request.{type Request}
 import gleam/http/response.{type Response}
@@ -26,11 +27,12 @@ const links = [
 
 pub fn handle(req: Request(Body), context: Context) -> Promise(Response(Body)) {
   use <- middleware.require_methods(req, [Get])
+  use profiles <- promise.map(store.list(context.env))
 
-  promise.resolve(respond.html(200, view(context)))
+  respond.html(200, view(context, profiles))
 }
 
-fn view(context: Context) -> Element(Nil) {
+fn view(context: Context, profiles: List(Link)) -> Element(Nil) {
   base.document(
     "Home",
     left: [],
@@ -150,6 +152,9 @@ fn view(context: Context) -> Element(Nil) {
     ],
     right: [],
     dock: [],
+    head: list.map(profiles, fn(profile) {
+      html.link([attribute.rel("me"), attribute.href(profile.url)])
+    }),
     client_entry: context.client_entry,
   )
 }

@@ -22,6 +22,7 @@ fn view(context: Context) -> Element(Nil) {
     content: [html.h1([], [html.text("Not Found")])],
     right: [],
     dock: [],
+    head: [],
     client_entry: context.client_entry,
   )
 }

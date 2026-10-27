@@ -9,9 +9,10 @@ pub fn document(
   content content: List(Element(Nil)),
   right right: List(Element(Nil)),
   dock dock: List(dock.Item(Nil)),
+  head head: List(Element(Nil)),
   client_entry client_entry: String,
 ) -> Element(Nil) {
-  shell(title, client_entry, [
+  page(title, client_entry, head, [
     html.div([attribute.class("flex justify-center gap-x-12 px-6 py-24")], [
       sidebar(left),
       html.main([attribute.class("w-full max-w-2xl min-w-0")], content),
@@ -24,6 +25,15 @@ pub fn document(
 pub fn shell(
   title: String,
   client_entry: String,
+  body: List(Element(Nil)),
+) -> Element(Nil) {
+  page(title, client_entry, [], body)
+}
+
+fn page(
+  title: String,
+  client_entry: String,
+  head: List(Element(Nil)),
   body: List(Element(Nil)),
 ) -> Element(Nil) {
   html.html([attribute.lang("ja")], [
@@ -53,6 +63,7 @@ pub fn shell(
         attribute.href("/entry/style.css"),
       ]),
       html.script([attribute.type_("module"), attribute.src(client_entry)], ""),
+      ..head
     ]),
     html.body([], body),
   ])
