@@ -1,4 +1,5 @@
 import components/button
+import components/dock
 import components/icons
 import components/side_nav.{Item}
 import features/links/brand
@@ -23,10 +24,10 @@ pub fn handle(req: Request(Body), context: Context) -> Promise(Response(Body)) {
   use <- middleware.require_methods(req, [Get])
   use links <- promise.map(store.list(context.env))
 
-  respond.html(200, view(links))
+  respond.html(200, view(context, links))
 }
 
-fn view(links: List(Link)) -> Element(Nil) {
+fn view(context: Context, links: List(Link)) -> Element(Nil) {
   base.document(
     "Links",
     left: [
@@ -63,7 +64,11 @@ fn view(links: List(Link)) -> Element(Nil) {
         Item("Add link", link.new_path, icons.plus),
       ]),
     ],
-    scripts: [],
+    dock: [
+      dock.Link("Home", "/", icons.home_simple_door),
+      dock.Link("Add link", link.new_path, icons.plus),
+    ],
+    client_entry: context.client_entry,
   )
 }
 

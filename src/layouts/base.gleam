@@ -1,4 +1,4 @@
-import gleam/list
+import components/dock
 import lustre/attribute
 import lustre/element.{type Element}
 import lustre/element/html
@@ -8,7 +8,8 @@ pub fn document(
   left left: List(Element(Nil)),
   content content: List(Element(Nil)),
   right right: List(Element(Nil)),
-  scripts scripts: List(String),
+  dock dock: List(dock.Item(Nil)),
+  client_entry client_entry: String,
 ) -> Element(Nil) {
   html.html([attribute.lang("ja")], [
     html.head([], [
@@ -36,9 +37,7 @@ pub fn document(
         attribute.rel("stylesheet"),
         attribute.href("/entry/style.css"),
       ]),
-      ..list.map(scripts, fn(src) {
-        html.script([attribute.type_("module"), attribute.src(src)], "")
-      })
+      html.script([attribute.type_("module"), attribute.src(client_entry)], ""),
     ]),
     html.body([], [
       html.div([attribute.class("flex justify-center gap-x-6 px-6 py-24")], [
@@ -46,6 +45,7 @@ pub fn document(
         html.main([attribute.class("w-full max-w-2xl min-w-0")], content),
         sidebar(right),
       ]),
+      dock.view("Menu", dock),
     ]),
   ])
 }

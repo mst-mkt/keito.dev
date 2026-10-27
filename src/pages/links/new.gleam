@@ -1,3 +1,4 @@
+import components/dock
 import components/icons
 import components/side_nav.{Item}
 import features/links/link.{type Errors, type Link, Link}
@@ -61,6 +62,10 @@ fn view(context: Context, draft: Link, errors: Errors) -> Element(Nil) {
       ]),
     ],
     right: [],
-    scripts: [context.client_entry],
+    dock: [
+      dock.Link("Home", "/", icons.home_simple_door),
+      dock.Link("All links", link.list_path, icons.list),
+    ],
+    client_entry: context.client_entry,
   )
 }

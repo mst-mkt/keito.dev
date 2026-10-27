@@ -10,17 +10,18 @@ import server/respond
 
 pub fn handle(
   _req: Request(Body),
-  _context: Context,
+  context: Context,
 ) -> Promise(Response(Body)) {
-  promise.resolve(respond.html(404, view()))
+  promise.resolve(respond.html(404, view(context)))
 }
 
-fn view() -> Element(Nil) {
+fn view(context: Context) -> Element(Nil) {
   base.document(
     "Not Found",
     left: [],
     content: [html.h1([], [html.text("Not Found")])],
     right: [],
-    scripts: [],
+    dock: [],
+    client_entry: context.client_entry,
   )
 }

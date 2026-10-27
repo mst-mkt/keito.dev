@@ -1,4 +1,5 @@
 import components/button
+import components/dock
 import components/icons
 import components/side_nav.{Item}
 import features/links/link.{type Link}
@@ -31,12 +32,12 @@ pub fn handle(
 
       respond.redirect(303, link.list_path)
     }
-    Ok(current), _ -> promise.resolve(respond.html(200, view(current)))
+    Ok(current), _ -> promise.resolve(respond.html(200, view(context, current)))
     Error(_), _ -> not_found.handle(req, context)
   }
 }
 
-fn view(current: Link) -> Element(Nil) {
+fn view(context: Context, current: Link) -> Element(Nil) {
   base.document(
     "Delete " <> current.name,
     left: [
@@ -73,6 +74,14 @@ fn view(current: Link) -> Element(Nil) {
       ]),
     ],
     right: [],
-    scripts: [],
+    dock: [
+      dock.Link("Home", "/", icons.home_simple_door),
+      dock.Link(
+        "Back to " <> current.name,
+        link.page_path(current.id),
+        icons.arrow_left,
+      ),
+    ],
+    client_entry: context.client_entry,
   )
 }

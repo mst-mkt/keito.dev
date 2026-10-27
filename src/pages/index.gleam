@@ -24,16 +24,13 @@ const links = [
   #("mixi2", "mst_mkt", "mixi2"),
 ]
 
-pub fn handle(
-  req: Request(Body),
-  _context: Context,
-) -> Promise(Response(Body)) {
+pub fn handle(req: Request(Body), context: Context) -> Promise(Response(Body)) {
   use <- middleware.require_methods(req, [Get])
 
-  promise.resolve(respond.html(200, view()))
+  promise.resolve(respond.html(200, view(context)))
 }
 
-fn view() -> Element(Nil) {
+fn view(context: Context) -> Element(Nil) {
   base.document(
     "Home",
     left: [],
@@ -152,6 +149,7 @@ fn view() -> Element(Nil) {
       ]),
     ],
     right: [],
-    scripts: [],
+    dock: [],
+    client_entry: context.client_entry,
   )
 }

@@ -1,4 +1,5 @@
 import components/button
+import components/dock
 import components/icons
 import components/qr_code
 import components/side_nav.{Item}
@@ -27,12 +28,12 @@ pub fn handle(
   use found <- promise.await(store.get(context.env, id))
 
   case found {
-    Ok(current) -> promise.resolve(respond.html(200, view(current)))
+    Ok(current) -> promise.resolve(respond.html(200, view(context, current)))
     Error(_) -> not_found.handle(req, context)
   }
 }
 
-fn view(current: Link) -> Element(Nil) {
+fn view(context: Context, current: Link) -> Element(Nil) {
   let short_url = link.short_url(current.id)
 
   base.document(
@@ -70,6 +71,12 @@ fn view(current: Link) -> Element(Nil) {
         Item("Delete", link.delete_path(current.id), icons.trash),
       ]),
     ],
-    scripts: [],
+    dock: [
+      dock.Link("Home", "/", icons.home_simple_door),
+      dock.Link("All links", link.list_path, icons.list),
+      dock.Link("Edit", link.edit_path(current.id), icons.edit_pencil),
+      dock.Link("Delete", link.delete_path(current.id), icons.trash),
+    ],
+    client_entry: context.client_entry,
   )
 }

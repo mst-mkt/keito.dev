@@ -1,3 +1,4 @@
+import components/dock
 import components/icons
 import components/side_nav.{Item}
 import features/links/link.{type Errors, type Link}
@@ -83,6 +84,15 @@ fn view(
         Item("Delete", link.delete_path(current.id), icons.trash),
       ]),
     ],
-    scripts: [context.client_entry],
+    dock: [
+      dock.Link("Home", "/", icons.home_simple_door),
+      dock.Link(
+        "Back to " <> current.name,
+        link.page_path(current.id),
+        icons.arrow_left,
+      ),
+      dock.Link("Delete", link.delete_path(current.id), icons.trash),
+    ],
+    client_entry: context.client_entry,
   )
 }
