@@ -85,15 +85,20 @@ export default defineConfig({
         command: "vp dev",
         cache: false,
       },
-      fmt: ["gleam run --no-print-progress -m sort_classes", "vp fmt", "gleam format src dev"],
+      fmt: ["gleam run --no-print-progress -m sort_classes", "vp fmt", "gleam format src test dev"],
       check: {
         command: [
           "gleam run --no-print-progress -m sort_classes -- --check",
           "gleam run --no-print-progress -m generate_icons -- update --check",
-          "gleam format --check src dev",
+          "gleam format --check src test dev",
           "vp check",
         ],
         dependsOn: ["gleam:build", "cf:types", "cn:build"],
+      },
+      test: {
+        command: "gleam test",
+        dependsOn: ["cn:build"],
+        cache: { input: [{ auto: true }, "!build/**"] },
       },
       "cn:build": {
         command: "cn build --content 'src/**/*.gleam' -o .generated/cn-tables.ts",
@@ -106,7 +111,7 @@ export default defineConfig({
       "cf:types": "cf workers types",
       build: {
         command: "vp build",
-        dependsOn: ["check"],
+        dependsOn: ["check", "test"],
         cache: {
           input: [{ auto: true }, "!build/**", "!.cloudflare/output/**"],
           output: [{ auto: true }, "!build/**"],

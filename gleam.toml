@@ -18,3 +18,4 @@ typescript_declarations = true
 glance = ">= 7.0.0 and < 8.0.0"
 argv = ">= 1.1.0 and < 2.0.0"
 bigi = ">= 4.1.1 and < 5.0.0"
+gleeunit = ">= 1.11.0 and < 2.0.0"
