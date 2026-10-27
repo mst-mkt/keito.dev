@@ -10,6 +10,8 @@ import pages/links/id/delete
 import pages/links/id/edit
 import pages/links/new
 import pages/not_found
+import pages/uuid
+import pages/uuid/source as uuid_source
 import server/context.{type Context}
 import server/middleware
 
@@ -24,6 +26,8 @@ pub fn route(req: Request(Body), context: Context) -> Promise(Response(Body)) {
     ["links", id] -> link_page.handle(req, context, id)
     ["links", id, "edit"] -> edit.handle(req, context, id)
     ["links", id, "delete"] -> delete.handle(req, context, id)
+    ["uuid"] -> uuid.handle(req, context)
+    ["uuid", "source"] -> uuid_source.handle(req, context)
     _ -> not_found.handle(req, context)
   }
 }
