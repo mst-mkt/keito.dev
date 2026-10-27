@@ -1,9 +1,10 @@
 import components/dock
 import components/icons
 import components/side_nav.{Item}
-import features/links/link.{type Errors, type Link}
+import features/links/link.{type Draft, type Errors, type Link}
 import features/links/link_form
 import features/links/store
+import features/links/submission
 import gleam/http.{Get, Post}
 import gleam/http/request.{type Request}
 import gleam/http/response.{type Response}
@@ -31,8 +32,8 @@ pub fn handle(
   case found, req.method {
     Ok(current), Post -> {
       use fields <- form.read(req)
-      let draft = link_form.draft(fields)
-      use submitted <- promise.map(link_form.submit(
+      let draft = submission.draft(fields)
+      use submitted <- promise.map(submission.submit(
         context.env,
         draft,
         replacing: Some(current.id),
@@ -47,7 +48,7 @@ pub fn handle(
     Ok(current), _ ->
       promise.resolve(respond.html(
         200,
-        view(context, current, current, link.no_errors),
+        view(context, current, link.to_draft(current), link.no_errors),
       ))
     Error(_), _ -> not_found.handle(req, context)
   }
@@ -56,7 +57,7 @@ pub fn handle(
 fn view(
   context: Context,
   current: Link,
-  draft: Link,
+  draft: Draft,
   errors: Errors,
 ) -> Element(Nil) {
   base.document(

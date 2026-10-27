@@ -1,8 +1,9 @@
 import components/dock
 import components/icons
 import components/side_nav.{Item}
-import features/links/link.{type Errors, type Link, Link}
+import features/links/link.{type Draft, type Errors}
 import features/links/link_form
+import features/links/submission
 import gleam/http.{Get, Post}
 import gleam/http/request.{type Request}
 import gleam/http/response.{type Response}
@@ -24,8 +25,8 @@ pub fn handle(req: Request(Body), context: Context) -> Promise(Response(Body)) {
   case req.method {
     Post -> {
       use fields <- form.read(req)
-      let draft = link_form.draft(fields)
-      use submitted <- promise.map(link_form.submit(
+      let draft = submission.draft(fields)
+      use submitted <- promise.map(submission.submit(
         context.env,
         draft,
         replacing: None,
@@ -37,14 +38,14 @@ pub fn handle(req: Request(Body), context: Context) -> Promise(Response(Body)) {
       }
     }
     _ -> {
-      let draft = Link(id: "", name: "", url: "")
+      let draft = link.empty_draft
 
       promise.resolve(respond.html(200, view(context, draft, link.no_errors)))
     }
   }
 }
 
-fn view(context: Context, draft: Link, errors: Errors) -> Element(Nil) {
+fn view(context: Context, draft: Draft, errors: Errors) -> Element(Nil) {
   base.document(
     "New link",
     left: [

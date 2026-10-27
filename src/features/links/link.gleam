@@ -8,9 +8,15 @@ pub type Link {
   Link(id: String, name: String, url: String)
 }
 
+pub type Draft {
+  Draft(id: String, name: String, url: String)
+}
+
 pub type Errors {
   Errors(id: Option(String), name: Option(String), url: Option(String))
 }
+
+pub const empty_draft = Draft(id: "", name: "", url: "")
 
 pub const no_errors = Errors(id: None, name: None, url: None)
 
@@ -62,7 +68,11 @@ pub fn normalize_id(id: String) -> String {
   id |> string.trim |> string.lowercase
 }
 
-pub fn parse(draft: Link) -> Result(Link, Errors) {
+pub fn to_draft(link: Link) -> Draft {
+  Draft(id: link.id, name: link.name, url: link.url)
+}
+
+pub fn parse(draft: Draft) -> Result(Link, Errors) {
   case parse_id(draft.id), parse_name(draft.name), parse_url(draft.url) {
     Ok(id), Ok(""), Ok(url) -> Ok(Link(id:, name: id, url:))
     Ok(id), Ok(name), Ok(url) -> Ok(Link(id:, name:, url:))

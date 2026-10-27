@@ -1,39 +1,16 @@
-import bindings/env.{type Env}
 import components/button
 import components/text_input
-import features/links/link.{type Errors, type Link, Errors, Link}
-import features/links/store
-import gleam/javascript/promise.{type Promise}
-import gleam/list
-import gleam/option.{type Option, Some}
-import gleam/result
+import features/links/link.{type Draft, type Errors, Errors}
+import gleam/option.{Some}
 import lustre/attribute
 import lustre/element.{type Element}
 import lustre/element/html
 
-pub fn draft(fields: List(#(String, String))) -> Link {
-  let field = fn(key) { list.key_find(fields, key) |> result.unwrap("") }
-
-  Link(id: field("id"), name: field("name"), url: field("url"))
-}
-
-pub fn submit(
-  env: Env,
-  draft: Link,
-  replacing from: Option(String),
-) -> Promise(Result(Link, Errors)) {
-  case link.parse(draft) {
-    Error(errors) -> promise.resolve(Error(errors))
-    Ok(parsed) -> {
-      use saved <- promise.map(store.save(env, parsed, replacing: from))
-
-      result.replace(saved, parsed)
-      |> result.replace_error(link.taken(parsed.id))
-    }
-  }
-}
-
-pub fn view(draft: Link, errors: Errors, submit_label: String) -> Element(Nil) {
+pub fn view(
+  draft: Draft,
+  errors: Errors,
+  submit_label: String,
+) -> Element(Nil) {
   let focus = case errors {
     Errors(id: Some(_), ..) -> "id"
     Errors(name: Some(_), ..) -> "name"
