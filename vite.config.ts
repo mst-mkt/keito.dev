@@ -2,11 +2,52 @@ import { gleamImportPlugin } from "@chouquette/gleam-vite-loader";
 import { cloudflare } from "@cloudflare/vite-plugin";
 import tailwindcss from "@tailwindcss/vite";
 import { cn } from "cn/vite";
-import { defineConfig, lazyPlugins } from "vite-plus";
+import { readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+import { defineConfig, lazyPlugins, type Plugin } from "vite-plus";
+
+const stories = (): Plugin => {
+  const id = "virtual:stories";
+  const resolved = `\0${id}`;
+  let directory = "src";
+
+  const storyModules = () => {
+    return readdirSync(directory, { recursive: true, encoding: "utf8" })
+      .filter((file) => file.endsWith(".gleam"))
+      .filter((file) => /^pub fn stories\(\)/m.test(readFileSync(join(directory, file), "utf8")))
+      .map((file) => file.slice(0, -".gleam".length))
+      .sort();
+  };
+
+  return {
+    name: "stories",
+    configResolved: (config) => {
+      directory = join(config.root, "src");
+    },
+    resolveId: (source) => (source === id ? resolved : null),
+    load: (source) => {
+      if (source !== resolved) return null;
+      const modules = storyModules();
+      const imports = modules.map(
+        (module, index) => `import * as m${index} from "gleam:${module}";`,
+      );
+      const entries = modules.map((module, index) => `["${module}", m${index}.stories()]`);
+
+      return [...imports, `export const modules = () => [${entries.join(", ")}];`].join("\n");
+    },
+    hotUpdate({ file, modules }) {
+      const module = this.environment.moduleGraph.getModuleById(resolved);
+      if (!file.endsWith(".gleam") || !module) return;
+
+      return [...modules, module];
+    },
+  };
+};
 
 export default defineConfig({
   plugins: lazyPlugins(() => [
     gleamImportPlugin(),
+    stories(),
     tailwindcss(),
     cn({ content: ["src/**/*.gleam"], out: ".generated/cn-tables.ts" }),
     cloudflare(),

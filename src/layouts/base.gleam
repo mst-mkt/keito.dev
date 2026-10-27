@@ -11,6 +11,21 @@ pub fn document(
   dock dock: List(dock.Item(Nil)),
   client_entry client_entry: String,
 ) -> Element(Nil) {
+  shell(title, client_entry, [
+    html.div([attribute.class("flex justify-center gap-x-12 px-6 py-24")], [
+      sidebar(left),
+      html.main([attribute.class("w-full max-w-2xl min-w-0")], content),
+      sidebar(right),
+    ]),
+    dock.view("Menu", dock),
+  ])
+}
+
+pub fn shell(
+  title: String,
+  client_entry: String,
+  body: List(Element(Nil)),
+) -> Element(Nil) {
   html.html([attribute.lang("ja")], [
     html.head([], [
       html.meta([attribute.charset("utf-8")]),
@@ -39,14 +54,7 @@ pub fn document(
       ]),
       html.script([attribute.type_("module"), attribute.src(client_entry)], ""),
     ]),
-    html.body([], [
-      html.div([attribute.class("flex justify-center gap-x-12 px-6 py-24")], [
-        sidebar(left),
-        html.main([attribute.class("w-full max-w-2xl min-w-0")], content),
-        sidebar(right),
-      ]),
-      dock.view("Menu", dock),
-    ]),
+    html.body([], body),
   ])
 }
 
