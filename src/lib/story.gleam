@@ -63,10 +63,14 @@ pub fn select(
   next: fn(value) -> Args(a),
 ) -> Args(a) {
   use query <- control(next)
-  let selected = case dict.get(query, name) {
-    Ok(label) -> list.find(options, fn(option) { option.0 == label })
-    Error(Nil) -> list.find(options, fn(option) { option.1 == default })
-  }
+  let selected =
+    dict.get(query, name)
+    |> result.try(fn(label) {
+      list.find(options, fn(option) { option.0 == label })
+    })
+    |> result.lazy_or(fn() {
+      list.find(options, fn(option) { option.1 == default })
+    })
   let #(label, value) = result.unwrap(selected, #("", default))
   let labels = list.map(options, fn(option) { option.0 })
 
