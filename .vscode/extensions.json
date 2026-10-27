@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "gleam.gleam",
+    "oxc.oxc-vscode",
+    "bradlc.vscode-tailwindcss",
+    "tamasfe.even-better-toml",
+    "jnoortheen.nix-ide"
+  ]
+}

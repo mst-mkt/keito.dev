@@ -1,0 +1,70 @@
+{
+  "editor.tabSize": 2,
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.oxc": "always",
+    "source.removeUnusedImports": "always"
+  },
+
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  "files.trimFinalNewlines": true,
+  "files.eol": "\n",
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "files.watcherExclude": {
+    "**/build/**": true,
+    "**/.cloudflare/output/**": true
+  },
+  "files.readonlyInclude": {
+    ".generated/**": true,
+    "manifest.toml": true
+  },
+
+  "js/ts.suggest.autoImports": true,
+  "js/ts.updateImportsOnFileMove.enabled": "always",
+
+  "tailwindCSS.includeLanguages": {
+    "gleam": "html"
+  },
+  "tailwindCSS.experimental.classRegex": [
+    "attribute\\.class\\(\\s*\"([^\"]*)\"",
+    ["cn\\(\\[([^\\]]*)\\]", "\"([^\"]*)\""]
+  ],
+
+  "[gleam]": {
+    "editor.defaultFormatter": "gleam.gleam"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[tailwindcss]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[github-actions-workflow]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[toml]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[nix]": {
+    "editor.defaultFormatter": "jnoortheen.nix-ide"
+  },
+
+  "oxc.typeAware": true,
+  "oxc.fmt.configPath": "./vite.config.ts"
+}
