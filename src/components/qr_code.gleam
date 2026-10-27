@@ -1,7 +1,7 @@
 import gleam/int
 import gleam/list
 import gleam/string
-import glqr
+import lib/qr
 import lib/story.{type Story}
 import lustre/attribute
 import lustre/element.{type Element}
@@ -11,57 +11,31 @@ import lustre/element/svg
 const quiet_zone = 4
 
 pub fn view(text: String, label: String) -> Element(msg) {
-  let generated =
-    glqr.new(text)
-    |> glqr.error_correction(glqr.M)
-    |> glqr.generate
-
-  case generated {
-    Ok(qr) -> {
-      let #(size, bits) = glqr.to_bits(qr)
-      view_modules(list.sized_chunk(modules(bits, []), size), label)
-    }
+  case qr.modules(text) {
+    Ok(modules) -> view_modules(modules, label)
     Error(_) -> element.none()
   }
 }
 
-fn modules(bits: BitArray, acc: List(Bool)) -> List(Bool) {
-  case bits {
-    <<1:1, rest:bits>> -> modules(rest, [True, ..acc])
-    <<0:1, rest:bits>> -> modules(rest, [False, ..acc])
-    _ -> list.reverse(acc)
-  }
-}
-
 fn view_modules(modules: List(List(Bool)), label: String) -> Element(msg) {
+  let origin = int.to_string(-quiet_zone)
   let size = int.to_string(list.length(modules) + quiet_zone * 2)
-  let path =
-    modules
-    |> list.index_map(fn(row, y) {
-      list.index_map(row, fn(dark, x) {
-        case dark {
-          True ->
-            "M"
-            <> int.to_string(x + quiet_zone)
-            <> " "
-            <> int.to_string(y + quiet_zone)
-            <> "h1v1h-1z"
-          False -> ""
-        }
-      })
-    })
-    |> list.flatten
-    |> string.concat
+  let view_box = [origin, origin, size, size]
 
   html.svg(
     [
-      attribute.attribute("viewBox", "0 0 " <> size <> " " <> size),
+      attribute.attribute("viewBox", string.join(view_box, " ")),
       attribute.attribute("shape-rendering", "crispEdges"),
       attribute.role("img"),
       attribute.aria_label(label),
       attribute.class("aspect-square w-full bg-bg"),
     ],
-    [svg.path([attribute.attribute("d", path), attribute.class("fill-fg")])],
+    [
+      svg.path([
+        attribute.attribute("d", qr.path(modules)),
+        attribute.class("fill-fg"),
+      ]),
+    ],
   )
 }
 
