@@ -68,6 +68,10 @@ fn page(
         attribute.rel("stylesheet"),
         attribute.href("/entry/style.css"),
       ]),
+      html.link([
+        attribute.rel("webmention"),
+        attribute.href("https://webmention.io/keito.dev/webmention"),
+      ]),
       html.script([attribute.type_("module"), attribute.src(client_entry)], ""),
       ..head
     ]),
