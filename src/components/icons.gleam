@@ -367,6 +367,14 @@ pub fn iniad(attributes: List(Attribute(msg))) -> Element(msg) {
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+pub fn arrow_left(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 24 24", attributes, [
+    svg.path([
+      attribute.attribute("d", "M21 12L3 12M3 12L11.5 3.5M3 12L11.5 20.5"),
+    ]),
+  ])
+}
+
 pub fn arrow_up_right(attributes: List(Attribute(msg))) -> Element(msg) {
   icon("0 0 24 24", attributes, [
     svg.path([
@@ -396,6 +404,17 @@ pub fn fast_arrow_left(attributes: List(Attribute(msg))) -> Element(msg) {
   ])
 }
 
+pub fn home_simple_door(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 24 24", attributes, [
+    svg.path([
+      attribute.attribute(
+        "d",
+        "M9 21H7C4.79086 21 3 19.2091 3 17V10.7076C3 9.30887 3.73061 8.01175 4.92679 7.28679L9.92679 4.25649C11.2011 3.48421 12.7989 3.48421 14.0732 4.25649L19.0732 7.28679C20.2694 8.01175 21 9.30887 21 10.7076V17C21 19.2091 19.2091 21 17 21H15M9 21V17C9 15.3431 10.3431 14 12 14V14C13.6569 14 15 15.3431 15 17V21M9 21H15",
+      ),
+    ]),
+  ])
+}
+
 pub fn link(attributes: List(Attribute(msg))) -> Element(msg) {
   icon("0 0 24 24", attributes, [
     svg.path([
@@ -410,6 +429,23 @@ pub fn link(attributes: List(Attribute(msg))) -> Element(msg) {
         "M10 11.9976C10 14.4893 12.317 16.9952 15.1429 16.9952C15.4776 16.9952 16.581 16.9952 16.8571 16.9952C19.6975 16.9952 22 14.7577 22 11.9976C22 9.6192 20.2903 7.62884 18 7.12383C17.6324 7.04278 17.2499 6.99999 16.8571 6.99999",
       ),
     ]),
+  ])
+}
+
+pub fn list(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 24 24", attributes, [
+    svg.path([attribute.attribute("d", "M8 6L20 6")]),
+    svg.path([attribute.attribute("d", "M4 6.01L4.01 5.99889")]),
+    svg.path([attribute.attribute("d", "M4 12.01L4.01 11.9989")]),
+    svg.path([attribute.attribute("d", "M4 18.01L4.01 17.9989")]),
+    svg.path([attribute.attribute("d", "M8 12L20 12")]),
+    svg.path([attribute.attribute("d", "M8 18L20 18")]),
+  ])
+}
+
+pub fn nav_arrow_down(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 24 24", attributes, [
+    svg.path([attribute.attribute("d", "M6 9L12 15L18 9")]),
   ])
 }
 
