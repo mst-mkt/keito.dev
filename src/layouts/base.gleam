@@ -3,7 +3,7 @@ import lustre/attribute
 import lustre/element.{type Element}
 import lustre/element/html
 
-const origin = "https://keito.dev"
+pub const origin = "https://keito.dev"
 
 pub fn canonical(path: String) -> Element(Nil) {
   html.link([attribute.rel("canonical"), attribute.href(origin <> path)])

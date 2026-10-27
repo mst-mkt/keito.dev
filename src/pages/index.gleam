@@ -37,17 +37,17 @@ fn view(context: Context, profiles: List(Link)) -> Element(Nil) {
     "Home",
     left: [],
     content: [
-      html.div([attribute.class("grid enter gap-y-12")], [
+      html.div([attribute.class("h-card grid enter gap-y-12")], [
         html.header([attribute.class("grid gap-y-4")], [
           avatar.view(),
           html.hgroup([], [
-            html.h1([attribute.class("text-2xl font-bold")], [
+            html.h1([attribute.class("p-name text-2xl font-bold")], [
               html.text("mst-mkt"),
             ]),
             html.p([attribute.class("text-muted")], [html.text("keito /keːto/")]),
           ]),
         ]),
-        html.div([], [
+        html.div([attribute.class("p-note")], [
           html.p([], [
             html.text("Software engineer."),
             html.br([]),
@@ -148,6 +148,22 @@ fn view(context: Context, profiles: List(Link)) -> Element(Nil) {
             ],
           ),
         ]),
+        html.data(
+          [
+            attribute.class("u-url u-uid"),
+            attribute.value(base.origin <> "/"),
+            attribute.hidden(True),
+          ],
+          [],
+        ),
+        html.data(
+          [
+            attribute.class("u-photo"),
+            attribute.value(base.origin <> "/avatar.png"),
+            attribute.hidden(True),
+          ],
+          [],
+        ),
       ]),
     ],
     right: [],
