@@ -6,7 +6,7 @@ import lustre/element/html
 
 pub type Item(msg) {
   Item(
-    text: String,
+    label: String,
     href: String,
     icon: fn(List(Attribute(msg))) -> Element(msg),
   )
@@ -33,7 +33,7 @@ fn view_item(item: Item(msg)) -> Element(msg) {
       ],
       [
         item.icon([attribute.aria_hidden(True), attribute.class("size-4")]),
-        html.text(item.text),
+        html.text(item.label),
       ],
     ),
   ])
