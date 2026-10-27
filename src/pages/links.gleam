@@ -68,7 +68,7 @@ fn view(context: Context, links: List(Link)) -> Element(Nil) {
       dock.Link("Home", "/", icons.home_simple_door),
       dock.Link("Add link", link.new_path, icons.plus),
     ],
-    head: [],
+    head: [base.canonical(link.list_path)],
     client_entry: context.client_entry,
   )
 }

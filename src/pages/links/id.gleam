@@ -77,7 +77,7 @@ fn view(context: Context, current: Link) -> Element(Nil) {
       dock.Link("Edit", link.edit_path(current.id), icons.edit_pencil),
       dock.Link("Delete", link.delete_path(current.id), icons.trash),
     ],
-    head: [],
+    head: [base.canonical(link.page_path(current.id))],
     client_entry: context.client_entry,
   )
 }

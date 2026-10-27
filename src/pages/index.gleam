@@ -152,9 +152,12 @@ fn view(context: Context, profiles: List(Link)) -> Element(Nil) {
     ],
     right: [],
     dock: [],
-    head: list.map(profiles, fn(profile) {
-      html.link([attribute.rel("me"), attribute.href(profile.url)])
-    }),
+    head: [
+      base.canonical("/"),
+      ..list.map(profiles, fn(profile) {
+        html.link([attribute.rel("me"), attribute.href(profile.url)])
+      })
+    ],
     client_entry: context.client_entry,
   )
 }
