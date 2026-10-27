@@ -40,7 +40,7 @@ pub fn document(
       html.script([attribute.type_("module"), attribute.src(client_entry)], ""),
     ]),
     html.body([], [
-      html.div([attribute.class("flex justify-center gap-x-6 px-6 py-24")], [
+      html.div([attribute.class("flex justify-center gap-x-12 px-6 py-24")], [
         sidebar(left),
         html.main([attribute.class("w-full max-w-2xl min-w-0")], content),
         sidebar(right),
