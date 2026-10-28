@@ -58,10 +58,14 @@ fn view(context: Context, current: Link) -> Element(Nil) {
           qr_code.view(short_url, "QR code for " <> short_url),
           button.new()
             |> button.class("w-full")
-            |> button.link(current.url, [attribute.rel("me")], [
-              icons.open_new_window([attribute.aria_hidden(True)]),
-              html.text("Open link"),
-            ]),
+            |> button.link(
+              current.url,
+              [attribute.target("_blank"), attribute.rel("me noopener")],
+              [
+                icons.open_new_window([attribute.aria_hidden(True)]),
+                html.text("Open link"),
+              ],
+            ),
           html.a(
             [
               attribute.href(link.wallet_path(current.id)),

@@ -108,7 +108,8 @@ fn view_item(item: Link) -> Element(Nil) {
       |> button.link(
         item.url,
         [
-          attribute.rel("me"),
+          attribute.target("_blank"),
+          attribute.rel("me noopener"),
           attribute.aria_label("Open " <> item.name),
           attribute.title(display_url),
         ],
