@@ -8,7 +8,7 @@ import server/context.{type Context}
 import server/middleware
 import server/respond
 
-const lines = ["User-agent: *", "Allow: /"]
+const lines = ["User-agent: *", "Allow: /", "Disallow: /links/*/wallet"]
 
 pub fn handle(
   req: Request(Body),
