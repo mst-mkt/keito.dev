@@ -3,7 +3,7 @@
     "target": "esnext",
     "lib": ["esnext"],
     "module": "preserve",
-    "types": ["vite-plus/client"],
+    "types": ["vite-plus/client", "w3c-web-nfc"],
     "noEmit": true,
     "allowImportingTsExtensions": true,
     "strict": true,
