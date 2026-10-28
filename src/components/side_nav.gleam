@@ -27,14 +27,17 @@ fn view_item(item: Item(msg)) -> Element(msg) {
         attribute.href(item.href),
         attribute.class(
           cn([
-            "flex w-fit items-center gap-x-2 rounded-sm text-sm",
+            "flex w-fit items-baseline gap-x-2 rounded-sm text-sm",
             "text-subtle transition-colors hover:text-fg focus-visible:text-fg",
             "outline-offset-4 focus-visible:outline-2 focus-visible:outline-fg",
           ]),
         ),
       ],
       [
-        item.icon([attribute.aria_hidden(True), attribute.class("size-4")]),
+        item.icon([
+          attribute.aria_hidden(True),
+          attribute.class("size-4 cap-center"),
+        ]),
         html.text(item.label),
       ],
     ),

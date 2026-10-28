@@ -16,9 +16,7 @@ pub fn with_icon(
   link(href, [
     icon([
       attribute.aria_hidden(True),
-      attribute.class(
-        "mr-1 ml-0.5 inline size-[1.25em] align-[calc((1cap-1.25em)/2)]",
-      ),
+      attribute.class("mr-1 ml-0.5 inline size-[1.25em] cap-center"),
     ]),
     html.text(text),
   ])

@@ -133,7 +133,7 @@ fn view(context: Context, profiles: List(Link)) -> Element(Nil) {
               attribute.href(link.list_path),
               attribute.class(
                 cn([
-                  "flex w-fit items-center gap-x-1 justify-self-end rounded-sm text-sm",
+                  "flex w-fit items-baseline gap-x-1 justify-self-end rounded-sm text-sm",
                   "text-subtle transition-colors hover:text-fg focus-visible:text-fg",
                   "outline-offset-4 focus-visible:outline-2 focus-visible:outline-fg",
                 ]),
@@ -143,7 +143,7 @@ fn view(context: Context, profiles: List(Link)) -> Element(Nil) {
               html.text("more"),
               icons.arrow_up_right([
                 attribute.aria_hidden(True),
-                attribute.class("size-3.5"),
+                attribute.class("size-3.5 cap-center"),
               ]),
             ],
           ),

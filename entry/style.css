@@ -30,6 +30,11 @@
   }
 }
 
+@utility cap-center {
+  vertical-align: baseline;
+  translate: 0 calc(50% - 0.5cap);
+}
+
 @layer base {
   :root {
     color-scheme: light dark;
