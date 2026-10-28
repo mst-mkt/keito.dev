@@ -4,6 +4,7 @@ import components/icons
 import components/qr_code
 import components/side_nav.{Item}
 import features/links/link.{type Link}
+import features/links/nfc
 import features/links/store
 import gleam/http.{Get}
 import gleam/http/request.{type Request}
@@ -56,16 +57,19 @@ fn view(context: Context, current: Link) -> Element(Nil) {
         ]),
         html.div([attribute.class("grid gap-y-3")], [
           qr_code.view(short_url, "QR code for " <> short_url),
-          button.new()
-            |> button.class("w-full")
-            |> button.link(
-              current.url,
-              [attribute.target("_blank"), attribute.rel("me noopener")],
-              [
-                icons.open_new_window([attribute.aria_hidden(True)]),
-                html.text("Open link"),
-              ],
-            ),
+          html.div([attribute.class("flex flex-wrap gap-2")], [
+            button.new()
+              |> button.class("grow basis-36")
+              |> button.link(
+                current.url,
+                [attribute.target("_blank"), attribute.rel("me noopener")],
+                [
+                  icons.open_new_window([attribute.aria_hidden(True)]),
+                  html.text("Open link"),
+                ],
+              ),
+            nfc.view(short_url),
+          ]),
           html.a(
             [
               attribute.href(link.wallet_path(current.id)),
