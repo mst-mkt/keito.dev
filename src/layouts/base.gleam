@@ -42,6 +42,11 @@ fn page(
   head: List(Element(Nil)),
   body: List(Element(Nil)),
 ) -> Element(Nil) {
+  let title = case title {
+    "" -> "keito.dev"
+    _ -> title <> " | keito.dev"
+  }
+
   html.html([attribute.lang("en")], [
     html.head([], [
       html.meta([attribute.charset("utf-8")]),
@@ -53,10 +58,35 @@ fn page(
         attribute.name("color-scheme"),
         attribute.content("light dark"),
       ]),
-      html.title([], case title {
-        "" -> "keito.dev"
-        _ -> title <> " | keito.dev"
-      }),
+      html.title([], title),
+      html.meta([
+        attribute.attribute("property", "og:title"),
+        attribute.content(title),
+      ]),
+      html.meta([
+        attribute.attribute("property", "og:site_name"),
+        attribute.content("keito.dev"),
+      ]),
+      html.meta([
+        attribute.attribute("property", "og:type"),
+        attribute.content("website"),
+      ]),
+      html.meta([
+        attribute.attribute("property", "og:image"),
+        attribute.content(origin <> "/ogp.png"),
+      ]),
+      html.meta([
+        attribute.attribute("property", "og:image:width"),
+        attribute.content("2400"),
+      ]),
+      html.meta([
+        attribute.attribute("property", "og:image:height"),
+        attribute.content("1260"),
+      ]),
+      html.meta([
+        attribute.name("twitter:card"),
+        attribute.content("summary_large_image"),
+      ]),
       html.link([
         attribute.rel("icon"),
         attribute.type_("image/svg+xml"),
