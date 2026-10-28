@@ -386,6 +386,17 @@ pub fn arrow_up_right(attributes: List(Attribute(msg))) -> Element(msg) {
   ])
 }
 
+pub fn contactless(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 24 24", attributes, [
+    svg.path([attribute.attribute("d", "M15 21.5C19 16 19 8 15 2.5")]),
+    svg.path([attribute.attribute("d", "M11.5 20C15 15 15 9 11.5 4")]),
+    svg.path([
+      attribute.attribute("d", "M8.5 18C11.1667 14.25 11.1667 9.75 8.5 6"),
+    ]),
+    svg.path([attribute.attribute("d", "M5.5 16C7 13.5 7 10.5 5.5 8")]),
+  ])
+}
+
 pub fn edit_pencil(attributes: List(Attribute(msg))) -> Element(msg) {
   icon("0 0 24 24", attributes, [
     svg.path([
