@@ -53,7 +53,10 @@ fn page(
         attribute.name("color-scheme"),
         attribute.content("light dark"),
       ]),
-      html.title([], title <> " | keito.dev"),
+      html.title([], case title {
+        "" -> "keito.dev"
+        _ -> title <> " | keito.dev"
+      }),
       html.link([
         attribute.rel("icon"),
         attribute.type_("image/svg+xml"),

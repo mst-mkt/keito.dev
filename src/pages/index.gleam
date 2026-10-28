@@ -34,7 +34,7 @@ pub fn handle(req: Request(Body), context: Context) -> Promise(Response(Body)) {
 
 fn view(context: Context, profiles: List(Link)) -> Element(Nil) {
   base.document(
-    "Home",
+    "",
     left: [],
     content: [
       html.div([attribute.class("h-card grid enter gap-y-12")], [
