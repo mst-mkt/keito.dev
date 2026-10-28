@@ -24,13 +24,13 @@ pub const list_path = "/links"
 
 pub const new_path = "/links/new"
 
+pub const origin = "https://keito.dev"
+
 const id_characters = "abcdefghijklmnopqrstuvwxyz0123456789-_."
 
 const reserved_ids = ["new", ".", ".."]
 
 const unsafe_characters = " \"<>\\^`{|}"
-
-const origin = "https://keito.dev"
 
 pub fn page_path(id: String) -> String {
   list_path <> "/" <> id
@@ -42,6 +42,10 @@ pub fn edit_path(id: String) -> String {
 
 pub fn delete_path(id: String) -> String {
   page_path(id) <> "/delete"
+}
+
+pub fn wallet_path(id: String) -> String {
+  page_path(id) <> "/wallet"
 }
 
 pub fn redirect_path(id: String) -> String {

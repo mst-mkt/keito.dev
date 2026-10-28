@@ -62,6 +62,23 @@ fn view(context: Context, current: Link) -> Element(Nil) {
               icons.open_new_window([attribute.aria_hidden(True)]),
               html.text("Open link"),
             ]),
+          html.a(
+            [
+              attribute.href(link.wallet_path(current.id)),
+              attribute.rel("nofollow"),
+              attribute.class(
+                "my-2 justify-self-center rounded-full outline-0 outline-fg/25 outline-solid focus-visible:outline-3",
+              ),
+            ],
+            [
+              html.img([
+                attribute.src("/add-to-google-wallet.svg"),
+                attribute.alt("Add to Google Wallet"),
+                attribute.width(283),
+                attribute.height(50),
+              ]),
+            ],
+          ),
         ]),
       ]),
     ],
