@@ -62,6 +62,10 @@ pub fn view() -> Element(msg) {
     ],
     [
       svg.defs([], [
+        svg.style(
+          [],
+          "@keyframes avatar-reveal { from { visibility: hidden; scale: 0.8; } }",
+        ),
         svg.clip_path(
           [attribute.id("avatar-reveal")],
           list.map(cells, view_reveal),
@@ -99,15 +103,14 @@ fn view_reveal(cell: Cell) -> Element(msg) {
     attribute.class(
       cn([
         "scale-120",
-        "starting:invisible starting:scale-80",
-        "transition-all duration-500 ease-out motion-reduce:transition-none",
+        "animate-[avatar-reveal_500ms_ease-out_both] motion-reduce:animate-none",
       ]),
     ),
     attribute.style(
       "transform-origin",
       int.to_string(cell.x + 5) <> "px " <> int.to_string(cell.y + 5) <> "px",
     ),
-    attribute.style("transition-delay", int.to_string(cell.delay) <> "ms"),
+    attribute.style("animation-delay", int.to_string(cell.delay) <> "ms"),
   ])
 }
 
