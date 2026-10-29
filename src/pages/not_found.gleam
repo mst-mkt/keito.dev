@@ -7,12 +7,15 @@ import lustre/element.{type Element}
 import lustre/element/html
 import server/context.{type Context}
 import server/respond
+import server/user_agent.{Browser, Terminal}
 
-pub fn handle(
-  _req: Request(Body),
-  context: Context,
-) -> Promise(Response(Body)) {
-  promise.resolve(respond.html(404, view(context)))
+pub fn handle(req: Request(Body), context: Context) -> Promise(Response(Body)) {
+  use client <- user_agent.detect(req)
+
+  promise.resolve(case client {
+    Terminal -> respond.text(404, "Not Found")
+    Browser -> respond.html(404, view(context))
+  })
 }
 
 fn view(context: Context) -> Element(Nil) {

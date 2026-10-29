@@ -12,6 +12,8 @@ import gleam/http/response.{type Response}
 import gleam/javascript/promise.{type Promise}
 import hinoto/body.{type Body}
 import layouts/base
+import lib/qr
+import lib/terminal
 import lustre/attribute
 import lustre/element.{type Element}
 import lustre/element/html
@@ -19,6 +21,7 @@ import pages/not_found
 import server/context.{type Context}
 import server/middleware
 import server/respond
+import server/user_agent.{Browser, Terminal}
 
 pub fn handle(
   req: Request(Body),
@@ -26,12 +29,32 @@ pub fn handle(
   id: String,
 ) -> Promise(Response(Body)) {
   use <- middleware.require_methods(req, [Get])
+  use client <- user_agent.detect(req)
   use found <- promise.await(store.get(context.env, id))
 
-  case found {
-    Ok(current) -> promise.resolve(respond.html(200, view(context, current)))
-    Error(_) -> not_found.handle(req, context)
+  case found, client {
+    Ok(current), Terminal ->
+      promise.resolve(respond.text(200, text_view(current)))
+    Ok(current), Browser ->
+      promise.resolve(respond.html(200, view(context, current)))
+    Error(_), _ -> not_found.handle(req, context)
   }
+}
+
+fn text_view(current: Link) -> String {
+  let short_url = link.short_url(current.id)
+
+  terminal.document([
+    [
+      terminal.bold(current.name),
+      terminal.link(terminal.dim(link.display_url(current.url)), current.url),
+    ],
+    case qr.modules(short_url) {
+      Ok(modules) -> qr.blocks(modules)
+      Error(_) -> []
+    },
+    [terminal.link(short_url, short_url)],
+  ])
 }
 
 fn view(context: Context, current: Link) -> Element(Nil) {

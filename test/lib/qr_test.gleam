@@ -10,6 +10,18 @@ pub fn modules_square_test() {
   assert list.all(modules, fn(row) { list.length(row) == size })
 }
 
+pub fn blocks_test() {
+  let modules = [
+    [True, True, False, False],
+    [True, False, True, False],
+    [True, False, False, True],
+  ]
+
+  let result = qr.blocks(modules)
+
+  assert result == ["█▀▄ ", "▀  ▀"]
+}
+
 pub fn path_dark_modules_test() {
   let modules = [[True, False], [False, True]]
 

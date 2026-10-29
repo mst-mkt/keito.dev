@@ -32,6 +32,28 @@ pub fn path(modules: List(List(Bool))) -> String {
   |> string.concat
 }
 
+pub fn blocks(modules: List(List(Bool))) -> List(String) {
+  modules
+  |> list.sized_chunk(2)
+  |> list.map(fn(rows) {
+    case rows {
+      [top, bottom] -> list.map2(top, bottom, block)
+      [top] -> list.map(top, block(_, False))
+      _ -> []
+    }
+    |> string.concat
+  })
+}
+
+fn block(top: Bool, bottom: Bool) -> String {
+  case top, bottom {
+    True, True -> "█"
+    True, False -> "▀"
+    False, True -> "▄"
+    False, False -> " "
+  }
+}
+
 fn to_bools(bits: BitArray, acc: List(Bool)) -> List(Bool) {
   case bits {
     <<1:1, rest:bits>> -> to_bools(rest, [True, ..acc])

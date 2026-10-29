@@ -8,15 +8,19 @@ import gleam/http/request.{type Request}
 import gleam/http/response.{type Response}
 import gleam/javascript/promise.{type Promise}
 import gleam/list
+import gleam/string
 import hinoto/body.{type Body}
 import layouts/base
 import lib/cn.{cn}
+import lib/emoji
+import lib/terminal
 import lustre/attribute
 import lustre/element.{type Element}
 import lustre/element/html
 import server/context.{type Context}
 import server/middleware
 import server/respond
+import server/user_agent.{Browser, Terminal}
 
 const links = [
   #("GitHub", "mst-mkt", "github"),
@@ -27,9 +31,64 @@ const links = [
 
 pub fn handle(req: Request(Body), context: Context) -> Promise(Response(Body)) {
   use <- middleware.require_methods(req, [Get])
-  use profiles <- promise.map(store.list(context.env))
+  use client <- user_agent.detect(req)
 
-  respond.html(200, view(context, profiles))
+  case client {
+    Terminal -> promise.resolve(respond.text(200, text_view()))
+    Browser -> {
+      use profiles <- promise.map(store.list(context.env))
+      respond.html(200, view(context, profiles))
+    }
+  }
+}
+
+fn text_view() -> String {
+  let projects = [
+    inline_link("Nuten", "https://nuten.keito.dev/"),
+    inline_link(
+      "mixi2-application-sdk-ts",
+      "https://github.com/mst-mkt/mixi2-application-sdk-ts",
+    ),
+    inline_link("autopair.nu", "https://github.com/mst-mkt/autopair.nu"),
+    inline_link("omniwm.nix", "https://github.com/mst-mkt/omniwm.nix"),
+  ]
+
+  terminal.document([
+    terminal.beside(emoji.yarn, [
+      "",
+      terminal.bold("mst-mkt"),
+      terminal.dim("keito /keːto/"),
+    ]),
+    terminal.paragraph([
+      "Software engineer.",
+      "Interested in web frontend, microblogging, JavaScript toolchains, Linux desktop, Nix, Nushell, and more.",
+    ]),
+    terminal.paragraph([
+      "Computer science undergraduate at "
+        <> inline_link("INIAD", "https://www.iniad.org/")
+        <> ".",
+      "Working part-time at "
+        <> inline_link("Hatena", "https://hatena.co.jp/")
+        <> ".",
+    ]),
+    terminal.paragraph([
+      "Building and maintaining "
+      <> string.join(projects, ", ")
+      <> ", and more.",
+    ]),
+    list.map(links, fn(entry) {
+      let #(service, account, id) = entry
+      let url = link.short_url(id)
+      terminal.leader(
+        terminal.link(service, url),
+        terminal.link(terminal.dim(account), url),
+      )
+    }),
+  ])
+}
+
+fn inline_link(text: String, url: String) -> String {
+  terminal.link(terminal.underline(text), url)
 }
 
 fn view(context: Context, profiles: List(Link)) -> Element(Nil) {

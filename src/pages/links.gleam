@@ -13,18 +13,42 @@ import gleam/list
 import hinoto/body.{type Body}
 import layouts/base
 import lib/cn.{cn}
+import lib/terminal
 import lustre/attribute
 import lustre/element.{type Element}
 import lustre/element/html
 import server/context.{type Context}
 import server/middleware
 import server/respond
+import server/user_agent.{Browser, Terminal}
 
 pub fn handle(req: Request(Body), context: Context) -> Promise(Response(Body)) {
   use <- middleware.require_methods(req, [Get])
+  use client <- user_agent.detect(req)
   use links <- promise.map(store.list(context.env))
 
-  respond.html(200, view(context, links))
+  case client {
+    Terminal -> respond.text(200, text_view(links))
+    Browser -> respond.html(200, view(context, links))
+  }
+}
+
+fn text_view(links: List(Link)) -> String {
+  terminal.document([
+    [terminal.dim("mst-mkt/") <> terminal.bold("links")],
+    case links {
+      [] -> [terminal.dim("No links.")]
+      _ ->
+        terminal.table(
+          list.map(links, fn(item) {
+            [
+              terminal.link(item.name, item.url),
+              terminal.link(terminal.dim(link.display_url(item.url)), item.url),
+            ]
+          }),
+        )
+    },
+  ])
 }
 
 fn view(context: Context, links: List(Link)) -> Element(Nil) {
