@@ -68,6 +68,70 @@ pub fn dev_null(attributes: List(Attribute(msg))) -> Element(msg) {
   ])
 }
 
+// ## Arch Linux
+// Source: https://gitlab.archlinux.org/archlinux/archlinux-common-style/-/blob/4206344e6631097447c5582b51539dd840cf6269/img/favicon.svg
+// License: MIT
+// Terms: https://terms.archlinux.org/docs/trademark-policy/
+//
+// The MIT License (MIT)
+//
+// Copyright (c) 2020 Levente Polyak
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+pub fn arch_linux(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 126 126", attributes, [
+    svg.g(
+      [
+        attribute.attribute(
+          "transform",
+          "matrix(0.7,0,0,0.7,-37.866513,-100.53407)",
+        ),
+      ],
+      [
+        svg.g(
+          [
+            attribute.attribute(
+              "transform",
+              "matrix(0.8746356,0,0,0.8746356,14.730518,23.408954)",
+            ),
+          ],
+          [
+            svg.path([
+              attribute.attribute(
+                "d",
+                "m 146.07667,140.34607 c -8.79537,21.56391 -14.10032,35.66923 -23.89281,56.59215 6.00403,6.36425 13.37368,13.77576 25.34198,22.14636 -12.8671,-5.29474 -21.64403,-10.61053 -28.20317,-16.12673 -12.53252,26.15105 -32.167383,63.40203 -72.012843,134.99623 31.317194,-18.07996 55.593723,-29.22646 78.218283,-33.47965 -0.97151,-4.17845 -1.52386,-8.69825 -1.48634,-13.41417 l 0.0372,-1.00328 c 0.49693,-20.06409 10.93425,-35.49338 23.29826,-34.44576 12.36403,1.04761 21.97445,18.17182 21.47753,38.23591 -0.0935,3.77544 -0.51932,7.40735 -1.26338,10.77593 22.37891,4.37771 46.39587,15.49567 77.28933,33.33102 -6.0916,-11.21503 -11.52886,-21.32458 -16.72125,-30.9529 -8.17886,-6.33916 -16.70983,-14.58961 -34.11135,-23.52122 11.9608,3.10792 20.52459,6.69363 27.1999,10.7016 -52.79254,-98.29043 -57.0676,-111.3512 -75.17132,-153.83549 z",
+              ),
+              attribute.attribute("fill-rule", "evenodd"),
+              attribute.attribute("fill", "currentColor"),
+              attribute.attribute("stroke", "none"),
+              attribute.attribute("stroke-width", "1"),
+              attribute.attribute("stroke-linecap", "butt"),
+              attribute.attribute("stroke-linejoin", "miter"),
+            ]),
+          ],
+        ),
+      ],
+    ),
+  ])
+}
+
 // ## Bluesky
 // Source: https://bsky.social/about/support/icons (bluesky_media_kit_logo_transparent_4.svg)
 // Terms: https://bsky.social/about/support/branding
@@ -149,7 +213,7 @@ pub fn github(attributes: List(Attribute(msg))) -> Element(msg) {
 }
 
 // ## Hatena
-// Source: https://brand.hatena.co.jp/hatena (symbolmark_RGB.ai)
+// Source: https://brand.hatena.co.jp/hatena (symbolmark_RGB.ai, symbolmark_mono.ai)
 // Terms: https://brand.hatena.co.jp/hatena#guide-using
 
 pub fn hatena(attributes: List(Attribute(msg))) -> Element(msg) {
@@ -292,6 +356,167 @@ pub fn hatena(attributes: List(Attribute(msg))) -> Element(msg) {
         "M 436 244 C 436 257.253906 425.253906 268 412 268 C 398.746094 268 388 257.253906 388 244 C 388 230.746094 398.746094 220 412 220 C 425.253906 220 436 230.746094 436 244",
       ),
       attribute.attribute("fill", "#eeeeee"),
+      attribute.attribute("stroke", "none"),
+      attribute.attribute("stroke-width", "1"),
+      attribute.attribute("stroke-linecap", "butt"),
+      attribute.attribute("stroke-linejoin", "miter"),
+    ]),
+  ])
+}
+
+pub fn hatena_mono(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("100 100 336 300", attributes, [
+    svg.path([
+      attribute.attribute("fill-rule", "nonzero"),
+      attribute.attribute(
+        "d",
+        "M 244 124 C 244 137.253906 233.253906 148 220 148 C 206.746094 148 196 137.253906 196 124 C 196 110.746094 206.746094 100 220 100 C 233.253906 100 244 110.746094 244 124 ",
+      ),
+      attribute.attribute("fill", "currentColor"),
+      attribute.attribute("stroke", "none"),
+      attribute.attribute("stroke-width", "1"),
+      attribute.attribute("stroke-linecap", "butt"),
+      attribute.attribute("stroke-linejoin", "miter"),
+    ]),
+    svg.path([
+      attribute.attribute("fill-rule", "nonzero"),
+      attribute.attribute(
+        "d",
+        "M 340 124 C 340 137.253906 329.253906 148 316 148 C 302.746094 148 292 137.253906 292 124 C 292 110.746094 302.746094 100 316 100 C 329.253906 100 340 110.746094 340 124 ",
+      ),
+      attribute.attribute("fill", "currentColor"),
+      attribute.attribute("stroke", "none"),
+      attribute.attribute("stroke-width", "1"),
+      attribute.attribute("stroke-linecap", "butt"),
+      attribute.attribute("stroke-linejoin", "miter"),
+    ]),
+    svg.path([
+      attribute.attribute("fill-rule", "nonzero"),
+      attribute.attribute(
+        "d",
+        "M 220 220 C 206.746094 220 196 230.746094 196 244 C 196 257.253906 206.746094 268 220 268 C 233.253906 268 244 257.253906 244 244 C 244 230.746094 233.253906 220 220 220 M 220 225.484375 C 230.210938 225.484375 238.515625 233.789062 238.515625 244 C 238.515625 254.210938 230.210938 262.515625 220 262.515625 C 209.789062 262.515625 201.484375 254.210938 201.484375 244 C 201.484375 233.789062 209.789062 225.484375 220 225.484375 ",
+      ),
+      attribute.attribute("fill", "currentColor"),
+      attribute.attribute("stroke", "none"),
+      attribute.attribute("stroke-width", "1"),
+      attribute.attribute("stroke-linecap", "butt"),
+      attribute.attribute("stroke-linejoin", "miter"),
+    ]),
+    svg.path([
+      attribute.attribute("fill-rule", "nonzero"),
+      attribute.attribute(
+        "d",
+        "M 340 244 C 340 257.253906 329.253906 268 316 268 C 302.746094 268 292 257.253906 292 244 C 292 230.746094 302.746094 220 316 220 C 329.253906 220 340 230.746094 340 244 ",
+      ),
+      attribute.attribute("fill", "currentColor"),
+      attribute.attribute("stroke", "none"),
+      attribute.attribute("stroke-width", "1"),
+      attribute.attribute("stroke-linecap", "butt"),
+      attribute.attribute("stroke-linejoin", "miter"),
+    ]),
+    svg.path([
+      attribute.attribute("fill-rule", "nonzero"),
+      attribute.attribute(
+        "d",
+        "M 412 220 C 398.746094 220 388 230.746094 388 244 C 388 257.253906 398.746094 268 412 268 C 425.253906 268 436 257.253906 436 244 C 436 230.746094 425.253906 220 412 220 M 412 225.484375 C 422.210938 225.484375 430.515625 233.789062 430.515625 244 C 430.515625 254.210938 422.210938 262.515625 412 262.515625 C 401.789062 262.515625 393.484375 254.210938 393.484375 244 C 393.484375 233.789062 401.789062 225.484375 412 225.484375 ",
+      ),
+      attribute.attribute("fill", "currentColor"),
+      attribute.attribute("stroke", "none"),
+      attribute.attribute("stroke-width", "1"),
+      attribute.attribute("stroke-linecap", "butt"),
+      attribute.attribute("stroke-linejoin", "miter"),
+    ]),
+    svg.path([
+      attribute.attribute("fill-rule", "nonzero"),
+      attribute.attribute(
+        "d",
+        "M 124 220 C 110.746094 220 100 230.746094 100 244 C 100 257.253906 110.746094 268 124 268 C 137.253906 268 148 257.253906 148 244 C 148 230.746094 137.253906 220 124 220 M 124 225.484375 C 134.210938 225.484375 142.515625 233.789062 142.515625 244 C 142.515625 254.210938 134.210938 262.515625 124 262.515625 C 113.789062 262.515625 105.484375 254.210938 105.484375 244 C 105.484375 233.789062 113.789062 225.484375 124 225.484375 ",
+      ),
+      attribute.attribute("fill", "currentColor"),
+      attribute.attribute("stroke", "none"),
+      attribute.attribute("stroke-width", "1"),
+      attribute.attribute("stroke-linecap", "butt"),
+      attribute.attribute("stroke-linejoin", "miter"),
+    ]),
+    svg.path([
+      attribute.attribute("fill-rule", "nonzero"),
+      attribute.attribute(
+        "d",
+        "M 196 184 C 196 197.253906 185.253906 208 172 208 C 158.746094 208 148 197.253906 148 184 C 148 170.746094 158.746094 160 172 160 C 185.253906 160 196 170.746094 196 184 ",
+      ),
+      attribute.attribute("fill", "currentColor"),
+      attribute.attribute("stroke", "none"),
+      attribute.attribute("stroke-width", "1"),
+      attribute.attribute("stroke-linecap", "butt"),
+      attribute.attribute("stroke-linejoin", "miter"),
+    ]),
+    svg.path([
+      attribute.attribute("fill-rule", "nonzero"),
+      attribute.attribute(
+        "d",
+        "M 388 184 C 388 197.253906 377.253906 208 364 208 C 350.746094 208 340 197.253906 340 184 C 340 170.746094 350.746094 160 364 160 C 377.253906 160 388 170.746094 388 184 ",
+      ),
+      attribute.attribute("fill", "currentColor"),
+      attribute.attribute("stroke", "none"),
+      attribute.attribute("stroke-width", "1"),
+      attribute.attribute("stroke-linecap", "butt"),
+      attribute.attribute("stroke-linejoin", "miter"),
+    ]),
+    svg.path([
+      attribute.attribute("fill-rule", "nonzero"),
+      attribute.attribute(
+        "d",
+        "M 268 160 C 254.746094 160 244 170.746094 244 184 C 244 197.253906 254.746094 208 268 208 C 281.253906 208 292 197.253906 292 184 C 292 170.746094 281.253906 160 268 160 M 268 165.484375 C 278.210938 165.484375 286.515625 173.789062 286.515625 184 C 286.515625 194.210938 278.210938 202.515625 268 202.515625 C 257.789062 202.515625 249.484375 194.210938 249.484375 184 C 249.484375 173.789062 257.789062 165.484375 268 165.484375 ",
+      ),
+      attribute.attribute("fill", "currentColor"),
+      attribute.attribute("stroke", "none"),
+      attribute.attribute("stroke-width", "1"),
+      attribute.attribute("stroke-linecap", "butt"),
+      attribute.attribute("stroke-linejoin", "miter"),
+    ]),
+    svg.path([
+      attribute.attribute("fill-rule", "nonzero"),
+      attribute.attribute(
+        "d",
+        "M 172 280 C 158.746094 280 148 290.746094 148 304 C 148 317.253906 158.746094 328 172 328 C 185.253906 328 196 317.253906 196 304 C 196 290.746094 185.253906 280 172 280 M 172 285.484375 C 182.210938 285.484375 190.515625 293.789062 190.515625 304 C 190.515625 314.210938 182.210938 322.515625 172 322.515625 C 161.789062 322.515625 153.484375 314.210938 153.484375 304 C 153.484375 293.789062 161.789062 285.484375 172 285.484375 ",
+      ),
+      attribute.attribute("fill", "currentColor"),
+      attribute.attribute("stroke", "none"),
+      attribute.attribute("stroke-width", "1"),
+      attribute.attribute("stroke-linecap", "butt"),
+      attribute.attribute("stroke-linejoin", "miter"),
+    ]),
+    svg.path([
+      attribute.attribute("fill-rule", "nonzero"),
+      attribute.attribute(
+        "d",
+        "M 364 280 C 350.746094 280 340 290.746094 340 304 C 340 317.253906 350.746094 328 364 328 C 377.253906 328 388 317.253906 388 304 C 388 290.746094 377.253906 280 364 280 M 364 285.484375 C 374.210938 285.484375 382.515625 293.789062 382.515625 304 C 382.515625 314.210938 374.210938 322.515625 364 322.515625 C 353.789062 322.515625 345.484375 314.210938 345.484375 304 C 345.484375 293.789062 353.789062 285.484375 364 285.484375 ",
+      ),
+      attribute.attribute("fill", "currentColor"),
+      attribute.attribute("stroke", "none"),
+      attribute.attribute("stroke-width", "1"),
+      attribute.attribute("stroke-linecap", "butt"),
+      attribute.attribute("stroke-linejoin", "miter"),
+    ]),
+    svg.path([
+      attribute.attribute("fill-rule", "nonzero"),
+      attribute.attribute(
+        "d",
+        "M 268 280 C 254.746094 280 244 290.746094 244 304 C 244 317.253906 254.746094 328 268 328 C 281.253906 328 292 317.253906 292 304 C 292 290.746094 281.253906 280 268 280 M 268 285.484375 C 278.210938 285.484375 286.515625 293.789062 286.515625 304 C 286.515625 314.210938 278.210938 322.515625 268 322.515625 C 257.789062 322.515625 249.484375 314.210938 249.484375 304 C 249.484375 293.789062 257.789062 285.484375 268 285.484375 ",
+      ),
+      attribute.attribute("fill", "currentColor"),
+      attribute.attribute("stroke", "none"),
+      attribute.attribute("stroke-width", "1"),
+      attribute.attribute("stroke-linecap", "butt"),
+      attribute.attribute("stroke-linejoin", "miter"),
+    ]),
+    svg.path([
+      attribute.attribute("fill-rule", "nonzero"),
+      attribute.attribute(
+        "d",
+        "M 292 376 C 292 389.253906 281.253906 400 268 400 C 254.746094 400 244 389.253906 244 376 C 244 362.746094 254.746094 352 268 352 C 281.253906 352 292 362.746094 292 376 ",
+      ),
+      attribute.attribute("fill", "currentColor"),
       attribute.attribute("stroke", "none"),
       attribute.attribute("stroke-width", "1"),
       attribute.attribute("stroke-linecap", "butt"),
@@ -541,6 +766,93 @@ pub fn jsr(attributes: List(Attribute(msg))) -> Element(msg) {
       attribute.attribute("stroke-linecap", "butt"),
       attribute.attribute("stroke-linejoin", "miter"),
     ]),
+  ])
+}
+
+// ## Misskey
+// Source: https://github.com/misskey-dev/assets/blob/abcc92d684a2dedc81fe8623d8d8736f951fafd3/public/mi.svg (fill changed to currentColor)
+// License: CC-BY-SA-4.0 (https://creativecommons.org/licenses/by-sa/4.0/)
+
+pub fn misskey(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 7378 5171", attributes, [
+    svg.g(
+      [
+        attribute.attribute(
+          "transform",
+          "matrix(1,0,0,1,-5169.525015,-3320.307026)",
+        ),
+      ],
+      [
+        svg.g(
+          [
+            attribute.attribute(
+              "transform",
+              "matrix(14.409147,0,0,14.409147,5169.524961,2216.770392)",
+            ),
+          ],
+          [
+            svg.path([
+              attribute.attribute(
+                "d",
+                "M62.475,76.586C54.999,76.586 47.879,77.832 41.115,80.324C29.012,84.596 19.044,92.25 11.213,103.285C3.737,113.964 -0,125.889 -0,139.061L-0,372.939C-0,390.026 6.051,404.799 18.154,417.258C30.614,429.361 45.388,435.414 62.475,435.414C79.918,435.414 94.69,429.361 106.793,417.258C119.252,404.799 125.482,390.026 125.482,372.939L125.482,330.408C125.617,321.197 135.105,323.614 139.9,330.408C148.881,345.962 167.923,359.321 190.092,359.244C212.261,359.168 230.674,348.207 240.285,330.408C243.925,326.116 254.184,318.801 255.236,330.408L255.236,372.939C255.236,390.026 261.287,404.799 273.391,417.258C285.85,429.361 300.624,435.414 317.711,435.414C335.154,435.414 349.926,429.361 362.029,417.258C374.489,404.799 380.719,390.026 380.719,372.939L380.719,139.061C380.719,125.889 376.804,113.964 368.973,103.285C361.497,92.25 351.707,84.596 339.604,80.324C332.484,77.832 325.364,76.586 318.244,76.586C299.021,76.586 282.825,84.063 269.654,99.014L206.252,173.213C204.828,174.281 200.111,182.445 190.092,182.445C180.073,182.445 175.891,174.281 174.467,173.213L110.531,99.014C97.716,84.063 81.697,76.586 62.475,76.586Z",
+              ),
+              attribute.attribute("fill-rule", "nonzero"),
+              attribute.attribute("fill", "currentColor"),
+              attribute.attribute("stroke", "none"),
+              attribute.attribute("stroke-width", "1"),
+              attribute.attribute("stroke-linecap", "butt"),
+              attribute.attribute("stroke-linejoin", "miter"),
+            ]),
+          ],
+        ),
+        svg.g(
+          [
+            attribute.attribute("id", "path5210"),
+            attribute.attribute(
+              "transform",
+              "matrix(14.409147,0,0,14.409147,5169.524961,2216.767726)",
+            ),
+          ],
+          [
+            svg.path([
+              attribute.attribute(
+                "d",
+                "M457.535,76.586C442.584,76.586 429.769,81.926 419.09,92.605C408.766,102.929 403.605,115.566 403.605,130.518C403.605,145.469 408.766,158.284 419.09,168.963C429.769,179.286 442.584,184.449 457.535,184.449C472.486,184.449 485.301,179.286 495.98,168.963C506.66,158.284 512,145.469 512,130.518C512,115.566 506.66,102.929 495.98,92.605C485.301,81.926 472.486,76.586 457.535,76.586Z",
+              ),
+              attribute.attribute("fill-rule", "nonzero"),
+              attribute.attribute("fill", "currentColor"),
+              attribute.attribute("stroke", "none"),
+              attribute.attribute("stroke-width", "1"),
+              attribute.attribute("stroke-linecap", "butt"),
+              attribute.attribute("stroke-linejoin", "miter"),
+            ]),
+          ],
+        ),
+        svg.g(
+          [
+            attribute.attribute("id", "path52101"),
+            attribute.attribute(
+              "transform",
+              "matrix(14.409147,0,0,14.409147,5169.524961,2216.767726)",
+            ),
+          ],
+          [
+            svg.path([
+              attribute.attribute(
+                "d",
+                "M458.068,195.127C443.117,195.127 430.302,200.467 419.623,211.146C408.944,221.826 403.605,234.641 403.605,249.592L403.605,381.482C403.605,396.434 408.944,409.248 419.623,419.928C430.302,430.251 443.117,435.414 458.068,435.414C473.019,435.414 485.657,430.251 495.98,419.928C506.66,409.248 512,396.434 512,381.482L512,249.592C512,234.641 506.66,221.826 495.98,211.146C485.657,200.467 473.019,195.127 458.068,195.127Z",
+              ),
+              attribute.attribute("fill-rule", "nonzero"),
+              attribute.attribute("fill", "currentColor"),
+              attribute.attribute("stroke", "none"),
+              attribute.attribute("stroke-width", "1"),
+              attribute.attribute("stroke-linecap", "butt"),
+              attribute.attribute("stroke-linejoin", "miter"),
+            ]),
+          ],
+        ),
+      ],
+    ),
   ])
 }
 
