@@ -275,7 +275,7 @@ fn view_sidebar(
     [
       attribute.aria_label("Stories"),
       attribute.class(
-        "w-56 shrink-0 overflow-y-auto border-r border-border p-4",
+        "w-56 shrink-0 overflow-y-auto border-r border-border p-4 wrap-anywhere",
       ),
     ],
     [
