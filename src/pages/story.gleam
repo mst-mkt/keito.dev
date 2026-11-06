@@ -7,12 +7,13 @@ import gleam/javascript/array.{type Array}
 import gleam/javascript/promise.{type Promise}
 import gleam/list
 import gleam/result
+import gleam/string
 import gleam/uri
 import hinoto/body.{type Body}
 import layouts/base
 import lib/cn.{cn}
 import lib/story.{type Module, type Route, type Story, Canvas, Docs, Show}
-import lustre/attribute
+import lustre/attribute.{type Attribute}
 import lustre/element.{type Element}
 import lustre/element/html
 import pages/not_found
@@ -30,6 +31,15 @@ const viewports = [
   #("tablet", 768),
   #("mobile", 390),
 ]
+
+type NavModule {
+  NavModule(
+    directory: String,
+    label: String,
+    name: String,
+    stories: List(Story),
+  )
+}
 
 @external(javascript, "virtual:stories", "modules")
 fn story_modules() -> Array(Module)
@@ -67,6 +77,7 @@ fn view(
       base.shell(module, context.client_entry, [
         view_layout(
           modules,
+          module,
           story.docs_path(module),
           carry,
           view_docs(module, stories, carry),
@@ -76,6 +87,7 @@ fn view(
       base.shell(module <> "/" <> story.name(entry), context.client_entry, [
         view_layout(
           modules,
+          module,
           story.path(module, entry),
           carry,
           view_story(module, entry, query, viewport, carry),
@@ -108,12 +120,13 @@ fn carry_viewport(viewport: #(String, Int)) -> String {
 
 fn view_layout(
   modules: List(Module),
-  current: String,
+  current_module: String,
+  current_path: String,
   carry: String,
   content: List(Element(Nil)),
 ) -> Element(Nil) {
   html.div([attribute.class("flex h-dvh")], [
-    view_sidebar(modules, current, carry),
+    view_sidebar(modules, current_module, current_path, carry),
     ..content
   ])
 }
@@ -268,43 +281,44 @@ fn view_story(
 
 fn view_sidebar(
   modules: List(Module),
-  current: String,
+  current_module: String,
+  current_path: String,
   carry: String,
 ) -> Element(Nil) {
+  let groups =
+    list.map(modules, to_nav_module)
+    |> list.sort(fn(a, b) { string.compare(a.directory, b.directory) })
+    |> list.chunk(fn(nav_module) { nav_module.directory })
+
   html.nav(
     [
       attribute.aria_label("Stories"),
       attribute.class(
-        "w-56 shrink-0 overflow-y-auto border-r border-border p-4 wrap-anywhere",
+        cn([
+          "w-56 shrink-0 border-r border-border p-3 text-sm wrap-anywhere",
+          "overflow-y-auto overscroll-contain",
+        ]),
       ),
     ],
     [
       html.ul(
-        [attribute.class("grid gap-y-6")],
-        list.map(modules, fn(module) {
-          let #(name, stories) = module
+        [attribute.class("grid gap-y-4")],
+        list.filter_map(groups, fn(group) {
+          use first <- result.map(list.first(group))
 
-          html.li([attribute.class("grid gap-y-1")], [
-            view_link(
-              story.docs_path(name),
-              current,
-              carry,
-              "px-2 py-1 text-xs font-medium text-subtle hover:text-fg aria-[current=page]:text-fg",
-              name,
+          html.li([attribute.class("grid gap-y-0.5")], [
+            html.h2(
+              [attribute.class("px-1.5 py-1 text-xs font-medium text-subtle")],
+              [html.text(first.directory)],
             ),
             html.ul(
-              [attribute.class("grid gap-y-0.5")],
-              list.map(stories, fn(entry) {
-                html.li([], [
-                  view_link(
-                    story.path(name, entry),
-                    current,
-                    carry,
-                    "px-2 py-1.5 text-sm hover:bg-control-hover aria-[current=page]:bg-control aria-[current=page]:font-medium",
-                    story.name(entry),
-                  ),
-                ])
-              }),
+              [attribute.class("grid gap-y-1")],
+              list.map(group, view_nav_module(
+                _,
+                current_module,
+                current_path,
+                carry,
+              )),
             ),
           ])
         }),
@@ -313,24 +327,100 @@ fn view_sidebar(
   )
 }
 
-fn view_link(
-  href: String,
-  current: String,
+fn view_nav_module(
+  nav_module: NavModule,
+  current_module: String,
+  current_path: String,
   carry: String,
-  class: String,
-  label: String,
 ) -> Element(Nil) {
-  html.a(
-    [
-      attribute.href(href <> carry),
-      case href == current {
-        True -> attribute.aria_current("page")
-        False -> attribute.none()
-      },
-      attribute.class("block rounded-md " <> class),
-    ],
-    [html.text(label)],
-  )
+  let docs_path = story.docs_path(nav_module.name)
+
+  html.li([], [
+    html.details(
+      [
+        attribute.open(nav_module.name == current_module),
+        attribute.class("group grid gap-y-0.5 open:pb-2"),
+      ],
+      [
+        html.summary(
+          [
+            attribute.class(
+              cn([
+                "flex cursor-pointer list-none items-center rounded-md pl-1.5",
+                "[&::-webkit-details-marker]:hidden",
+                "hover:bg-control-hover has-aria-[current=page]:bg-control",
+              ]),
+            ),
+          ],
+          [
+            icons.nav_arrow_down([
+              attribute.aria_hidden(True),
+              attribute.class(
+                "size-3.5 shrink-0 -rotate-90 text-subtle group-open:rotate-0",
+              ),
+            ]),
+            html.a(
+              [
+                attribute.href(docs_path <> carry),
+                aria_current(docs_path, current_path),
+                attribute.class(
+                  "flex-1 rounded-md py-1 pr-1.5 pl-1 font-medium",
+                ),
+              ],
+              [html.text(nav_module.label)],
+            ),
+          ],
+        ),
+        html.ul(
+          [
+            attribute.class("ml-3 grid gap-y-0.5 border-l border-border pl-3"),
+          ],
+          list.map(nav_module.stories, fn(entry) {
+            let path = story.path(nav_module.name, entry)
+
+            html.li([], [
+              html.a(
+                [
+                  attribute.href(path <> carry),
+                  aria_current(path, current_path),
+                  attribute.class(
+                    cn([
+                      "block rounded-md px-1.5 py-1 text-muted",
+                      "hover:bg-control-hover hover:text-fg",
+                      "aria-[current=page]:bg-control aria-[current=page]:font-medium aria-[current=page]:text-fg",
+                    ]),
+                  ),
+                ],
+                [html.text(story.name(entry))],
+              ),
+            ])
+          }),
+        ),
+      ],
+    ),
+  ])
+}
+
+fn aria_current(href: String, current_path: String) -> Attribute(Nil) {
+  case href == current_path {
+    True -> attribute.aria_current("page")
+    False -> attribute.none()
+  }
+}
+
+fn to_nav_module(module: Module) -> NavModule {
+  let #(name, stories) = module
+
+  case list.reverse(string.split(name, "/")) {
+    [label, ..directory] ->
+      NavModule(
+        directory: string.join(list.reverse(directory), "/"),
+        label:,
+        name:,
+        stories:,
+      )
+    [] -> NavModule(directory: "", label: name, name:, stories:)
+  }
 }
 
 fn view_control(control: story.Control) -> Element(Nil) {
