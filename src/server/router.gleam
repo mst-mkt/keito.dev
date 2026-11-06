@@ -14,6 +14,7 @@ import pages/not_found
 import pages/robots
 import pages/uuid
 import pages/uuid/source as uuid_source
+import pages/yarn
 import server/context.{type Context}
 import server/middleware
 
@@ -32,6 +33,7 @@ pub fn route(req: Request(Body), context: Context) -> Promise(Response(Body)) {
     ["robots.txt"] -> robots.handle(req, context)
     ["uuid"] -> uuid.handle(req, context)
     ["uuid", "source"] -> uuid_source.handle(req, context)
+    ["yarn"] -> yarn.handle(req, context)
     _ -> not_found.handle(req, context)
   }
 }
