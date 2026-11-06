@@ -1,3 +1,4 @@
+import components/icons
 import gleam/http.{Get}
 import gleam/http/request.{type Request}
 import gleam/http/response.{type Response}
@@ -9,6 +10,7 @@ import gleam/result
 import gleam/uri
 import hinoto/body.{type Body}
 import layouts/base
+import lib/cn.{cn}
 import lib/story.{type Module, type Route, type Story, Canvas, Docs, Show}
 import lustre/attribute
 import lustre/element.{type Element}
@@ -76,7 +78,7 @@ fn view(
           modules,
           story.path(module, entry),
           carry,
-          view_story(module, entry, query, viewport),
+          view_story(module, entry, query, viewport, carry),
         ),
       ])
     Canvas(story: entry) -> {
@@ -171,24 +173,76 @@ fn view_story(
   entry: Story,
   query: List(#(String, String)),
   viewport: #(String, Int),
+  carry: String,
 ) -> List(Element(Nil)) {
   let path = story.path(module, entry)
   let #(_, controls) = story.run(entry, query)
   let story_query = list.filter(query, fn(param) { param.0 != viewport_param })
+  let canvas = path <> "/canvas?" <> uri.query_to_string(story_query)
 
   [
-    html.main([attribute.class("flex-1 overflow-auto bg-control p-4")], [
-      html.h1([attribute.class("sr-only")], [html.text(story.name(entry))]),
-      html.iframe([
-        attribute.src(path <> "/canvas?" <> uri.query_to_string(story_query)),
-        attribute.title(story.name(entry)),
-        attribute.style("width", case viewport.1 {
-          0 -> "100%"
-          width -> int.to_string(width) <> "px"
-        }),
-        attribute.class(
-          "mx-auto block h-full rounded-lg border border-border bg-bg",
-        ),
+    html.main([attribute.class("flex min-w-0 flex-1 flex-col bg-control")], [
+      html.header(
+        [
+          attribute.class(
+            cn([
+              "flex h-12 shrink-0 items-center gap-x-4 px-4 text-sm",
+              "border-b border-border",
+            ]),
+          ),
+        ],
+        [
+          html.h1(
+            [attribute.class("flex min-w-0 items-baseline gap-x-1 text-subtle")],
+            [
+              html.a(
+                [
+                  attribute.href(story.docs_path(module) <> carry),
+                  attribute.class(
+                    "min-w-0 truncate hover:text-fg hover:underline",
+                  ),
+                ],
+                [html.text(module)],
+              ),
+              html.span([attribute.aria_hidden(True)], [html.text("/")]),
+              html.span(
+                [attribute.class("min-w-0 truncate font-medium text-fg")],
+                [
+                  html.text(story.name(entry)),
+                ],
+              ),
+            ],
+          ),
+          html.a(
+            [
+              attribute.href(canvas),
+              attribute.target("_blank"),
+              attribute.class(
+                "ml-auto inline-flex shrink-0 items-center gap-x-1 text-subtle hover:text-fg",
+              ),
+            ],
+            [
+              html.text("Open canvas"),
+              icons.open_new_window([
+                attribute.aria_hidden(True),
+                attribute.class("size-4"),
+              ]),
+            ],
+          ),
+        ],
+      ),
+      html.div([attribute.class("flex min-h-0 flex-1 overflow-auto p-4")], [
+        html.iframe([
+          attribute.src(canvas),
+          attribute.title(story.name(entry)),
+          attribute.style("width", case viewport.1 {
+            0 -> "100%"
+            width -> int.to_string(width) <> "px"
+          }),
+          attribute.class(
+            "mx-auto shrink-0 rounded-lg border border-border bg-bg",
+          ),
+        ]),
       ]),
     ]),
     html.form(
