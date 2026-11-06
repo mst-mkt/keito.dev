@@ -289,6 +289,7 @@ fn view_story(
       [
         attribute.method("get"),
         attribute.action(path),
+        attribute.aria_label("Controls"),
         attribute.attribute("onchange", "this.requestSubmit()"),
         attribute.class(
           cn([
@@ -299,11 +300,13 @@ fn view_story(
         ),
       ],
       [
-        view_select(
-          viewport_param,
-          viewport.0,
-          list.map(viewports, fn(viewport) { viewport.0 }),
-        ),
+        html.div([attribute.class("grid border-b border-border pb-6")], [
+          view_select(
+            viewport_param,
+            viewport.0,
+            list.map(viewports, fn(viewport) { viewport.0 }),
+          ),
+        ]),
         ..list.map(controls, view_control)
       ],
     ),
