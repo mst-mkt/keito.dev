@@ -32,6 +32,15 @@ const viewports = [
   #("mobile", 390),
 ]
 
+const focus_ring =
+  "outline-0 outline-fg/25 outline-solid focus-visible:outline-3"
+
+const control_class = [
+  "bg-control hover:bg-control-hover",
+  focus_ring,
+  "transition-[background-color,outline-width] duration-100 ease-out",
+]
+
 type NavModule {
   NavModule(
     directory: String,
@@ -156,7 +165,9 @@ fn view_docs(
               html.a(
                 [
                   attribute.href(path <> carry),
-                  attribute.class("font-medium hover:underline"),
+                  attribute.class(
+                    cn(["rounded-xs font-medium hover:underline", focus_ring]),
+                  ),
                 ],
                 [html.text(story.name(entry))],
               ),
@@ -215,7 +226,10 @@ fn view_story(
                 [
                   attribute.href(story.docs_path(module) <> carry),
                   attribute.class(
-                    "min-w-0 truncate hover:text-fg hover:underline",
+                    cn([
+                      "min-w-0 truncate rounded-xs hover:text-fg hover:underline",
+                      focus_ring,
+                    ]),
                   ),
                 ],
                 [html.text(module)],
@@ -234,7 +248,10 @@ fn view_story(
               attribute.href(canvas),
               attribute.target("_blank"),
               attribute.class(
-                "ml-auto inline-flex shrink-0 items-center gap-x-1 text-subtle hover:text-fg",
+                cn([
+                  "ml-auto inline-flex shrink-0 items-center gap-x-1 rounded-xs text-subtle hover:text-fg",
+                  focus_ring,
+                ]),
               ),
             ],
             [
@@ -365,6 +382,7 @@ fn view_nav_module(
                 "flex cursor-pointer list-none items-center rounded-md pl-1.5",
                 "[&::-webkit-details-marker]:hidden",
                 "hover:bg-control-hover has-aria-[current=page]:bg-control",
+                focus_ring,
               ]),
             ),
           ],
@@ -380,7 +398,10 @@ fn view_nav_module(
                 attribute.href(docs_path <> carry),
                 aria_current(docs_path, current_path),
                 attribute.class(
-                  "flex-1 rounded-md py-1 pr-1.5 pl-1 font-medium",
+                  cn([
+                    "flex-1 rounded-md py-1 pr-1.5 pl-1 font-medium",
+                    focus_ring,
+                  ]),
                 ),
               ],
               [html.text(nav_module.label)],
@@ -404,6 +425,7 @@ fn view_nav_module(
                       "block rounded-md px-1.5 py-1 text-muted",
                       "hover:bg-control-hover hover:text-fg",
                       "aria-[current=page]:bg-control aria-[current=page]:font-medium aria-[current=page]:text-fg",
+                      focus_ring,
                     ]),
                   ),
                 ],
@@ -448,7 +470,7 @@ fn view_control(control: story.Control) -> Element(Nil) {
           attribute.id(name),
           attribute.name(name),
           attribute.value(value),
-          attribute.class("h-9 rounded-md bg-control px-3"),
+          attribute.class(cn(["h-9 rounded-md px-3", ..control_class])),
         ]),
       ])
     story.Bool(name:, value:) ->
@@ -480,7 +502,7 @@ fn view_select(
       [
         attribute.id(name),
         attribute.name(name),
-        attribute.class("h-9 rounded-md bg-control px-2"),
+        attribute.class(cn(["h-9 rounded-md px-2", ..control_class])),
       ],
       list.map(options, fn(option) {
         html.option(
