@@ -214,7 +214,8 @@ pub fn stories() -> List(Story) {
           Link("Add link", "#", icons.plus),
         ]),
       )
-    }),
+    })
+      |> story.isolated,
     story.new("panel", {
       use label <- story.text("label", "Menu")
       let links =
@@ -233,6 +234,7 @@ pub fn stories() -> List(Story) {
           Link("Add link", "#", icons.plus),
         ]),
       )
-    }),
+    })
+      |> story.isolated,
   ]
 }

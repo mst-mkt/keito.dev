@@ -124,7 +124,7 @@ fn view_docs(
     html.main(
       [
         attribute.class(
-          "grid flex-1 content-start gap-y-10 overflow-y-auto p-8",
+          "grid min-w-0 flex-1 content-start gap-y-10 overflow-y-auto p-8",
         ),
       ],
       [
@@ -132,7 +132,7 @@ fn view_docs(
         ..list.map(stories, fn(entry) {
           let path = story.path(module, entry)
 
-          html.section([attribute.class("grid gap-y-3")], [
+          html.section([attribute.class("grid max-w-3xl gap-y-3")], [
             html.h2([], [
               html.a(
                 [
@@ -142,18 +142,27 @@ fn view_docs(
                 [html.text(story.name(entry))],
               ),
             ]),
-            html.iframe([
-              attribute.src(path <> "/canvas"),
-              attribute.title(story.name(entry)),
-              attribute.class(
-                "h-64 w-full resize-y overflow-auto rounded-lg border border-border",
-              ),
-            ]),
+            view_preview(path, entry),
           ])
         })
       ],
     ),
   ]
+}
+
+fn view_preview(path: String, entry: Story) -> Element(Nil) {
+  case story.is_isolated(entry) {
+    True ->
+      html.iframe([
+        attribute.src(path <> "/canvas"),
+        attribute.title(story.name(entry)),
+        attribute.class("h-64 w-full resize-y rounded-lg border border-border"),
+      ])
+    False ->
+      html.div([attribute.class("rounded-lg border border-border p-8")], [
+        story.run(entry, []).0,
+      ])
+  }
 }
 
 fn view_story(

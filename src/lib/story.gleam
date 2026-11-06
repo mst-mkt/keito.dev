@@ -5,7 +5,7 @@ import gleam/string
 import lustre/element.{type Element}
 
 pub opaque type Story {
-  Story(name: String, args: Args(Element(Nil)))
+  Story(name: String, args: Args(Element(Nil)), isolated: Bool)
 }
 
 pub opaque type Args(a) {
@@ -28,7 +28,7 @@ pub type Route {
 }
 
 pub fn new(name: String, args: Args(Element(msg))) -> Story {
-  Story(name:, args: map(args, element.map(_, fn(_) { Nil })))
+  Story(name:, args: map(args, element.map(_, fn(_) { Nil })), isolated: False)
 }
 
 pub fn render(value: a) -> Args(a) {
@@ -75,6 +75,14 @@ pub fn select(
   let labels = list.map(options, fn(option) { option.0 })
 
   #(value, Select(name:, value: label, options: labels))
+}
+
+pub fn isolated(story: Story) -> Story {
+  Story(..story, isolated: True)
+}
+
+pub fn is_isolated(story: Story) -> Bool {
+  story.isolated
 }
 
 pub fn name(story: Story) -> String {
