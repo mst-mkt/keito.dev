@@ -31,12 +31,13 @@ pub fn document(
 pub fn shell(
   title: String,
   client_entry: String,
-  body: List(Element(Nil)),
+  head head: List(Element(Nil)),
+  body body: List(Element(Nil)),
 ) -> Element(Nil) {
   let script =
     client_script(client_entry, [attribute.attribute("blocking", "render")])
 
-  page(title, [script], body)
+  page(title, [script, ..head], body)
 }
 
 fn client_script(

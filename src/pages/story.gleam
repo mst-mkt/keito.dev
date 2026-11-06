@@ -32,6 +32,14 @@ const viewports = [
   #("mobile", 390),
 ]
 
+const scheme_param = "scheme"
+
+const default_scheme = "system"
+
+const schemes = [default_scheme, "light", "dark"]
+
+const global_params = [viewport_param, scheme_param]
+
 const focus_ring =
   "outline-0 outline-fg/25 outline-solid focus-visible:outline-3"
 
@@ -40,6 +48,10 @@ const control_class = [
   focus_ring,
   "transition-[background-color,outline-width] duration-100 ease-out",
 ]
+
+type Globals {
+  Globals(viewport: #(String, Int), scheme: String)
+}
 
 type NavModule {
   NavModule(
@@ -78,52 +90,93 @@ fn view(
   resolved: Route,
   query: List(#(String, String)),
 ) -> Element(Nil) {
-  let viewport = parse_viewport(query)
-  let carry = carry_viewport(viewport)
+  let globals = parse_globals(query)
+  let carry =
+    to_query(list.append(viewport_params(globals), scheme_params(globals)))
 
   case resolved {
     Docs(module:, stories:) ->
-      base.shell(module, context.client_entry, [
+      base.shell(module, context.client_entry, head: [], body: [
         view_layout(
           modules,
           module,
           story.docs_path(module),
           carry,
-          view_docs(module, stories, carry),
+          view_docs(module, stories, globals, carry),
         ),
       ])
     Show(module:, story: entry) ->
-      base.shell(module <> "/" <> story.name(entry), context.client_entry, [
-        view_layout(
-          modules,
-          module,
-          story.path(module, entry),
-          carry,
-          view_story(module, entry, query, viewport, carry),
-        ),
-      ])
+      base.shell(
+        module <> "/" <> story.name(entry),
+        context.client_entry,
+        head: [],
+        body: [
+          view_layout(
+            modules,
+            module,
+            story.path(module, entry),
+            carry,
+            view_story(module, entry, query, globals, carry),
+          ),
+        ],
+      )
     Canvas(story: entry) -> {
       let #(element, _) = story.run(entry, query)
 
-      base.shell(story.name(entry), context.client_entry, [
+      let head = case globals.scheme == default_scheme {
+        True -> []
+        False -> [
+          html.style([], ":root { color-scheme: " <> globals.scheme <> "; }"),
+        ]
+      }
+
+      base.shell(story.name(entry), context.client_entry, head:, body: [
         html.main([attribute.class("p-8")], [element]),
       ])
     }
   }
 }
 
-fn parse_viewport(query: List(#(String, String))) -> #(String, Int) {
-  list.key_find(query, viewport_param)
-  |> result.try(fn(name) {
-    list.find(viewports, fn(viewport) { viewport.0 == name })
-  })
-  |> result.unwrap(default_viewport)
+fn parse_globals(query: List(#(String, String))) -> Globals {
+  let viewport =
+    list.key_find(query, viewport_param)
+    |> result.try(fn(name) {
+      list.find(viewports, fn(viewport) { viewport.0 == name })
+    })
+    |> result.unwrap(default_viewport)
+  let scheme =
+    list.key_find(query, scheme_param)
+    |> result.try(fn(name) { list.find(schemes, fn(scheme) { scheme == name }) })
+    |> result.unwrap(default_scheme)
+
+  Globals(viewport:, scheme:)
 }
 
-fn carry_viewport(viewport: #(String, Int)) -> String {
-  case viewport == default_viewport {
-    True -> ""
-    False -> "?" <> uri.query_to_string([#(viewport_param, viewport.0)])
+fn viewport_params(globals: Globals) -> List(#(String, String)) {
+  case globals.viewport == default_viewport {
+    True -> []
+    False -> [#(viewport_param, globals.viewport.0)]
+  }
+}
+
+fn scheme_params(globals: Globals) -> List(#(String, String)) {
+  case globals.scheme == default_scheme {
+    True -> []
+    False -> [#(scheme_param, globals.scheme)]
+  }
+}
+
+fn to_query(params: List(#(String, String))) -> String {
+  case params {
+    [] -> ""
+    _ -> "?" <> uri.query_to_string(params)
+  }
+}
+
+fn color_scheme(globals: Globals) -> Attribute(Nil) {
+  case globals.scheme == default_scheme {
+    True -> attribute.none()
+    False -> attribute.style("color-scheme", globals.scheme)
   }
 }
 
@@ -143,6 +196,7 @@ fn view_layout(
 fn view_docs(
   module: String,
   stories: List(Story),
+  globals: Globals,
   carry: String,
 ) -> List(Element(Nil)) {
   [
@@ -172,7 +226,7 @@ fn view_docs(
                 [html.text(story.name(entry))],
               ),
             ]),
-            view_preview(path, entry),
+            view_preview(path, entry, globals),
           ])
         })
       ],
@@ -180,18 +234,25 @@ fn view_docs(
   ]
 }
 
-fn view_preview(path: String, entry: Story) -> Element(Nil) {
+fn view_preview(path: String, entry: Story, globals: Globals) -> Element(Nil) {
   case story.is_isolated(entry) {
     True ->
       html.iframe([
-        attribute.src(path <> "/canvas"),
+        attribute.src(path <> "/canvas" <> to_query(scheme_params(globals))),
+        color_scheme(globals),
         attribute.title(story.name(entry)),
         attribute.class("h-64 w-full resize-y rounded-lg border border-border"),
       ])
     False ->
-      html.div([attribute.class("rounded-lg border border-border p-8")], [
-        story.run(entry, []).0,
-      ])
+      html.div(
+        [
+          attribute.class(
+            "rounded-lg border border-border bg-bg p-8 text-fg accent-fg",
+          ),
+          color_scheme(globals),
+        ],
+        [story.run(entry, []).0],
+      )
   }
 }
 
@@ -199,13 +260,17 @@ fn view_story(
   module: String,
   entry: Story,
   query: List(#(String, String)),
-  viewport: #(String, Int),
+  globals: Globals,
   carry: String,
 ) -> List(Element(Nil)) {
   let path = story.path(module, entry)
   let #(_, controls) = story.run(entry, query)
-  let story_query = list.filter(query, fn(param) { param.0 != viewport_param })
-  let canvas = path <> "/canvas?" <> uri.query_to_string(story_query)
+  let story_query =
+    list.filter(query, fn(param) { !list.contains(global_params, param.0) })
+  let canvas =
+    path
+    <> "/canvas"
+    <> to_query(list.append(story_query, scheme_params(globals)))
 
   [
     html.main([attribute.class("flex min-w-0 flex-1 flex-col bg-control")], [
@@ -273,8 +338,9 @@ fn view_story(
         [
           html.iframe([
             attribute.src(canvas),
+            color_scheme(globals),
             attribute.title(story.name(entry)),
-            attribute.style("width", case viewport.1 {
+            attribute.style("width", case globals.viewport.1 {
               0 -> "100%"
               width -> int.to_string(width) <> "px"
             }),
@@ -300,12 +366,13 @@ fn view_story(
         ),
       ],
       [
-        html.div([attribute.class("grid border-b border-border pb-6")], [
+        html.div([attribute.class("grid gap-y-6 border-b border-border pb-6")], [
           view_select(
             viewport_param,
-            viewport.0,
+            globals.viewport.0,
             list.map(viewports, fn(viewport) { viewport.0 }),
           ),
+          view_select(scheme_param, globals.scheme, schemes),
         ]),
         ..list.map(controls, view_control)
       ],
