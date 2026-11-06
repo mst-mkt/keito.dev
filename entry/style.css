@@ -35,6 +35,11 @@
   translate: 0 calc(50% - 0.5cap);
 }
 
+@utility scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklch, var(--color-fg) 25%, transparent) transparent;
+}
+
 @layer base {
   :root {
     color-scheme: light dark;

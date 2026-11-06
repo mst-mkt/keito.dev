@@ -140,7 +140,10 @@ fn view_docs(
     html.main(
       [
         attribute.class(
-          "grid min-w-0 flex-1 content-start gap-y-10 overflow-y-auto p-8",
+          cn([
+            "grid min-w-0 flex-1 content-start gap-y-10 p-8",
+            "scrollbar-thin overflow-y-auto",
+          ]),
         ),
       ],
       [
@@ -244,19 +247,26 @@ fn view_story(
           ),
         ],
       ),
-      html.div([attribute.class("flex min-h-0 flex-1 overflow-auto p-4")], [
-        html.iframe([
-          attribute.src(canvas),
-          attribute.title(story.name(entry)),
-          attribute.style("width", case viewport.1 {
-            0 -> "100%"
-            width -> int.to_string(width) <> "px"
-          }),
+      html.div(
+        [
           attribute.class(
-            "mx-auto shrink-0 rounded-lg border border-border bg-bg",
+            "flex min-h-0 flex-1 scrollbar-thin overflow-auto p-4",
           ),
-        ]),
-      ]),
+        ],
+        [
+          html.iframe([
+            attribute.src(canvas),
+            attribute.title(story.name(entry)),
+            attribute.style("width", case viewport.1 {
+              0 -> "100%"
+              width -> int.to_string(width) <> "px"
+            }),
+            attribute.class(
+              "mx-auto shrink-0 rounded-lg border border-border bg-bg",
+            ),
+          ]),
+        ],
+      ),
     ]),
     html.form(
       [
@@ -264,7 +274,11 @@ fn view_story(
         attribute.action(path),
         attribute.attribute("onchange", "this.requestSubmit()"),
         attribute.class(
-          "grid w-72 shrink-0 content-start gap-y-6 overflow-y-auto border-l border-border p-4",
+          cn([
+            "grid w-72 shrink-0 content-start gap-y-6 p-4",
+            "border-l border-border",
+            "scrollbar-thin overflow-y-auto",
+          ]),
         ),
       ],
       [
@@ -297,7 +311,7 @@ fn view_sidebar(
       attribute.class(
         cn([
           "w-56 shrink-0 border-r border-border p-3 text-sm wrap-anywhere",
-          "overflow-y-auto overscroll-contain",
+          "scrollbar-thin overflow-y-auto overscroll-contain",
         ]),
       ),
     ],
