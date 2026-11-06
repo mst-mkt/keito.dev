@@ -18,7 +18,7 @@ pub fn document(
   head head: List(Element(Nil)),
   client_entry client_entry: String,
 ) -> Element(Nil) {
-  page(title, client_entry, head, [
+  page(title, [client_script(client_entry, []), ..head], [
     html.div([attribute.class("flex justify-center gap-x-12 px-6 py-24")], [
       sidebar(left),
       html.main([attribute.class("w-full max-w-2xl min-w-0")], content),
@@ -33,12 +33,24 @@ pub fn shell(
   client_entry: String,
   body: List(Element(Nil)),
 ) -> Element(Nil) {
-  page(title, client_entry, [], body)
+  let script =
+    client_script(client_entry, [attribute.attribute("blocking", "render")])
+
+  page(title, [script], body)
+}
+
+fn client_script(
+  client_entry: String,
+  attributes: List(attribute.Attribute(Nil)),
+) -> Element(Nil) {
+  html.script(
+    [attribute.type_("module"), attribute.src(client_entry), ..attributes],
+    "",
+  )
 }
 
 fn page(
   title: String,
-  client_entry: String,
   head: List(Element(Nil)),
   body: List(Element(Nil)),
 ) -> Element(Nil) {
@@ -105,7 +117,6 @@ fn page(
         attribute.rel("webmention"),
         attribute.href("https://webmention.io/keito.dev/webmention"),
       ]),
-      html.script([attribute.type_("module"), attribute.src(client_entry)], ""),
       ..head
     ]),
     html.body([], body),

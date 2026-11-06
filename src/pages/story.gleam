@@ -292,6 +292,7 @@ fn view_sidebar(
 
   html.nav(
     [
+      attribute.id(story.nav_id),
       attribute.aria_label("Stories"),
       attribute.class(
         cn([
@@ -339,6 +340,7 @@ fn view_nav_module(
     html.details(
       [
         attribute.open(nav_module.name == current_module),
+        attribute.data("module", nav_module.name),
         attribute.class("group grid gap-y-0.5 open:pb-2"),
       ],
       [

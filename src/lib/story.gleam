@@ -21,6 +21,8 @@ pub type Control {
 pub type Module =
   #(String, List(Story))
 
+pub const nav_id = "story-nav"
+
 pub type Route {
   Docs(module: String, stories: List(Story))
   Show(module: String, story: Story)
