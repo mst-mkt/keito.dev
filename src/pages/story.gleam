@@ -18,6 +18,8 @@ import server/context.{type Context}
 import server/middleware
 import server/respond
 
+const viewport_param = "viewport"
+
 const default_viewport = #("fit", 0)
 
 const viewports = [
@@ -54,13 +56,17 @@ fn view(
   resolved: Route,
   query: List(#(String, String)),
 ) -> Element(Nil) {
+  let viewport = parse_viewport(query)
+  let carry = carry_viewport(viewport)
+
   case resolved {
     Docs(module:, stories:) ->
       base.shell(module, context.client_entry, [
         view_layout(
           modules,
           story.docs_path(module),
-          view_docs(module, stories),
+          carry,
+          view_docs(module, stories, carry),
         ),
       ])
     Show(module:, story: entry) ->
@@ -68,7 +74,8 @@ fn view(
         view_layout(
           modules,
           story.path(module, entry),
-          view_story(module, entry, query),
+          carry,
+          view_story(module, entry, query, viewport),
         ),
       ])
     Canvas(story: entry) -> {
@@ -81,18 +88,38 @@ fn view(
   }
 }
 
+fn parse_viewport(query: List(#(String, String))) -> #(String, Int) {
+  list.key_find(query, viewport_param)
+  |> result.try(fn(name) {
+    list.find(viewports, fn(viewport) { viewport.0 == name })
+  })
+  |> result.unwrap(default_viewport)
+}
+
+fn carry_viewport(viewport: #(String, Int)) -> String {
+  case viewport == default_viewport {
+    True -> ""
+    False -> "?" <> uri.query_to_string([#(viewport_param, viewport.0)])
+  }
+}
+
 fn view_layout(
   modules: List(Module),
   current: String,
+  carry: String,
   content: List(Element(Nil)),
 ) -> Element(Nil) {
   html.div([attribute.class("flex h-dvh")], [
-    view_sidebar(modules, current),
+    view_sidebar(modules, current, carry),
     ..content
   ])
 }
 
-fn view_docs(module: String, stories: List(Story)) -> List(Element(Nil)) {
+fn view_docs(
+  module: String,
+  stories: List(Story),
+  carry: String,
+) -> List(Element(Nil)) {
   [
     html.main(
       [
@@ -109,7 +136,7 @@ fn view_docs(module: String, stories: List(Story)) -> List(Element(Nil)) {
             html.h2([], [
               html.a(
                 [
-                  attribute.href(path),
+                  attribute.href(path <> carry),
                   attribute.class("font-medium hover:underline"),
                 ],
                 [html.text(story.name(entry))],
@@ -133,16 +160,11 @@ fn view_story(
   module: String,
   entry: Story,
   query: List(#(String, String)),
+  viewport: #(String, Int),
 ) -> List(Element(Nil)) {
   let path = story.path(module, entry)
   let #(_, controls) = story.run(entry, query)
-  let #(viewport, width) =
-    list.key_find(query, "viewport")
-    |> result.try(fn(name) {
-      list.find(viewports, fn(viewport) { viewport.0 == name })
-    })
-    |> result.unwrap(default_viewport)
-  let story_query = list.filter(query, fn(param) { param.0 != "viewport" })
+  let story_query = list.filter(query, fn(param) { param.0 != viewport_param })
 
   [
     html.main([attribute.class("flex-1 overflow-auto bg-control p-4")], [
@@ -150,9 +172,9 @@ fn view_story(
       html.iframe([
         attribute.src(path <> "/canvas?" <> uri.query_to_string(story_query)),
         attribute.title(story.name(entry)),
-        attribute.style("width", case width {
+        attribute.style("width", case viewport.1 {
           0 -> "100%"
-          _ -> int.to_string(width) <> "px"
+          width -> int.to_string(width) <> "px"
         }),
         attribute.class(
           "mx-auto block h-full rounded-lg border border-border bg-bg",
@@ -169,14 +191,22 @@ fn view_story(
         ),
       ],
       [
-        view_select("viewport", viewport, list.map(viewports, fn(v) { v.0 })),
+        view_select(
+          viewport_param,
+          viewport.0,
+          list.map(viewports, fn(viewport) { viewport.0 }),
+        ),
         ..list.map(controls, view_control)
       ],
     ),
   ]
 }
 
-fn view_sidebar(modules: List(Module), current: String) -> Element(Nil) {
+fn view_sidebar(
+  modules: List(Module),
+  current: String,
+  carry: String,
+) -> Element(Nil) {
   html.nav(
     [
       attribute.aria_label("Stories"),
@@ -194,6 +224,7 @@ fn view_sidebar(modules: List(Module), current: String) -> Element(Nil) {
             view_link(
               story.docs_path(name),
               current,
+              carry,
               "px-2 py-1 text-xs font-medium text-subtle hover:text-fg aria-[current=page]:text-fg",
               name,
             ),
@@ -204,6 +235,7 @@ fn view_sidebar(modules: List(Module), current: String) -> Element(Nil) {
                   view_link(
                     story.path(name, entry),
                     current,
+                    carry,
                     "px-2 py-1.5 text-sm hover:bg-control-hover aria-[current=page]:bg-control aria-[current=page]:font-medium",
                     story.name(entry),
                   ),
@@ -220,12 +252,13 @@ fn view_sidebar(modules: List(Module), current: String) -> Element(Nil) {
 fn view_link(
   href: String,
   current: String,
+  carry: String,
   class: String,
   label: String,
 ) -> Element(Nil) {
   html.a(
     [
-      attribute.href(href),
+      attribute.href(href <> carry),
       case href == current {
         True -> attribute.aria_current("page")
         False -> attribute.none()
