@@ -1,6 +1,7 @@
 import gleam/http.{Get}
 import gleam/http/request.{type Request}
 import gleam/http/response.{type Response}
+import gleam/int
 import gleam/javascript/array.{type Array}
 import gleam/javascript/promise.{type Promise}
 import gleam/list
@@ -17,9 +18,14 @@ import server/context.{type Context}
 import server/middleware
 import server/respond
 
-const default_viewport = #("desktop", "1440px")
+const default_viewport = #("fit", 0)
 
-const viewports = [default_viewport, #("tablet", "768px"), #("mobile", "390px")]
+const viewports = [
+  default_viewport,
+  #("desktop", 1440),
+  #("tablet", 768),
+  #("mobile", 390),
+]
 
 @external(javascript, "virtual:stories", "modules")
 fn story_modules() -> Array(Module)
@@ -144,7 +150,10 @@ fn view_story(
       html.iframe([
         attribute.src(path <> "/canvas?" <> uri.query_to_string(story_query)),
         attribute.title(story.name(story)),
-        attribute.style("width", width),
+        attribute.style("width", case width {
+          0 -> "100%"
+          _ -> int.to_string(width) <> "px"
+        }),
         attribute.class(
           "mx-auto block h-full rounded-lg border border-border bg-bg",
         ),
