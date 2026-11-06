@@ -63,18 +63,18 @@ fn view(
           view_docs(module, stories),
         ),
       ])
-    Show(module:, story:) ->
-      base.shell(module <> "/" <> story.name(story), context.client_entry, [
+    Show(module:, story: entry) ->
+      base.shell(module <> "/" <> story.name(entry), context.client_entry, [
         view_layout(
           modules,
-          story.path(module, story),
-          view_story(module, story, query),
+          story.path(module, entry),
+          view_story(module, entry, query),
         ),
       ])
-    Canvas(story:) -> {
-      let #(element, _) = story.run(story, query)
+    Canvas(story: entry) -> {
+      let #(element, _) = story.run(entry, query)
 
-      base.shell(story.name(story), context.client_entry, [
+      base.shell(story.name(entry), context.client_entry, [
         html.main([attribute.class("p-8")], [element]),
       ])
     }
@@ -102,8 +102,8 @@ fn view_docs(module: String, stories: List(Story)) -> List(Element(Nil)) {
       ],
       [
         html.h1([attribute.class("text-2xl font-bold")], [html.text(module)]),
-        ..list.map(stories, fn(story) {
-          let path = story.path(module, story)
+        ..list.map(stories, fn(entry) {
+          let path = story.path(module, entry)
 
           html.section([attribute.class("grid gap-y-3")], [
             html.h2([], [
@@ -112,12 +112,12 @@ fn view_docs(module: String, stories: List(Story)) -> List(Element(Nil)) {
                   attribute.href(path),
                   attribute.class("font-medium hover:underline"),
                 ],
-                [html.text(story.name(story))],
+                [html.text(story.name(entry))],
               ),
             ]),
             html.iframe([
               attribute.src(path <> "/canvas"),
-              attribute.title(story.name(story)),
+              attribute.title(story.name(entry)),
               attribute.class(
                 "h-64 w-full resize-y overflow-auto rounded-lg border border-border",
               ),
@@ -131,11 +131,11 @@ fn view_docs(module: String, stories: List(Story)) -> List(Element(Nil)) {
 
 fn view_story(
   module: String,
-  story: Story,
+  entry: Story,
   query: List(#(String, String)),
 ) -> List(Element(Nil)) {
-  let path = story.path(module, story)
-  let #(_, controls) = story.run(story, query)
+  let path = story.path(module, entry)
+  let #(_, controls) = story.run(entry, query)
   let #(viewport, width) =
     list.key_find(query, "viewport")
     |> result.try(fn(name) {
@@ -146,10 +146,10 @@ fn view_story(
 
   [
     html.main([attribute.class("flex-1 overflow-auto bg-control p-4")], [
-      html.h1([attribute.class("sr-only")], [html.text(story.name(story))]),
+      html.h1([attribute.class("sr-only")], [html.text(story.name(entry))]),
       html.iframe([
         attribute.src(path <> "/canvas?" <> uri.query_to_string(story_query)),
-        attribute.title(story.name(story)),
+        attribute.title(story.name(entry)),
         attribute.style("width", case width {
           0 -> "100%"
           _ -> int.to_string(width) <> "px"
@@ -199,13 +199,13 @@ fn view_sidebar(modules: List(Module), current: String) -> Element(Nil) {
             ),
             html.ul(
               [attribute.class("grid gap-y-0.5")],
-              list.map(stories, fn(story) {
+              list.map(stories, fn(entry) {
                 html.li([], [
                   view_link(
-                    story.path(name, story),
+                    story.path(name, entry),
                     current,
                     "px-2 py-1.5 text-sm hover:bg-control-hover aria-[current=page]:bg-control aria-[current=page]:font-medium",
-                    story.name(story),
+                    story.name(entry),
                   ),
                 ])
               }),
