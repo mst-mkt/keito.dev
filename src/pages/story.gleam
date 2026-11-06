@@ -42,11 +42,12 @@ pub fn handle(
   let query = request.get_query(req) |> result.unwrap([])
 
   case segments, modules, story.resolve(modules, segments) {
+    _, [], _ -> not_found.handle(req, context)
     [], [#(module, _), ..], _ ->
       promise.resolve(respond.redirect(302, story.docs_path(module)))
     _, _, Ok(resolved) ->
       promise.resolve(respond.html(200, view(context, modules, resolved, query)))
-    _, _, Error(Nil) -> not_found.handle(req, context)
+    _, _, Error(Nil) -> promise.resolve(respond.redirect(302, "/story"))
   }
 }
 
