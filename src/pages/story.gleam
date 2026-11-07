@@ -247,7 +247,7 @@ fn view_preview(path: String, entry: Story, globals: Globals) -> Element(Nil) {
       html.div(
         [
           attribute.class(
-            "rounded-lg border border-border bg-bg p-8 text-fg accent-fg",
+            "min-w-0 rounded-lg border border-border bg-bg p-8 text-fg accent-fg",
           ),
           color_scheme(globals),
         ],
