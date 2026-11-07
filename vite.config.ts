@@ -52,7 +52,7 @@ export default defineConfig({
     cn({ content: ["src/**/*.gleam"], out: ".generated/cn-tables.ts" }),
     cloudflare(),
   ]),
-  server: { watch: { ignored: ["**/build/**"] } },
+  server: { watch: { ignored: ["**/build/**", "**/.direnv/**"] } },
   environments: {
     client: {
       build: {
