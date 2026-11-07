@@ -5,7 +5,7 @@ import gleam/bool
 import gleam/dynamic/decode
 import gleam/javascript/promise.{type Promise}
 import gleam/list
-import gleam/option.{type Option, Some}
+import gleam/option.{type Option, None, Some}
 import gleam/result
 
 pub fn list(env: Env) -> Promise(List(Link)) {
@@ -37,7 +37,13 @@ pub fn save(
 
   use <- bool.guard(taken, promise.resolve(Error(Nil)))
   let metadata = [#("name", link.name), #("url", link.url)]
-  use _ <- promise.await(kv.put(namespace, link.id, link.url, metadata))
+  use _ <- promise.await(kv.put(
+    namespace,
+    link.id,
+    link.url,
+    metadata,
+    ttl: None,
+  ))
 
   case from {
     Some(old) if old != link.id -> kv.delete(namespace, old)

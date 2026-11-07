@@ -7,6 +7,7 @@ export const put = (
   key: string,
   value: string,
   metadata: [string, string][],
-) => namespace.put(key, value, { metadata: Object.fromEntries(metadata) });
+  ttl?: number,
+) => namespace.put(key, value, { metadata: Object.fromEntries(metadata), expirationTtl: ttl });
 
 export const remove = (namespace: KVNamespace, key: string) => namespace.delete(key);

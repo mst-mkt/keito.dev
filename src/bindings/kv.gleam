@@ -26,8 +26,11 @@ pub fn put(
   key: String,
   value: String,
   metadata: List(#(String, String)),
+  ttl ttl: Option(Int),
 ) -> Promise(Nil) {
-  do_put(namespace, key, value, array.from_list(metadata))
+  let ttl = option.map(ttl, dynamic.int) |> option.unwrap(dynamic.nil())
+
+  do_put(namespace, key, value, array.from_list(metadata), ttl)
 }
 
 @external(javascript, "./kv.ffi.ts", "remove")
@@ -92,4 +95,5 @@ fn do_put(
   key: String,
   value: String,
   metadata: Array(#(String, String)),
+  ttl: Dynamic,
 ) -> Promise(Nil)
