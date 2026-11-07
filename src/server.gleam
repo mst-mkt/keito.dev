@@ -19,7 +19,7 @@ pub fn serve(
   route: fn(Request(Body), Context) -> Promise(Response(Body)),
 ) -> fn(JsRequest, Env, WorkersContext) -> Promise(JsResponse) {
   fn(request, env, ctx) {
-    let context = Context(env:, client_entry:)
+    let context = Context(env:, ctx:, client_entry:)
     let serve =
       workers.serve(fn(hinoto) {
         use req <- hinoto.handle(hinoto)
