@@ -1,9 +1,10 @@
 import { gleamImportPlugin } from "@chouquette/gleam-vite-loader";
 import { cloudflare } from "@cloudflare/vite-plugin";
 import tailwindcss from "@tailwindcss/vite";
+import { githubDefault } from "@ox-content/theme-color-github";
 import { cn } from "cn/vite";
-import { readdirSync, readFileSync } from "node:fs";
-import { join } from "node:path";
+import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
 import { defineConfig, lazyPlugins, type Plugin } from "vite-plus";
 
 const stories = (): Plugin => {
@@ -44,10 +45,28 @@ const stories = (): Plugin => {
   };
 };
 
+const syntaxColors = ({ out }: { out: string }): Plugin => ({
+  name: "syntax-colors",
+  buildStart: () => {
+    const { tokens = {}, darkTokens = {} } = githubDefault;
+    const declarations = Object.keys(tokens)
+      .filter((name) => name.startsWith("syntax-"))
+      .map((name) =>
+        name === "syntax-background"
+          ? `  --octc-${name}: transparent;`
+          : `  --octc-${name}: light-dark(${tokens[name]}, ${darkTokens[name]});`,
+      );
+
+    mkdirSync(dirname(out), { recursive: true });
+    writeFileSync(out, `:root {\n${declarations.join("\n")}\n}\n`);
+  },
+});
+
 export default defineConfig({
   plugins: lazyPlugins(() => [
     gleamImportPlugin(),
     stories(),
+    syntaxColors({ out: ".generated/syntax-colors.css" }),
     tailwindcss(),
     cn({ content: ["src/**/*.gleam"], out: ".generated/cn-tables.ts" }),
     cloudflare(),

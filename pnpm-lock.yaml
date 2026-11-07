@@ -29,6 +29,9 @@ importers:
       '@cloudflare/vite-plugin':
         specifier: ^2.0.0-beta.v.1
         version: 2.0.0-beta.v.1(@types/node@24.19.2)(@voidzero-dev/vite-plus-core@1.3.0(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(typescript@7.0.2))(workerd@1.20261012.1)
+      '@ox-content/theme-color-github':
+        specifier: ^3.8.2
+        version: 3.8.2
       '@tailwindcss/node':
         specifier: 4.3.3
         version: 4.3.3
@@ -473,6 +476,14 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.9':
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
+
+  '@ox-content/theme-color-github@3.8.2':
+    resolution: {integrity: sha512-WB9K402T63WtxxXX5HydyPCqiyB9mZul891z5y1WJQVmspvTYTm4gaoGS9OWzwo4rQSpDqs1J5bLFaybEX3aaA==}
+    peerDependencies:
+      '@ox-content/vite-plugin': '>=3.0.0-alpha.1'
+    peerDependenciesMeta:
+      '@ox-content/vite-plugin':
+        optional: true
 
   '@oxc-project/runtime@0.154.0':
     resolution: {integrity: sha512-cBQNGoh659BNgvA8OC/e4BNDtFkv03dJaYdkp2adgOQNtISNAPQ+nB4S8XvWtNk7Xl+0g+7aa+iRGR25Xycd1Q==}
@@ -2066,6 +2077,8 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.6.0
+
+  '@ox-content/theme-color-github@3.8.2': {}
 
   '@oxc-project/runtime@0.154.0': {}
 
