@@ -201,34 +201,29 @@ fn view_docs(
 ) -> List(Element(Nil)) {
   [
     html.main(
+      [attribute.class("min-w-0 flex-1 scrollbar-thin overflow-y-auto")],
       [
-        attribute.class(
-          cn([
-            "grid min-w-0 flex-1 content-start gap-y-10 p-8",
-            "scrollbar-thin overflow-y-auto",
-          ]),
-        ),
-      ],
-      [
-        html.h1([attribute.class("text-2xl font-bold")], [html.text(module)]),
-        ..list.map(stories, fn(entry) {
-          let path = story.path(module, entry)
+        html.div([attribute.class("grid gap-y-10 p-8")], [
+          html.h1([attribute.class("text-2xl font-bold")], [html.text(module)]),
+          ..list.map(stories, fn(entry) {
+            let path = story.path(module, entry)
 
-          html.section([attribute.class("grid max-w-3xl gap-y-3")], [
-            html.h2([], [
-              html.a(
-                [
-                  attribute.href(path <> carry),
-                  attribute.class(
-                    cn(["rounded-xs font-medium hover:underline", focus_ring]),
-                  ),
-                ],
-                [html.text(story.name(entry))],
-              ),
-            ]),
-            view_preview(path, entry, globals),
-          ])
-        })
+            html.section([attribute.class("grid max-w-3xl gap-y-3")], [
+              html.h2([], [
+                html.a(
+                  [
+                    attribute.href(path <> carry),
+                    attribute.class(
+                      cn(["rounded-xs font-medium hover:underline", focus_ring]),
+                    ),
+                  ],
+                  [html.text(story.name(entry))],
+                ),
+              ]),
+              view_preview(path, entry, globals),
+            ])
+          })
+        ]),
       ],
     ),
   ]
