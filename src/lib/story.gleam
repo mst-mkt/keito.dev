@@ -1,5 +1,7 @@
 import gleam/dict.{type Dict}
+import gleam/int
 import gleam/list
+import gleam/option.{type Option, None, Some}
 import gleam/result
 import gleam/string
 import lustre/element.{type Element}
@@ -14,6 +16,7 @@ pub opaque type Args(a) {
 
 pub type Control {
   Text(name: String, value: String)
+  Number(name: String, value: Int)
   Bool(name: String, value: Bool)
   Select(name: String, value: String, options: List(String))
 }
@@ -48,6 +51,14 @@ pub fn text(
   #(value, Text(name:, value:))
 }
 
+pub fn number(name: String, default: Int, next: fn(Int) -> Args(a)) -> Args(a) {
+  use query <- control(next)
+  let value =
+    dict.get(query, name) |> result.try(int.parse) |> result.unwrap(default)
+
+  #(value, Number(name:, value:))
+}
+
 pub fn bool(name: String, default: Bool, next: fn(Bool) -> Args(a)) -> Args(a) {
   use query <- control(next)
   let value = case dict.get(query, name) {
@@ -77,6 +88,22 @@ pub fn select(
   let labels = list.map(options, fn(option) { option.0 })
 
   #(value, Select(name:, value: label, options: labels))
+}
+
+pub fn optional(
+  name: String,
+  default: Option(value),
+  otherwise fallback: value,
+  control control: fn(String, value, fn(value) -> Args(a)) -> Args(a),
+  next next: fn(Option(value)) -> Args(a),
+) -> Args(a) {
+  use present <- bool(name, option.is_some(default))
+  use value <- control(name <> "_value", option.unwrap(default, fallback))
+
+  next(case present {
+    True -> Some(value)
+    False -> None
+  })
 }
 
 pub fn isolated(story: Story) -> Story {

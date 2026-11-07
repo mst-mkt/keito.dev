@@ -543,6 +543,16 @@ fn view_control(control: story.Control) -> Element(Nil) {
           attribute.class(cn(["h-9 rounded-md px-3", ..control_class])),
         ]),
       ])
+    story.Number(name:, value:) ->
+      view_field(name, [
+        html.input([
+          attribute.type_("number"),
+          attribute.id(name),
+          attribute.name(name),
+          attribute.value(int.to_string(value)),
+          attribute.class(cn(["h-9 rounded-md px-3", ..control_class])),
+        ]),
+      ])
     story.Bool(name:, value:) ->
       html.label([attribute.class("flex items-center gap-x-2 text-sm")], [
         html.input([

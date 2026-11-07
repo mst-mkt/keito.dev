@@ -1,5 +1,6 @@
 import gleam/list
-import lib/story.{Bool, Canvas, Docs, Select, Show, Text}
+import gleam/option.{None, Some}
+import lib/story.{Bool, Canvas, Docs, Number, Select, Show, Text}
 import lustre/element
 
 fn modules() -> List(story.Module) {
@@ -16,6 +17,21 @@ fn controls_story() -> story.Story {
     use _ <- story.text("label", "Button")
     use _ <- story.bool("disabled", True)
     use _ <- story.select("variant", 2, [#("primary", 1), #("ghost", 2)])
+
+    story.render(element.none())
+  })
+}
+
+fn values_story() -> story.Story {
+  story.new("values", {
+    use _ <- story.optional(
+      "description",
+      Some("Formatter"),
+      otherwise: "",
+      control: story.text,
+    )
+    use _ <- story.optional("rank", None, otherwise: 1, control: story.number)
+    use _ <- story.number("stars", 128)
 
     story.render(element.none())
   })
@@ -108,4 +124,57 @@ pub fn run_unknown_select_option_test() {
     controls,
     Select(name: "variant", value: "ghost", options: ["primary", "ghost"]),
   )
+}
+
+pub fn run_present_optional_test() {
+  let query = []
+
+  let #(_, controls) = story.run(values_story(), query)
+
+  assert list.contains(controls, Bool(name: "description", value: True))
+  assert list.contains(
+    controls,
+    Text(name: "description_value", value: "Formatter"),
+  )
+}
+
+pub fn run_absent_optional_test() {
+  let query = []
+
+  let #(_, controls) = story.run(values_story(), query)
+
+  assert list.contains(controls, Bool(name: "rank", value: False))
+  assert list.contains(controls, Number(name: "rank_value", value: 1))
+}
+
+pub fn run_unchecked_optional_test() {
+  let query = [#("description", "false")]
+
+  let #(_, controls) = story.run(values_story(), query)
+
+  assert list.contains(controls, Bool(name: "description", value: False))
+}
+
+pub fn run_number_default_test() {
+  let query = []
+
+  let #(_, controls) = story.run(values_story(), query)
+
+  assert list.contains(controls, Number(name: "stars", value: 128))
+}
+
+pub fn run_number_query_test() {
+  let query = [#("stars", "52300")]
+
+  let #(_, controls) = story.run(values_story(), query)
+
+  assert list.contains(controls, Number(name: "stars", value: 52_300))
+}
+
+pub fn run_invalid_number_test() {
+  let query = [#("stars", "many")]
+
+  let #(_, controls) = story.run(values_story(), query)
+
+  assert list.contains(controls, Number(name: "stars", value: 128))
 }
