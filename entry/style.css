@@ -11,6 +11,8 @@
   --color-control: color-mix(in oklch, var(--color-fg) 5%, transparent);
   --color-control-hover: color-mix(in oklch, var(--color-fg) 8%, transparent);
 
+  --aspect-ogp: 1.91 / 1;
+
   --font-sans:
     "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Noto Sans JP",
     sans-serif;
