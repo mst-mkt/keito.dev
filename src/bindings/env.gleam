@@ -1,4 +1,5 @@
 import bindings/kv
+import bindings/service
 
 pub type Env
 
@@ -7,6 +8,9 @@ pub fn links(env: Env) -> kv.Namespace
 
 @external(javascript, "./env.ffi.ts", "embedCache")
 pub fn embed_cache(env: Env) -> kv.Namespace
+
+@external(javascript, "./env.ffi.ts", "posts")
+pub fn posts(env: Env) -> service.Service
 
 @external(javascript, "./env.ffi.ts", "googleWalletIssuerId")
 pub fn google_wallet_issuer_id(env: Env) -> String
