@@ -18,10 +18,14 @@ import lustre/element.{type Element}
 import lustre/element/html
 import mork
 import mork/document.{
-  type Block, type Document, type Inline, type ListItem, type ListPack,
-  BlockQuote, BulletList, Code, Emphasis, Empty, FullImage, Heading, HtmlBlock,
-  Loose, Newline, OrderedList, Paragraph, RawHtml, RefImage, SoftBreak, Table,
-  Text, ThematicBreak, Tight,
+  type Block, type Document, type FootnoteData, type Inline, type ListItem,
+  type ListPack, BlockQuote, BulletList, Code, Emphasis, Empty, FullImage,
+  Heading, HtmlBlock, Loose, Newline, OrderedList, Paragraph, RawHtml, RefImage,
+  SoftBreak, Table, Text, ThematicBreak, Tight,
+}
+
+pub type Section {
+  Section(level: Int, id: String, title: String)
 }
 
 type Renderer(msg) {
@@ -43,11 +47,34 @@ pub fn render(
 }
 
 pub fn embeds(markdown: String) -> List(Embed) {
-  let document = parse(markdown)
-  let notes = dict.values(document.footnotes)
+  parse(markdown) |> all_blocks |> list.flat_map(block_embeds)
+}
 
-  list.append(document.blocks, list.flat_map(notes, fn(note) { note.blocks }))
-  |> list.flat_map(block_embeds)
+pub fn sections(markdown: String) -> List(Section) {
+  let blocks = parse(markdown) |> all_blocks
+  let #(_, sections) = list.map_fold(blocks, dict.new(), block_sections)
+
+  list.flatten(sections)
+}
+
+fn block_sections(ids: Ids, block: Block) -> #(Ids, List(Section)) {
+  let nested = fn(blocks) {
+    let #(ids, sections) = list.map_fold(blocks, ids, block_sections)
+
+    #(ids, list.flatten(sections))
+  }
+
+  case block {
+    Heading(level:, inlines:, ..) -> {
+      let #(ids, id) = heading.id(ids, inlines)
+
+      #(ids, [Section(level:, id:, title: inline.plain_text(inlines))])
+    }
+    BlockQuote(blocks) -> nested(blocks)
+    BulletList(items:, ..) | OrderedList(items:, ..) ->
+      nested(list.flat_map(items, fn(item) { item.blocks }))
+    _ -> #(ids, [])
+  }
 }
 
 fn block_embeds(block: Block) -> List(Embed) {
@@ -63,6 +90,18 @@ fn block_embeds(block: Block) -> List(Embed) {
       list.flat_map(items, fn(item) { list.flat_map(item.blocks, block_embeds) })
     _ -> []
   }
+}
+
+fn ordered_notes(document: Document) -> List(FootnoteData) {
+  dict.values(document.footnotes)
+  |> list.sort(fn(a, b) { int.compare(a.num, b.num) })
+}
+
+fn all_blocks(document: Document) -> List(Block) {
+  let note_blocks =
+    list.flat_map(ordered_notes(document), fn(note) { note.blocks })
+
+  list.append(document.blocks, note_blocks)
 }
 
 fn parse(markdown: String) -> Document {
@@ -206,9 +245,7 @@ fn embedded(raw: String) -> Result(Embed, String) {
 }
 
 fn footnotes(renderer: Renderer(msg), ids: Ids) -> Promise(List(Element(msg))) {
-  let notes =
-    dict.values(renderer.document.footnotes)
-    |> list.sort(fn(a, b) { int.compare(a.num, b.num) })
+  let notes = ordered_notes(renderer.document)
   use <- bool.guard(notes == [], promise.resolve([]))
   let #(_, items) =
     list.map_fold(notes, ids, fn(ids, note) {

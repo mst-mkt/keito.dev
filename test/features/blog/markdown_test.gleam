@@ -1,6 +1,6 @@
 import components/icons
 import features/blog/embed.{LinkCard}
-import features/blog/markdown
+import features/blog/markdown.{Section}
 import gleam/javascript/promise.{type Promise}
 import gleam/list
 import gleam/string
@@ -41,6 +41,20 @@ pub fn embeds_test() {
 
   assert embeds
     == [LinkCard("https://example.com/a"), LinkCard("https://example.com/b")]
+}
+
+pub fn sections_test() {
+  let markdown = "## A\n\n### B\n\n> ## A\n\n## A\n"
+
+  let sections = markdown.sections(markdown)
+
+  assert sections
+    == [
+      Section(level: 2, id: "a", title: "A"),
+      Section(level: 3, id: "b", title: "B"),
+      Section(level: 2, id: "a-1", title: "A"),
+      Section(level: 2, id: "a-2", title: "A"),
+    ]
 }
 
 pub fn render_duplicate_headings_test() {

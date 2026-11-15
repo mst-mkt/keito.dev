@@ -2,7 +2,7 @@ import bindings/env
 import bindings/kv
 import bindings/service
 import features/blog/embed
-import features/blog/markdown
+import features/blog/markdown.{type Section}
 import features/blog/post.{type Post}
 import gleam/dynamic/decode
 import gleam/fetch
@@ -40,15 +40,23 @@ pub fn source(context: Context, slug: String) -> Promise(Result(String, Nil)) {
   result.map(found, fn(found) { found.body })
 }
 
-pub fn content(context: Context, slug: String) -> Promise(Result(String, Nil)) {
+pub type Article {
+  Article(content: String, sections: List(Section))
+}
+
+pub fn article(
+  context: Context,
+  slug: String,
+) -> Promise(Result(Article, Nil)) {
   use found <- promise.try_await(fetch_file(context, source_path(slug)))
   let content = case response.get_header(found, "etag") {
     Ok(etag) ->
       render_cached(context, "post:" <> slug <> ":" <> etag, found.body)
     Error(Nil) -> render(context, found.body) |> promise.map(unwrap)
   }
+  use content <- promise.map(content)
 
-  promise.map(content, Ok)
+  Ok(Article(content:, sections: markdown.sections(found.body)))
 }
 
 fn render_cached(

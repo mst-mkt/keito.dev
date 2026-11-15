@@ -2,15 +2,18 @@ import components/icons
 import components/side_nav.{Item}
 import features/blog/embed.{LinkCard}
 import features/blog/feed
+import features/blog/markdown.{type Section}
 import features/blog/post.{type Post}
-import features/blog/store
+import features/blog/store.{type Article}
 import gleam/http.{Get}
 import gleam/http/request.{type Request}
 import gleam/http/response.{type Response}
 import gleam/javascript/promise.{type Promise}
+import gleam/list
 import gleam/option.{None, Some}
 import hinoto/body.{type Body}
 import layouts/base
+import lib/cn.{cn}
 import lustre/attribute.{type Attribute}
 import lustre/element.{type Element}
 import lustre/element/html
@@ -43,12 +46,12 @@ pub fn handle(
         Some(event) -> embed.view(context, LinkCard(event.url))
         None -> promise.resolve(element.none())
       }
-      use content <- promise.await(store.content(context, slug))
+      use article <- promise.await(store.article(context, slug))
       use event_card <- promise.map(event_card)
 
-      case content {
-        Ok(content) ->
-          respond.html(200, view(context, entry, content, event_card))
+      case article {
+        Ok(article) ->
+          respond.html(200, view(context, entry, article, event_card))
         Error(Nil) -> respond.text(503, "Service Unavailable")
       }
     }
@@ -59,7 +62,7 @@ pub fn handle(
 fn view(
   context: Context,
   entry: Post,
-  content: String,
+  article: Article,
   event_card: Element(Nil),
 ) -> Element(Nil) {
   let description = case entry.description {
@@ -93,12 +96,12 @@ fn view(
             "",
             "div",
             [attribute.class("markdown")],
-            content,
+            article.content,
           ),
         ],
       ),
     ],
-    right: [],
+    right: view_contents(article.sections),
     dock: [],
     head: [
       base.canonical(post.page_path(entry.slug)),
@@ -177,5 +180,45 @@ fn view_date(
     html.time([attribute.attribute("datetime", value)], [
       html.text(post.display_date(value)),
     ]),
+  ])
+}
+
+fn view_contents(sections: List(Section)) -> List(Element(Nil)) {
+  case list.filter(sections, fn(section) { section.level <= 3 }) {
+    [] -> []
+    sections -> [
+      html.nav(
+        [
+          attribute.aria_label("Table of contents"),
+          attribute.class(
+            cn([
+              "-mx-2 -my-6 max-h-[calc(100dvh-6rem)] px-2 py-6",
+              "scrollbar-none overflow-y-auto overscroll-contain",
+              "mask-y-from-[calc(100%-1.5rem)]",
+            ]),
+          ),
+        ],
+        [
+          html.ul(
+            [attribute.lang("ja"), attribute.class("grid gap-y-2 text-sm")],
+            list.map(sections, view_section),
+          ),
+        ],
+      ),
+    ]
+  }
+}
+
+fn view_section(section: Section) -> Element(Nil) {
+  html.li([attribute.classes([#("pl-3", section.level == 3)])], [
+    html.a(
+      [
+        attribute.href("#" <> section.id),
+        attribute.class(
+          "rounded-sm text-subtle outline-offset-4 transition-colors hover:text-fg focus-visible:text-fg focus-visible:outline-2 focus-visible:outline-fg",
+        ),
+      ],
+      [html.text(section.title)],
+    ),
   ])
 }

@@ -42,6 +42,10 @@
   scrollbar-color: color-mix(in oklch, var(--color-fg) 25%, transparent) transparent;
 }
 
+@utility scrollbar-none {
+  scrollbar-width: none;
+}
+
 @layer base {
   :root {
     color-scheme: light dark;
