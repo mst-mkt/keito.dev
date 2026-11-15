@@ -649,6 +649,27 @@ pub fn fast_arrow_left(attributes: List(Attribute(msg))) -> Element(msg) {
   ])
 }
 
+pub fn hashtag(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 24 24", attributes, [
+    svg.path([
+      attribute.attribute("d", "M10 3L6 21"),
+      attribute.attribute("stroke-linejoin", "miter"),
+    ]),
+    svg.path([
+      attribute.attribute("d", "M20.5 16H2.5"),
+      attribute.attribute("stroke-linejoin", "miter"),
+    ]),
+    svg.path([
+      attribute.attribute("d", "M22 7H4"),
+      attribute.attribute("stroke-linejoin", "miter"),
+    ]),
+    svg.path([
+      attribute.attribute("d", "M18 3L14 21"),
+      attribute.attribute("stroke-linejoin", "miter"),
+    ]),
+  ])
+}
+
 pub fn home_simple_door(attributes: List(Attribute(msg))) -> Element(msg) {
   icon("0 0 24 24", attributes, [
     svg.path([
@@ -688,6 +709,38 @@ pub fn list(attributes: List(Attribute(msg))) -> Element(msg) {
   ])
 }
 
+pub fn long_arrow_up_left(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 24 24", attributes, [
+    svg.path([attribute.attribute("d", "M10.25 4.75L6.75 8.25L10.25 11.75")]),
+    svg.path([
+      attribute.attribute(
+        "d",
+        "M6.75 8.25L12.75 8.25C14.9591 8.25 16.75 10.0409 16.75 12.25V19.25",
+      ),
+    ]),
+  ])
+}
+
+pub fn map_pin(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 24 24", attributes, [
+    svg.path([
+      attribute.attribute(
+        "d",
+        "M20 10C20 14.4183 12 22 12 22C12 22 4 14.4183 4 10C4 5.58172 7.58172 2 12 2C16.4183 2 20 5.58172 20 10Z",
+      ),
+      attribute.attribute("stroke-linecap", "butt"),
+      attribute.attribute("stroke-linejoin", "miter"),
+    ]),
+    svg.path([
+      attribute.attribute(
+        "d",
+        "M12 11C12.5523 11 13 10.5523 13 10C13 9.44772 12.5523 9 12 9C11.4477 9 11 9.44772 11 10C11 10.5523 11.4477 11 12 11Z",
+      ),
+      attribute.attribute("fill", "currentColor"),
+    ]),
+  ])
+}
+
 pub fn nav_arrow_down(attributes: List(Attribute(msg))) -> Element(msg) {
   icon("0 0 24 24", attributes, [
     svg.path([attribute.attribute("d", "M6 9L12 15L18 9")]),
@@ -716,6 +769,20 @@ pub fn open_new_window(attributes: List(Attribute(msg))) -> Element(msg) {
 pub fn plus(attributes: List(Attribute(msg))) -> Element(msg) {
   icon("0 0 24 24", attributes, [
     svg.path([attribute.attribute("d", "M6 12H12M18 12H12M12 12V6M12 12V18")]),
+  ])
+}
+
+pub fn refresh(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 24 24", attributes, [
+    svg.path([
+      attribute.attribute(
+        "d",
+        "M21.8883 13.5C21.1645 18.3113 17.013 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C16.1006 2 19.6248 4.46819 21.1679 8",
+      ),
+    ]),
+    svg.path([
+      attribute.attribute("d", "M17 8H21.4C21.7314 8 22 7.73137 22 7.4V3"),
+    ]),
   ])
 }
 
