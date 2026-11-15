@@ -49,10 +49,17 @@ pub fn markdown(status: Int, body: String) -> Response(Body) {
 }
 
 pub fn vary(res: Response(Body), header: String) -> Response(Body) {
-  let vary = case response.get_header(res, "vary") {
-    Ok(vary) -> vary <> ", " <> header
-    Error(Nil) -> header
-  }
+  case response.get_header(res, "vary") {
+    Error(Nil) -> response.set_header(res, "vary", header)
+    Ok(vary) -> {
+      let headers =
+        string.split(vary, ",")
+        |> list.map(fn(name) { string.lowercase(string.trim(name)) })
 
-  response.set_header(res, "vary", vary)
+      case list.contains(headers, string.lowercase(header)) {
+        True -> res
+        False -> response.set_header(res, "vary", vary <> ", " <> header)
+      }
+    }
+  }
 }
