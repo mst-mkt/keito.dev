@@ -9,6 +9,9 @@ pub fn links(env: Env) -> kv.Namespace
 @external(javascript, "./env.ffi.ts", "embedCache")
 pub fn embed_cache(env: Env) -> kv.Namespace
 
+@external(javascript, "./env.ffi.ts", "postCache")
+pub fn post_cache(env: Env) -> kv.Namespace
+
 @external(javascript, "./env.ffi.ts", "posts")
 pub fn posts(env: Env) -> service.Service
 

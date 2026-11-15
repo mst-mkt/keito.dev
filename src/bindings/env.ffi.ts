@@ -2,6 +2,8 @@ export const links = (env: Env) => env.LINKS;
 
 export const embedCache = (env: Env) => env.EMBED_CACHE;
 
+export const postCache = (env: Env) => env.POST_CACHE;
+
 export const posts = (env: Env) => env.POSTS;
 
 export const googleWalletIssuerId = (env: Env) => env.GOOGLE_WALLET_ISSUER_ID;
