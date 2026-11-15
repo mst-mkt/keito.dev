@@ -592,6 +592,15 @@ pub fn iniad(attributes: List(Attribute(msg))) -> Element(msg) {
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+pub fn align_left(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 24 24", attributes, [
+    svg.path([attribute.attribute("d", "M3 10L17 10")]),
+    svg.path([attribute.attribute("d", "M3 6H21")]),
+    svg.path([attribute.attribute("d", "M3 18L17 18")]),
+    svg.path([attribute.attribute("d", "M3 14H21")]),
+  ])
+}
+
 pub fn arrow_left(attributes: List(Attribute(msg))) -> Element(msg) {
   icon("0 0 24 24", attributes, [
     svg.path([
