@@ -1,16 +1,18 @@
 import components/text_link
-import features/embeds/api/github_permalink as github_permalink_api
-import features/embeds/api/github_repository as github_repository_api
-import features/embeds/api/link_card as link_card_api
-import features/embeds/api/npm_package as npm_package_api
-import features/embeds/api/slide as slide_api
-import features/embeds/api/tweet as tweet_api
-import features/embeds/components/github_permalink.{type Lines, Range, WholeFile}
-import features/embeds/components/github_repository
-import features/embeds/components/link_card
-import features/embeds/components/npm_package
-import features/embeds/components/slide
-import features/embeds/components/tweet
+import features/blog/embed/api/github_permalink as github_permalink_api
+import features/blog/embed/api/github_repository as github_repository_api
+import features/blog/embed/api/link_card as link_card_api
+import features/blog/embed/api/npm_package as npm_package_api
+import features/blog/embed/api/slide as slide_api
+import features/blog/embed/api/tweet as tweet_api
+import features/blog/embed/components/github_permalink.{
+  type Lines, Range, WholeFile,
+}
+import features/blog/embed/components/github_repository
+import features/blog/embed/components/link_card
+import features/blog/embed/components/npm_package
+import features/blog/embed/components/slide
+import features/blog/embed/components/tweet
 import gleam/bool
 import gleam/int
 import gleam/javascript/promise.{type Promise}

@@ -1,5 +1,5 @@
-import features/embeds/api/github_repository as api
-import features/embeds/components/github_repository.{Language, Repository}
+import features/blog/embed/api/github_repository as api
+import features/blog/embed/components/github_repository.{Language, Repository}
 import gleam/json
 import gleam/option.{None, Some}
 

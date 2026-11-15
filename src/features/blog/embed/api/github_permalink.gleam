@@ -1,7 +1,7 @@
 import bindings/env
-import features/embeds/api/cache
-import features/embeds/api/remote
-import features/embeds/components/github_permalink.{
+import features/blog/embed/api/cache
+import features/blog/embed/api/remote
+import features/blog/embed/components/github_permalink.{
   type Lines, type Permalink, Permalink, Range, WholeFile,
 }
 import gleam/bool

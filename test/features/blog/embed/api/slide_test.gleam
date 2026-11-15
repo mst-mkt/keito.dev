@@ -1,5 +1,5 @@
-import features/embeds/api/slide as api
-import features/embeds/components/slide.{Slide}
+import features/blog/embed/api/slide as api
+import features/blog/embed/components/slide.{Slide}
 import gleam/json
 import gleam/result
 

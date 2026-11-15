@@ -1,8 +1,8 @@
-import features/embeds/components/github_permalink.{Range, WholeFile}
-import features/embeds/embed.{
+import features/blog/embed.{
   Docswell, GitHubPermalink, GitHubRepository, LinkCard, NpmPackage, SpeakerDeck,
   Tweet,
 }
+import features/blog/embed/components/github_permalink.{Range, WholeFile}
 
 pub fn from_tag_link_card_test() {
   let url = "https://nuten.keito.dev/"

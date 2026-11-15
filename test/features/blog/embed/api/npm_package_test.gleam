@@ -1,5 +1,5 @@
-import features/embeds/api/npm_package as api
-import features/embeds/components/npm_package.{Package}
+import features/blog/embed/api/npm_package as api
+import features/blog/embed/components/npm_package.{Package}
 import gleam/json
 import gleam/option.{None, Some}
 

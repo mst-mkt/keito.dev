@@ -1,6 +1,6 @@
-import features/embeds/api/cache
-import features/embeds/api/remote
-import features/embeds/components/npm_package.{type Package, Package}
+import features/blog/embed/api/cache
+import features/blog/embed/api/remote
+import features/blog/embed/components/npm_package.{type Package, Package}
 import gleam/dynamic/decode.{type Decoder}
 import gleam/javascript/promise.{type Promise}
 import gleam/option.{None}

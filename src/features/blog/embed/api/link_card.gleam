@@ -1,6 +1,6 @@
-import features/embeds/api/cache
-import features/embeds/api/remote
-import features/embeds/components/link_card.{type LinkCard, LinkCard}
+import features/blog/embed/api/cache
+import features/blog/embed/api/remote
+import features/blog/embed/components/link_card.{type LinkCard, LinkCard}
 import gleam/bool
 import gleam/dynamic/decode.{type Decoder}
 import gleam/fetch.{type FetchBody}

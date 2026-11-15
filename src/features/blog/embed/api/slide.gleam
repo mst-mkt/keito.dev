@@ -1,6 +1,6 @@
-import features/embeds/api/cache
-import features/embeds/api/remote
-import features/embeds/components/slide.{type Slide, Slide}
+import features/blog/embed/api/cache
+import features/blog/embed/api/remote
+import features/blog/embed/components/slide.{type Slide, Slide}
 import gleam/dynamic/decode.{type Decoder}
 import gleam/javascript/promise.{type Promise}
 import gleam/result

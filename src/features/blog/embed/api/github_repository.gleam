@@ -1,7 +1,7 @@
 import bindings/env
-import features/embeds/api/cache
-import features/embeds/api/remote
-import features/embeds/components/github_repository.{
+import features/blog/embed/api/cache
+import features/blog/embed/api/remote
+import features/blog/embed/components/github_repository.{
   type Repository, Language, Repository,
 }
 import gleam/dynamic/decode.{type Decoder}

@@ -1,5 +1,5 @@
-import features/embeds/api/github_permalink as api
-import features/embeds/components/github_permalink.{Range, WholeFile}
+import features/blog/embed/api/github_permalink as api
+import features/blog/embed/components/github_permalink.{Range, WholeFile}
 
 pub fn select_range_test() {
   let text = "a\nb\nc\nd\n"

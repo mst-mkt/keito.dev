@@ -1,5 +1,5 @@
-import features/embeds/api/tweet as api
-import features/embeds/components/tweet.{
+import features/blog/embed/api/tweet as api
+import features/blog/embed/components/tweet.{
   type Tweet, Link, Photo, Text, Tweet, Video,
 }
 import gleam/dict

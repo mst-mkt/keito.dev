@@ -1,5 +1,5 @@
-import features/embeds/api/cache
-import features/embeds/api/remote.{Failed, Found, Gone}
+import features/blog/embed/api/cache
+import features/blog/embed/api/remote.{Failed, Found, Gone}
 import gleam/dynamic.{type Dynamic}
 
 fn metadata(fetched_at: String) -> Dynamic {

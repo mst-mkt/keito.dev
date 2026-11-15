@@ -1,9 +1,9 @@
+import features/blog/embed.{type Embed}
 import features/blog/markdown/code
 import features/blog/markdown/heading.{type Ids}
 import features/blog/markdown/inline
 import features/blog/markdown/table
 import features/blog/markdown/tag
-import features/embeds/embed.{type Embed}
 import gleam/bool
 import gleam/dict
 import gleam/int

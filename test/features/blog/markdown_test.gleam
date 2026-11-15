@@ -1,6 +1,6 @@
 import components/icons
+import features/blog/embed.{LinkCard}
 import features/blog/markdown
-import features/embeds/embed.{LinkCard}
 import gleam/javascript/promise.{type Promise}
 import gleam/list
 import gleam/string

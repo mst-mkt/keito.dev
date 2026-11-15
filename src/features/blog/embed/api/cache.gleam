@@ -1,6 +1,6 @@
 import bindings/env
 import bindings/kv
-import features/embeds/api/remote.{type Fetched, Failed, Found, Gone}
+import features/blog/embed/api/remote.{type Fetched, Failed, Found, Gone}
 import gleam/dynamic.{type Dynamic}
 import gleam/dynamic/decode.{type Decoder}
 import gleam/int

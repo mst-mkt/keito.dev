@@ -1,5 +1,5 @@
-import features/embeds/api/link_card as api
-import features/embeds/components/link_card.{type LinkCard, LinkCard}
+import features/blog/embed/api/link_card as api
+import features/blog/embed/components/link_card.{type LinkCard, LinkCard}
 import gleam/json
 import gleam/option.{None, Some}
 import lib/html_head.{type Head, type Meta, Head, Link, Meta}
