@@ -8,6 +8,7 @@ import gleam/javascript/promise.{type Promise}
 import gleam/json
 import gleam/option.{Some}
 import gleam/result
+import lib/duration
 import lib/workers_context
 import plinth/javascript/date
 import server/context.{type Context}
@@ -66,7 +67,7 @@ pub fn is_stale(metadata: Dynamic, at now: Int) -> Bool {
   decode.run(metadata, decode.at(["fetched_at"], decode.string))
   |> result.replace_error(Nil)
   |> result.try(int.parse)
-  |> result.map(fn(fetched_at) { now - fetched_at > days(1) })
+  |> result.map(fn(fetched_at) { now - fetched_at > duration.days(1) })
   |> result.unwrap(True)
 }
 
@@ -76,19 +77,11 @@ pub fn entry(
   cached cached: Bool,
 ) -> Result(#(String, Int), Nil) {
   case fetched, cached {
-    Found(body), _ -> Ok(#(body, days(30)))
-    Gone, _ -> Ok(#("", days(30)))
+    Found(body), _ -> Ok(#(body, duration.days(30)))
+    Gone, _ -> Ok(#("", duration.days(30)))
     Failed, True -> Error(Nil)
-    Failed, False -> Ok(#("", hours(1)))
+    Failed, False -> Ok(#("", duration.hours(1)))
   }
-}
-
-fn hours(count: Int) -> Int {
-  count * 60 * 60
-}
-
-fn days(count: Int) -> Int {
-  count * hours(24)
 }
 
 fn save(
