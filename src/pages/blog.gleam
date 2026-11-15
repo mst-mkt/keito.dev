@@ -1,3 +1,4 @@
+import components/dock
 import components/icons
 import components/side_nav.{Item}
 import features/blog/feed
@@ -74,7 +75,10 @@ fn view(context: Context, posts: List(Post)) -> Element(Nil) {
         Item("Subscribe to feed", post.feed_path, icons.rss_feed),
       ]),
     ],
-    dock: [],
+    dock: [
+      dock.Link("Home", "/", icons.home_simple_door),
+      dock.Link("Subscribe to feed", post.feed_path, icons.rss_feed),
+    ],
     head: [base.canonical(post.list_path), feed.link()],
     client_entry: context.client_entry,
   )

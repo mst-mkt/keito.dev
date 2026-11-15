@@ -1,3 +1,4 @@
+import components/dock
 import components/icons
 import components/side_nav.{Item}
 import features/blog/embed.{LinkCard}
@@ -65,6 +66,8 @@ fn view(
   article: Article,
   event_card: Element(Nil),
 ) -> Element(Nil) {
+  let sections =
+    list.filter(article.sections, fn(section) { section.level <= 3 })
   let description = case entry.description {
     Some(description) -> [
       html.meta([attribute.name("description"), attribute.content(description)]),
@@ -101,8 +104,21 @@ fn view(
         ],
       ),
     ],
-    right: view_contents(article.sections),
-    dock: [],
+    right: view_contents(sections),
+    dock: [
+      dock.Link("Home", "/", icons.home_simple_door),
+      dock.Link("Post list", post.list_path, icons.list),
+      ..case sections {
+        [] -> []
+        _ -> [
+          dock.Panel(
+            "Table of contents",
+            [view_sections(sections)],
+            icons.align_left,
+          ),
+        ]
+      }
+    ],
     head: [
       base.canonical(post.page_path(entry.slug)),
       feed.link(),
@@ -184,9 +200,9 @@ fn view_date(
 }
 
 fn view_contents(sections: List(Section)) -> List(Element(Nil)) {
-  case list.filter(sections, fn(section) { section.level <= 3 }) {
+  case sections {
     [] -> []
-    sections -> [
+    _ -> [
       html.nav(
         [
           attribute.aria_label("Table of contents"),
@@ -198,15 +214,17 @@ fn view_contents(sections: List(Section)) -> List(Element(Nil)) {
             ]),
           ),
         ],
-        [
-          html.ul(
-            [attribute.lang("ja"), attribute.class("grid gap-y-2 text-sm")],
-            list.map(sections, view_section),
-          ),
-        ],
+        [view_sections(sections)],
       ),
     ]
   }
+}
+
+fn view_sections(sections: List(Section)) -> Element(Nil) {
+  html.ul(
+    [attribute.lang("ja"), attribute.class("grid gap-y-2 text-sm")],
+    list.map(sections, view_section),
+  )
 }
 
 fn view_section(section: Section) -> Element(Nil) {
