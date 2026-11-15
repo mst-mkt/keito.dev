@@ -620,6 +620,12 @@ pub fn arrow_up_right(attributes: List(Attribute(msg))) -> Element(msg) {
   ])
 }
 
+pub fn check(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 24 24", attributes, [
+    svg.path([attribute.attribute("d", "M5 13L9 17L19 7")]),
+  ])
+}
+
 pub fn contactless(attributes: List(Attribute(msg))) -> Element(msg) {
   icon("0 0 24 24", attributes, [
     svg.path([attribute.attribute("d", "M15 21.5C19 16 19 8 15 2.5")]),
@@ -628,6 +634,23 @@ pub fn contactless(attributes: List(Attribute(msg))) -> Element(msg) {
       attribute.attribute("d", "M8.5 18C11.1667 14.25 11.1667 9.75 8.5 6"),
     ]),
     svg.path([attribute.attribute("d", "M5.5 16C7 13.5 7 10.5 5.5 8")]),
+  ])
+}
+
+pub fn copy(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 24 24", attributes, [
+    svg.path([
+      attribute.attribute(
+        "d",
+        "M19.4 20H9.6C9.26863 20 9 19.7314 9 19.4V9.6C9 9.26863 9.26863 9 9.6 9H19.4C19.7314 9 20 9.26863 20 9.6V19.4C20 19.7314 19.7314 20 19.4 20Z",
+      ),
+    ]),
+    svg.path([
+      attribute.attribute(
+        "d",
+        "M15 9V4.6C15 4.26863 14.7314 4 14.4 4H4.6C4.26863 4 4 4.26863 4 4.6V14.4C4 14.7314 4.26863 15 4.6 15H9",
+      ),
+    ]),
   ])
 }
 
@@ -800,6 +823,18 @@ pub fn rss_feed(attributes: List(Attribute(msg))) -> Element(msg) {
     svg.path([attribute.attribute("d", "M12 19C12 14.8 9.2 12 5 12")]),
     svg.path([attribute.attribute("d", "M19 19C19 10.6 13.4 5 5 5")]),
     svg.path([attribute.attribute("d", "M5 19.01L5.01 18.9989")]),
+  ])
+}
+
+pub fn share_ios(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 24 24", attributes, [
+    svg.path([
+      attribute.attribute(
+        "d",
+        "M20 13V19C20 20.1046 19.1046 21 18 21H6C4.89543 21 4 20.1046 4 19V13",
+      ),
+    ]),
+    svg.path([attribute.attribute("d", "M12 15V3M12 3L8.5 6.5M12 3L15.5 6.5")]),
   ])
 }
 
