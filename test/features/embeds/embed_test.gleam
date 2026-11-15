@@ -1,5 +1,7 @@
+import features/embeds/components/github_permalink.{Range, WholeFile}
 import features/embeds/embed.{
-  Docswell, GitHubRepository, LinkCard, NpmPackage, SpeakerDeck, Tweet,
+  Docswell, GitHubPermalink, GitHubRepository, LinkCard, NpmPackage, SpeakerDeck,
+  Tweet,
 }
 
 pub fn from_tag_link_card_test() {
@@ -102,4 +104,51 @@ pub fn from_tag_uppercase_host_test() {
   let result = embed.from_tag("GitHubRepository", [#("url", url)])
 
   assert result == Ok(GitHubRepository(url:, owner: "mst-mkt", repo: "nuten"))
+}
+
+pub fn from_tag_github_permalink_test() {
+  let url =
+    "https://github.com/mst-mkt/keito.dev/blob/1a8a2db/src/server/router.gleam#L10-L20"
+
+  let result = embed.from_tag("GitHubPermalink", [#("url", url)])
+
+  assert result
+    == Ok(GitHubPermalink(
+      url:,
+      owner: "mst-mkt",
+      repo: "keito.dev",
+      ref: "1a8a2db",
+      path: "src/server/router.gleam",
+      lines: Range(10, 20),
+    ))
+}
+
+pub fn from_tag_github_permalink_single_line_test() {
+  let url = "https://github.com/mst-mkt/keito.dev/blob/1a8a2db/gleam.toml#L5"
+
+  let assert Ok(GitHubPermalink(lines:, ..)) =
+    embed.from_tag("GitHubPermalink", [#("url", url)])
+
+  assert lines == Range(5, 5)
+}
+
+pub fn from_tag_github_permalink_whole_file_test() {
+  let url = "https://github.com/mst-mkt/keito.dev/blob/1a8a2db/gleam.toml"
+
+  let assert Ok(GitHubPermalink(lines:, ..)) =
+    embed.from_tag("GitHubPermalink", [#("url", url)])
+
+  assert lines == WholeFile
+}
+
+pub fn from_tag_github_permalink_reversed_range_test() {
+  let url =
+    "https://github.com/mst-mkt/keito.dev/blob/1a8a2db/gleam.toml#L20-L10"
+
+  let result = embed.from_tag("GitHubPermalink", [#("url", url)])
+
+  assert result
+    == Error(
+      "<GitHubPermalink> does not support https://github.com/mst-mkt/keito.dev/blob/1a8a2db/gleam.toml#L20-L10.",
+    )
 }

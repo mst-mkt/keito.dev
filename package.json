@@ -3,8 +3,7 @@
   "private": true,
   "type": "module",
   "imports": {
-    "#cn-tables": "./.generated/cn-tables.ts",
-    "#syntax-colors": "./.generated/syntax-colors.css"
+    "#cn-tables": "./.generated/cn-tables.ts"
   },
   "scripts": {
     "prepare": "vp config --no-agent"
@@ -16,7 +15,6 @@
   "devDependencies": {
     "@chouquette/gleam-vite-loader": "^1.0.3",
     "@cloudflare/vite-plugin": "^2.0.0-beta.v.1",
-    "@ox-content/theme-color-github": "^3.8.2",
     "@tailwindcss/node": "4.3.3",
     "@tailwindcss/vite": "^4.3.3",
     "@types/w3c-web-nfc": "^1.0.4",

@@ -1,5 +1,4 @@
 @import "tailwindcss" source("../src");
-@import "#syntax-colors";
 
 @theme {
   --color-bg: light-dark(oklch(0.98 0 0), oklch(0.24 0 0));

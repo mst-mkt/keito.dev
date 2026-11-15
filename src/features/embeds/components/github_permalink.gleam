@@ -2,6 +2,7 @@ import components/icons
 import gleam/int
 import gleam/list
 import gleam/string
+import lib/highlight.{type Token}
 import lib/story.{type Story}
 import lustre/attribute
 import lustre/element.{type Element}
@@ -15,20 +16,21 @@ pub type Permalink {
     ref: String,
     path: String,
     lines: Lines,
-    code: String,
+    code: List(List(Token)),
   )
 }
 
 pub type Lines {
-  WholeFile(count: Int)
+  WholeFile
   Range(start: Int, end: Int)
 }
 
 pub fn view(permalink: Permalink) -> Element(msg) {
-  let #(start, end) = case permalink.lines {
-    WholeFile(count:) -> #(1, count)
-    Range(start:, end:) -> #(start, end)
+  let start = case permalink.lines {
+    WholeFile -> 1
+    Range(start:, ..) -> start
   }
+  let end = start + list.length(permalink.code) - 1
   let #(directory, file_name) = split_path(permalink)
 
   html.figure(
@@ -94,12 +96,9 @@ pub fn view(permalink: Permalink) -> Element(msg) {
               [html.div([], [html.text(int.to_string(line))]), ..lines]
             }),
           ),
-          element.unsafe_raw_html(
-            "",
-            "div",
-            [attribute.class("shrink-0 py-3 pr-4")],
-            permalink.code,
-          ),
+          html.pre([attribute.class("shrink-0 py-3 pr-4")], [
+            html.code([], highlight.view(permalink.code)),
+          ]),
         ],
       ),
     ],
@@ -127,7 +126,7 @@ fn location(permalink: Permalink) -> String {
   }
 
   case permalink.lines {
-    WholeFile(..) -> ref
+    WholeFile -> ref
     Range(start:, end:) -> fragment(start, end) <> " @ " <> ref
   }
 }
@@ -141,17 +140,27 @@ fn fragment(start: Int, end: Int) -> String {
 
 @internal
 pub fn stories() -> List(Story) {
-  // inlined output, as highlighting runs at build time
-  let long =
-    "<pre class=\"ox-highlight css-variables\" style=\"background-color:var(--octc-syntax-background, #0d1117);color:var(--octc-syntax-foreground, #e6edf3)\" tabindex=\"0\"><code><span class=\"line\"><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\">  </span><span style=\"color:var(--octc-syntax-token-keyword, #ff7b72)\">const</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> </span><span style=\"color:var(--octc-syntax-token-function, #d2a8ff)\">storyModules</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> </span><span style=\"color:var(--octc-syntax-token-keyword, #ff7b72)\">=</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> </span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">(</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">)</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> </span><span style=\"color:var(--octc-syntax-token-keyword, #ff7b72)\">=&gt;</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> </span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">{</span></span>\n<span class=\"line\"><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\">    </span><span style=\"color:var(--octc-syntax-token-keyword, #ff7b72)\">return</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> </span><span style=\"color:var(--octc-syntax-token-function, #d2a8ff)\">readdirSync</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">(</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\">directory</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">,</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> </span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">{</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> </span><span style=\"color:var(--octc-syntax-token-constant, #79c0ff)\">recursive</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\">: </span><span style=\"color:var(--octc-syntax-token-constant, #79c0ff)\">true</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">,</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> </span><span style=\"color:var(--octc-syntax-token-constant, #79c0ff)\">encoding</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\">: </span><span style=\"color:var(--octc-syntax-token-string, #a5d6ff)\">&quot;utf8&quot;</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> </span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">}</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">)</span></span>\n<span class=\"line\"><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\">      </span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">.</span><span style=\"color:var(--octc-syntax-token-function, #d2a8ff)\">filter</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">(</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">(</span><span style=\"color:var(--octc-syntax-token-parameter, #ffa657)\">file</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">)</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> </span><span style=\"color:var(--octc-syntax-token-keyword, #ff7b72)\">=&gt;</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> </span><span style=\"color:var(--octc-syntax-token-parameter, #ffa657)\">file</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">.</span><span style=\"color:var(--octc-syntax-token-function, #d2a8ff)\">endsWith</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">(</span><span style=\"color:var(--octc-syntax-token-string, #a5d6ff)\">&quot;.gleam&quot;</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">)</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">)</span></span>\n<span class=\"line\"><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\">      </span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">.</span><span style=\"color:var(--octc-syntax-token-function, #d2a8ff)\">filter</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">(</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">(</span><span style=\"color:var(--octc-syntax-token-parameter, #ffa657)\">file</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">)</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> </span><span style=\"color:var(--octc-syntax-token-keyword, #ff7b72)\">=&gt;</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> </span><span style=\"color:var(--octc-syntax-token-keyword, #ff7b72)\">/</span><span style=\"color:var(--octc-syntax-token-string, #a5d6ff)\">^pub fn stories\\(\\)</span><span style=\"color:var(--octc-syntax-token-keyword, #ff7b72)\">/</span><span style=\"color:var(--octc-syntax-token-string, #a5d6ff)\">m</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">.</span><span style=\"color:var(--octc-syntax-token-function, #d2a8ff)\">test</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">(</span><span style=\"color:var(--octc-syntax-token-function, #d2a8ff)\">readFileSync</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">(</span><span style=\"color:var(--octc-syntax-token-function, #d2a8ff)\">join</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">(</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\">directory</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">,</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> </span><span style=\"color:var(--octc-syntax-token-parameter, #ffa657)\">file</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">)</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">,</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> </span><span style=\"color:var(--octc-syntax-token-string, #a5d6ff)\">&quot;utf8&quot;</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">)</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">)</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">)</span></span>\n<span class=\"line\"><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\">      </span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">.</span><span style=\"color:var(--octc-syntax-token-function, #d2a8ff)\">map</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">(</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">(</span><span style=\"color:var(--octc-syntax-token-parameter, #ffa657)\">file</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">)</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> </span><span style=\"color:var(--octc-syntax-token-keyword, #ff7b72)\">=&gt;</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> </span><span style=\"color:var(--octc-syntax-token-parameter, #ffa657)\">file</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">.</span><span style=\"color:var(--octc-syntax-token-function, #d2a8ff)\">slice</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">(</span><span style=\"color:var(--octc-syntax-token-constant, #79c0ff)\">0</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">,</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> </span><span style=\"color:var(--octc-syntax-token-keyword, #ff7b72)\">-</span><span style=\"color:var(--octc-syntax-token-string, #a5d6ff)\">&quot;.gleam&quot;</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">.</span><span style=\"color:var(--octc-syntax-token-constant, #79c0ff)\">length</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">)</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">)</span></span>\n<span class=\"line\"><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\">      </span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">.</span><span style=\"color:var(--octc-syntax-token-function, #d2a8ff)\">sort</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">(</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">)</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">;</span></span>\n<span class=\"line\"><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\">  </span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">}</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">;</span></span></code></pre>"
-  let short =
-    "<pre class=\"ox-highlight css-variables\" style=\"background-color:var(--octc-syntax-background, #0d1117);color:var(--octc-syntax-foreground, #e6edf3)\" tabindex=\"0\"><code><span class=\"line\"><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\">    </span><span style=\"color:var(--octc-syntax-token-function, #d2a8ff)\">hotUpdate</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">(</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">{</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> </span><span style=\"color:var(--octc-syntax-token-parameter, #ffa657)\">file</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">,</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> </span><span style=\"color:var(--octc-syntax-token-parameter, #ffa657)\">modules</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> </span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">}</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">)</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> </span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">{</span></span>\n<span class=\"line\"><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\">      </span><span style=\"color:var(--octc-syntax-token-keyword, #ff7b72)\">const</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> module </span><span style=\"color:var(--octc-syntax-token-keyword, #ff7b72)\">=</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> </span><span style=\"color:var(--octc-syntax-token-keyword, #ff7b72)\">this</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">.</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\">environment</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">.</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\">moduleGraph</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">.</span><span style=\"color:var(--octc-syntax-token-function, #d2a8ff)\">getModuleById</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">(</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\">resolved</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">)</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">;</span></span>\n<span class=\"line\"><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\">      </span><span style=\"color:var(--octc-syntax-token-keyword, #ff7b72)\">if</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> </span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">(</span><span style=\"color:var(--octc-syntax-token-keyword, #ff7b72)\">!</span><span style=\"color:var(--octc-syntax-token-parameter, #ffa657)\">file</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">.</span><span style=\"color:var(--octc-syntax-token-function, #d2a8ff)\">endsWith</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">(</span><span style=\"color:var(--octc-syntax-token-string, #a5d6ff)\">&quot;.gleam&quot;</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">)</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> </span><span style=\"color:var(--octc-syntax-token-keyword, #ff7b72)\">||</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> </span><span style=\"color:var(--octc-syntax-token-keyword, #ff7b72)\">!</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\">module</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">)</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> </span><span style=\"color:var(--octc-syntax-token-keyword, #ff7b72)\">return</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">;</span></span>\n<span class=\"line\"></span>\n<span class=\"line\"><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\">      </span><span style=\"color:var(--octc-syntax-token-keyword, #ff7b72)\">return</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> </span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">[</span><span style=\"color:var(--octc-syntax-token-keyword, #ff7b72)\">...</span><span style=\"color:var(--octc-syntax-token-parameter, #ffa657)\">modules</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">,</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> module</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">]</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">;</span></span>\n<span class=\"line\"><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\">    </span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">}</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">,</span></span></code></pre>"
-  let single =
-    "<pre class=\"ox-highlight css-variables\" style=\"background-color:var(--octc-syntax-background, #0d1117);color:var(--octc-syntax-foreground, #e6edf3)\" tabindex=\"0\"><code><span class=\"line\"><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\">  </span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\">fetch</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\">: </span><span style=\"color:var(--octc-syntax-token-keyword, #ff7b72)\">import</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">.</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\">meta</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">.</span><span style=\"color:var(--octc-syntax-token-constant, #79c0ff)\">env</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">.</span><span style=\"color:var(--octc-syntax-token-constant, #79c0ff)\">DEV</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> ? </span><span style=\"color:var(--octc-syntax-token-function, #d2a8ff)\">devHandler</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">(</span><span style=\"color:var(--octc-syntax-token-string, #a5d6ff)\">&quot;/entry/client.ts&quot;</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">)</span><span style=\"color:var(--octc-syntax-foreground, #e6edf3)\"> : </span><span style=\"color:var(--octc-syntax-token-function, #d2a8ff)\">handler</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">(</span><span style=\"color:var(--octc-syntax-token-string, #a5d6ff)\">&quot;/assets/client.js&quot;</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">)</span><span style=\"color:var(--octc-syntax-token-punctuation, #c9d1d9)\">,</span></span></code></pre>"
   let ref = "1a8a2dba8c481241cf7a8ceefe904c125ca25d71"
+  let short =
+    "    hotUpdate({ file, modules }) {
+      const module = this.environment.moduleGraph.getModuleById(resolved);
+      if (!file.endsWith(\".gleam\") || !module) return;
+
+      return [...modules, module];
+    },"
+  let long =
+    "  const storyModules = () => {
+    return readdirSync(directory, { recursive: true, encoding: \"utf8\" })
+      .filter((file) => file.endsWith(\".gleam\"))
+      .filter((file) => /^pub fn stories\\(\\)/m.test(readFileSync(join(directory, file), \"utf8\")))
+      .map((file) => file.slice(0, -\".gleam\".length))
+      .sort();
+  };"
+  let single =
+    "  fetch: import.meta.env.DEV ? devHandler(\"/entry/client.ts\") : handler(\"/assets/client.js\"),"
   let new = fn(variant, path, lines, code) {
     let hash = case lines {
-      WholeFile(..) -> ""
+      WholeFile -> ""
       Range(start:, end:) -> "#" <> fragment(start, end)
     }
     let permalink =
@@ -166,7 +175,7 @@ pub fn stories() -> List(Story) {
         ref:,
         path:,
         lines:,
-        code:,
+        code: highlight.plain(code),
       )
 
     story.new(variant, {
