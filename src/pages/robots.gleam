@@ -5,6 +5,7 @@ import gleam/javascript/promise.{type Promise}
 import gleam/string
 import hinoto/body.{type Body}
 import layouts/base
+import pages/sitemap
 import server/context.{type Context}
 import server/middleware
 import server/respond
@@ -13,7 +14,7 @@ const lines = [
   "User-agent: *",
   "Allow: /",
   "Disallow: /links/*/wallet",
-  "Sitemap: " <> base.origin <> "/sitemap.xml",
+  "Sitemap: " <> base.origin <> sitemap.path,
 ]
 
 pub fn handle(

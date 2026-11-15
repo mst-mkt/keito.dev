@@ -19,6 +19,7 @@ import lib/terminal
 import lustre/attribute
 import lustre/element.{type Element}
 import lustre/element/html
+import pages/sitemap
 import server/context.{type Context}
 import server/format.{Html, Markdown, Terminal}
 import server/middleware
@@ -50,7 +51,12 @@ pub fn handle(req: Request(Body), context: Context) -> Promise(Response(Body)) {
     Terminal -> promise.resolve(respond.text(200, text_view()))
     Html -> {
       use profiles <- promise.map(store.list(context.env))
+
       respond.html(200, view(context, profiles))
+      |> respond.link(sitemap.path, [
+        #("rel", "sitemap"),
+        #("type", "application/xml"),
+      ])
     }
   }
 }

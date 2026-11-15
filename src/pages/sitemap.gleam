@@ -15,6 +15,8 @@ import server/context.{type Context}
 import server/middleware
 import server/respond
 
+pub const path = "/sitemap.xml"
+
 pub fn handle(req: Request(Body), context: Context) -> Promise(Response(Body)) {
   use <- middleware.require_methods(req, [Get])
   use posts <- promise.map(store.list(context))

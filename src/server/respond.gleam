@@ -48,6 +48,22 @@ pub fn markdown(status: Int, body: String) -> Response(Body) {
   |> response.set_body(StringBody(body))
 }
 
+pub fn link(
+  res: Response(Body),
+  target: String,
+  params: List(#(String, String)),
+) -> Response(Body) {
+  let value =
+    list.fold(params, "<" <> target <> ">", fn(value, param) {
+      value <> "; " <> param.0 <> "=\"" <> param.1 <> "\""
+    })
+
+  case response.get_header(res, "link") {
+    Ok(link) -> response.set_header(res, "link", link <> ", " <> value)
+    Error(Nil) -> response.set_header(res, "link", value)
+  }
+}
+
 pub fn vary(res: Response(Body), header: String) -> Response(Body) {
   case response.get_header(res, "vary") {
     Error(Nil) -> response.set_header(res, "vary", header)

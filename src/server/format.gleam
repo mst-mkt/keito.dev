@@ -16,11 +16,28 @@ pub fn negotiate(
   req: Request(Body),
   next: fn(Format) -> Promise(Response(Body)),
 ) -> Promise(Response(Body)) {
-  use res <- promise.map(next(from_request(req)))
+  let format = from_request(req)
+  use res <- promise.map(next(format))
 
   res
+  |> link_markdown(req, format)
   |> respond.vary("accept")
   |> respond.vary("user-agent")
+}
+
+fn link_markdown(
+  res: Response(Body),
+  req: Request(Body),
+  format: Format,
+) -> Response(Body) {
+  case format, res.status {
+    Html, 200 ->
+      respond.link(res, req.path, [
+        #("rel", "alternate"),
+        #("type", "text/markdown"),
+      ])
+    _, _ -> res
+  }
 }
 
 @internal
