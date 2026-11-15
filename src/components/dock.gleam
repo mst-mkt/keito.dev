@@ -66,7 +66,8 @@ fn view_dock(label: String, items: List(Item(msg))) -> Element(msg) {
       attribute.aria_label(label),
       attribute.class(
         cn([
-          "group/dock @container pointer-events-none fixed inset-x-0 bottom-0 z-10 flex justify-center bg-linear-to-t from-bg px-4 pt-12 pb-4",
+          "group/dock @container pointer-events-none fixed inset-x-0 bottom-0 z-10 flex justify-center px-4 pb-4",
+          "before:absolute before:inset-x-0 before:bottom-0 before:-z-10 before:h-28 before:bg-linear-to-t before:from-bg",
           "transition-[display,translate,opacity] transition-discrete duration-300 ease-out starting:translate-y-2 starting:opacity-0",
           "xl:hidden xl:translate-y-2 xl:opacity-0",
         ]),
