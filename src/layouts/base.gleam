@@ -6,6 +6,8 @@ import lustre/element/html
 
 pub const origin = "https://keito.dev"
 
+pub const og_image = origin <> "/ogp.png"
+
 pub fn canonical(path: String) -> Element(Nil) {
   html.link([attribute.rel("canonical"), attribute.href(origin <> path)])
 }
@@ -79,7 +81,7 @@ fn page(
       html.title([], document_title),
       ogp.property("og:title", og_title),
       ogp.property("og:site_name", "keito.dev"),
-      ogp.property("og:image", origin <> "/ogp.png"),
+      ogp.property("og:image", og_image),
       ogp.property("og:image:width", "2400"),
       ogp.property("og:image:height", "1260"),
       html.meta([

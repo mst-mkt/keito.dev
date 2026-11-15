@@ -13,6 +13,7 @@ import hinoto/body.{type Body}
 import layouts/base
 import lib/cn.{cn}
 import lib/emoji
+import lib/json_ld
 import lib/md
 import lib/ogp
 import lib/terminal
@@ -274,6 +275,33 @@ fn view(context: Context, profiles: List(Link)) -> Element(Nil) {
     head: [
       base.canonical("/"),
       ogp.property("og:type", "website"),
+      json_ld.script([
+        json_ld.Person(
+          id: base.origin <> "/#person",
+          name: "mst-mkt",
+          alternate_name: "keito",
+          url: base.origin <> "/",
+          image: base.origin <> "/avatar.png",
+          description: "Software engineer interested in web frontend, microblogging, JavaScript toolchains, Linux desktop, Nix, Nushell, and more.",
+          job_title: "Software engineer",
+          works_for: json_ld.Organization("Hatena", "https://hatena.co.jp/"),
+          affiliation: json_ld.CollegeOrUniversity(
+            "INIAD",
+            "https://www.iniad.org/",
+          ),
+          same_as: list.map(profiles, fn(profile) { profile.url }),
+        ),
+        json_ld.WebSite(
+          id: base.origin <> "/#website",
+          name: "keito.dev",
+          url: base.origin <> "/",
+          author: json_ld.PersonReference(
+            id: base.origin <> "/#person",
+            name: "mst-mkt",
+            url: base.origin <> "/",
+          ),
+        ),
+      ]),
       ..list.map(profiles, fn(profile) {
         html.link([attribute.rel("me"), attribute.href(profile.url)])
       })

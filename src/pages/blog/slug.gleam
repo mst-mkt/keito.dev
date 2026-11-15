@@ -16,6 +16,7 @@ import gleam/option.{None, Some}
 import hinoto/body.{type Body}
 import layouts/base
 import lib/cn.{cn}
+import lib/json_ld
 import lib/ogp
 import lustre/attribute.{type Attribute}
 import lustre/element.{type Element}
@@ -144,6 +145,24 @@ fn view_meta(entry: Post) -> List(Element(Nil)) {
       html.meta([attribute.name("description"), attribute.content(description)])
     }),
     option.map(entry.description, ogp.property("og:description", _)),
+    Some(
+      json_ld.script([
+        json_ld.BlogPosting(
+          headline: entry.title,
+          url: base.origin <> post.page_path(entry.slug),
+          image: base.og_image,
+          language: "ja",
+          published_at: entry.published_at,
+          modified_at: post.last_updated(entry),
+          description: entry.description,
+          author: json_ld.PersonReference(
+            id: base.origin <> "/#person",
+            name: "mst-mkt",
+            url: base.origin <> "/",
+          ),
+        ),
+      ]),
+    ),
   ])
 }
 
