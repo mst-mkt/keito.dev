@@ -5,6 +5,7 @@ import features/blog/embed.{LinkCard}
 import features/blog/feed
 import features/blog/markdown.{type Section}
 import features/blog/post.{type Post}
+import features/blog/share
 import features/blog/store.{type Article}
 import gleam/http.{Get}
 import gleam/http/request.{type Request}
@@ -108,6 +109,7 @@ fn view(
             [attribute.class("markdown")],
             article.content,
           ),
+          share.view(entry),
         ],
       ),
     ],
