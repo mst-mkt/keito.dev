@@ -12,6 +12,7 @@ import gleam/http/response.{type Response}
 import gleam/javascript/promise.{type Promise}
 import hinoto/body.{type Body}
 import layouts/base
+import lib/md
 import lib/ogp
 import lib/qr
 import lib/terminal
@@ -20,9 +21,9 @@ import lustre/element.{type Element}
 import lustre/element/html
 import pages/not_found
 import server/context.{type Context}
+import server/format.{Html, Markdown, Terminal}
 import server/middleware
 import server/respond
-import server/user_agent.{Browser, Terminal}
 
 pub fn handle(
   req: Request(Body),
@@ -30,16 +31,31 @@ pub fn handle(
   id: String,
 ) -> Promise(Response(Body)) {
   use <- middleware.require_methods(req, [Get])
-  use client <- user_agent.detect(req)
+  use format <- format.negotiate(req)
   use found <- promise.await(store.get(context.env, id))
 
-  case found, client {
+  case found, format {
+    Ok(current), Markdown ->
+      promise.resolve(respond.markdown(200, markdown_view(current)))
     Ok(current), Terminal ->
       promise.resolve(respond.text(200, text_view(current)))
-    Ok(current), Browser ->
+    Ok(current), Html ->
       promise.resolve(respond.html(200, view(context, current)))
     Error(_), _ -> not_found.handle(req, context)
   }
+}
+
+@internal
+pub fn markdown_view(current: Link) -> String {
+  let short_url = link.short_url(current.id)
+
+  md.document([
+    "# " <> current.name,
+    md.list([
+      "Link: " <> md.link(link.display_url(current.url), current.url),
+      "Short link: " <> md.link(link.display_url(short_url), short_url),
+    ]),
+  ])
 }
 
 fn text_view(current: Link) -> String {

@@ -1,6 +1,7 @@
 import gleam/list
 import gleam/string
 import layouts/base
+import lib/md
 
 pub const value = "a6920af8-2f39-417b-b112-ced60f6d4ba7"
 
@@ -29,6 +30,14 @@ pub fn text() -> String {
   |> list.append([#("Source", source_url), #("Page", page_url)])
   |> list.map(fn(field) { field.0 <> ": " <> field.1 <> "\n" })
   |> string.concat
+}
+
+pub fn markdown() -> String {
+  md.document([
+    "# " <> value,
+    md.list(list.map(fields, fn(field) { field.0 <> ": " <> field.1 })),
+    md.link("Source post", source_url),
+  ])
 }
 
 pub fn is_host(host: String) -> Bool {

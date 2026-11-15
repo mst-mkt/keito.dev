@@ -16,9 +16,9 @@ import lustre/element.{type Element}
 import lustre/element/html
 import pages/not_found
 import server/context.{type Context}
+import server/format.{Html, Markdown, Terminal}
 import server/middleware
 import server/respond
-import server/user_agent.{Browser, Terminal}
 
 pub fn handle(
   req: Request(Body),
@@ -29,11 +29,12 @@ pub fn handle(
   use <- bool.lazy_guard(id != uuid.value, fn() {
     not_found.handle(req, context)
   })
-  use client <- user_agent.detect(req)
+  use format <- format.negotiate(req)
 
-  promise.resolve(case client {
+  promise.resolve(case format {
+    Markdown -> respond.markdown(200, uuid.markdown())
     Terminal -> respond.text(200, uuid.text())
-    Browser -> respond.html(200, view(context))
+    Html -> respond.html(200, view(context))
   })
 }
 

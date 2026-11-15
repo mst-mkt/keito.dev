@@ -13,25 +13,38 @@ import gleam/list
 import hinoto/body.{type Body}
 import layouts/base
 import lib/cn.{cn}
+import lib/md
 import lib/ogp
 import lib/terminal
 import lustre/attribute
 import lustre/element.{type Element}
 import lustre/element/html
 import server/context.{type Context}
+import server/format.{Html, Markdown, Terminal}
 import server/middleware
 import server/respond
-import server/user_agent.{Browser, Terminal}
 
 pub fn handle(req: Request(Body), context: Context) -> Promise(Response(Body)) {
   use <- middleware.require_methods(req, [Get])
-  use client <- user_agent.detect(req)
+  use format <- format.negotiate(req)
   use links <- promise.map(store.list(context.env))
 
-  case client {
+  case format {
+    Markdown -> respond.markdown(200, markdown_view(links))
     Terminal -> respond.text(200, text_view(links))
-    Browser -> respond.html(200, view(context, links))
+    Html -> respond.html(200, view(context, links))
   }
+}
+
+@internal
+pub fn markdown_view(links: List(Link)) -> String {
+  md.document([
+    "# Links",
+    case links {
+      [] -> "No links."
+      _ -> md.list(list.map(links, fn(item) { md.link(item.name, item.url) }))
+    },
+  ])
 }
 
 fn text_view(links: List(Link)) -> String {
