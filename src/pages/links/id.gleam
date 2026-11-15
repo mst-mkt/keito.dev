@@ -12,6 +12,7 @@ import gleam/http/response.{type Response}
 import gleam/javascript/promise.{type Promise}
 import hinoto/body.{type Body}
 import layouts/base
+import lib/ogp
 import lib/qr
 import lib/terminal
 import lustre/attribute
@@ -125,7 +126,10 @@ fn view(context: Context, current: Link) -> Element(Nil) {
       dock.Link("Edit", link.edit_path(current.id), icons.edit_pencil),
       dock.Link("Delete", link.delete_path(current.id), icons.trash),
     ],
-    head: [base.canonical(link.page_path(current.id))],
+    head: [
+      base.canonical(link.page_path(current.id)),
+      ogp.property("og:type", "website"),
+    ],
     client_entry: context.client_entry,
   )
 }

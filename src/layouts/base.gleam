@@ -1,4 +1,5 @@
 import components/dock
+import lib/ogp
 import lustre/attribute
 import lustre/element.{type Element}
 import lustre/element/html
@@ -72,30 +73,11 @@ fn page(
         attribute.content("light dark"),
       ]),
       html.title([], title),
-      html.meta([
-        attribute.attribute("property", "og:title"),
-        attribute.content(title),
-      ]),
-      html.meta([
-        attribute.attribute("property", "og:site_name"),
-        attribute.content("keito.dev"),
-      ]),
-      html.meta([
-        attribute.attribute("property", "og:type"),
-        attribute.content("website"),
-      ]),
-      html.meta([
-        attribute.attribute("property", "og:image"),
-        attribute.content(origin <> "/ogp.png"),
-      ]),
-      html.meta([
-        attribute.attribute("property", "og:image:width"),
-        attribute.content("2400"),
-      ]),
-      html.meta([
-        attribute.attribute("property", "og:image:height"),
-        attribute.content("1260"),
-      ]),
+      ogp.property("og:title", title),
+      ogp.property("og:site_name", "keito.dev"),
+      ogp.property("og:image", origin <> "/ogp.png"),
+      ogp.property("og:image:width", "2400"),
+      ogp.property("og:image:height", "1260"),
       html.meta([
         attribute.name("twitter:card"),
         attribute.content("summary_large_image"),

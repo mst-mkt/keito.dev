@@ -16,6 +16,7 @@ import gleam/option.{None, Some}
 import hinoto/body.{type Body}
 import layouts/base
 import lib/cn.{cn}
+import lib/ogp
 import lustre/attribute.{type Attribute}
 import lustre/element.{type Element}
 import lustre/element/html
@@ -76,17 +77,6 @@ fn view(
 ) -> Element(Nil) {
   let sections =
     list.filter(article.sections, fn(section) { section.level <= 3 })
-  let description = case entry.description {
-    Some(description) -> [
-      html.meta([attribute.name("description"), attribute.content(description)]),
-      html.meta([
-        attribute.attribute("property", "og:description"),
-        attribute.content(description),
-      ]),
-    ]
-    None -> []
-  }
-
   base.document(
     entry.title,
     left: [
@@ -140,10 +130,23 @@ fn view(
         attribute.rel("stylesheet"),
         attribute.href("/entry/markdown.css"),
       ]),
-      ..description
+      ..view_meta(entry)
     ],
     client_entry: context.client_entry,
   )
+}
+
+fn view_meta(entry: Post) -> List(Element(Nil)) {
+  option.values([
+    Some(ogp.property("og:type", "article")),
+    Some(ogp.property("og:url", base.origin <> post.page_path(entry.slug))),
+    Some(ogp.property("article:published_time", entry.published_at)),
+    option.map(entry.updated_at, ogp.property("article:modified_time", _)),
+    option.map(entry.description, fn(description) {
+      html.meta([attribute.name("description"), attribute.content(description)])
+    }),
+    option.map(entry.description, ogp.property("og:description", _)),
+  ])
 }
 
 fn view_header(entry: Post, event_card: Element(Nil)) -> Element(Nil) {

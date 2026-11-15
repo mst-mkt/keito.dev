@@ -13,6 +13,7 @@ import hinoto/body.{type Body}
 import layouts/base
 import lib/cn.{cn}
 import lib/emoji
+import lib/ogp
 import lib/terminal
 import lustre/attribute
 import lustre/element.{type Element}
@@ -229,6 +230,7 @@ fn view(context: Context, profiles: List(Link)) -> Element(Nil) {
     dock: [],
     head: [
       base.canonical("/"),
+      ogp.property("og:type", "website"),
       ..list.map(profiles, fn(profile) {
         html.link([attribute.rel("me"), attribute.href(profile.url)])
       })

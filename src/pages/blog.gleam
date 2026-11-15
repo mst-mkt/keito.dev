@@ -13,6 +13,7 @@ import gleam/string
 import hinoto/body.{type Body}
 import layouts/base
 import lib/cn.{cn}
+import lib/ogp
 import lib/terminal
 import lustre/attribute
 import lustre/element.{type Element}
@@ -79,7 +80,11 @@ fn view(context: Context, posts: List(Post)) -> Element(Nil) {
       dock.Link("Home", "/", icons.home_simple_door),
       dock.Link("Subscribe to feed", post.feed_path, icons.rss_feed),
     ],
-    head: [base.canonical(post.list_path), feed.link()],
+    head: [
+      base.canonical(post.list_path),
+      ogp.property("og:type", "website"),
+      feed.link(),
+    ],
     client_entry: context.client_entry,
   )
 }

@@ -13,6 +13,7 @@ import gleam/list
 import hinoto/body.{type Body}
 import layouts/base
 import lib/cn.{cn}
+import lib/ogp
 import lib/terminal
 import lustre/attribute
 import lustre/element.{type Element}
@@ -92,7 +93,7 @@ fn view(context: Context, links: List(Link)) -> Element(Nil) {
       dock.Link("Home", "/", icons.home_simple_door),
       dock.Link("Add link", link.new_path, icons.plus),
     ],
-    head: [base.canonical(link.list_path)],
+    head: [base.canonical(link.list_path), ogp.property("og:type", "website")],
     client_entry: context.client_entry,
   )
 }
