@@ -122,7 +122,7 @@ fn view(
       html.link([
         attribute.rel("alternate"),
         attribute.type_("text/markdown"),
-        attribute.href(post.source_path(entry.slug)),
+        attribute.href(post.page_path(entry.slug)),
       ]),
       html.link([
         attribute.rel("stylesheet"),

@@ -29,10 +29,6 @@ pub fn page_path(slug: String) -> String {
   list_path <> "/" <> slug
 }
 
-pub fn source_path(slug: String) -> String {
-  page_path(slug) <> ".md"
-}
-
 pub fn decoder() -> Decoder(Post) {
   use slug <- decode.field("slug", decode.string)
   use title <- decode.field("title", decode.string)
