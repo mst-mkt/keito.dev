@@ -13,26 +13,46 @@ import gleam/string
 import hinoto/body.{type Body}
 import layouts/base
 import lib/cn.{cn}
+import lib/md
 import lib/ogp
 import lib/terminal
 import lustre/attribute
 import lustre/element.{type Element}
 import lustre/element/html
 import server/context.{type Context}
+import server/format.{Html, Markdown, Terminal}
 import server/middleware
 import server/respond
-import server/user_agent.{Browser, Terminal}
 
 pub fn handle(req: Request(Body), context: Context) -> Promise(Response(Body)) {
   use <- middleware.require_methods(req, [Get])
-  use client <- user_agent.detect(req)
+  use format <- format.negotiate(req)
   use posts <- promise.map(store.list(context))
 
-  case posts, client {
+  case posts, format {
+    Ok(posts), Markdown -> respond.markdown(200, markdown_view(posts))
     Ok(posts), Terminal -> respond.text(200, text_view(posts))
-    Ok(posts), Browser -> respond.html(200, view(context, posts))
+    Ok(posts), Html -> respond.html(200, view(context, posts))
     Error(Nil), _ -> respond.text(503, "Service Unavailable")
   }
+}
+
+@internal
+pub fn markdown_view(posts: List(Post)) -> String {
+  md.document([
+    "# Blog",
+    case posts {
+      [] -> "No posts."
+      _ ->
+        md.list(
+          list.map(posts, fn(entry) {
+            let url = base.origin <> post.page_path(entry.slug)
+
+            entry.published_at <> " " <> md.link(entry.title, url)
+          }),
+        )
+    },
+  ])
 }
 
 fn text_view(posts: List(Post)) -> String {

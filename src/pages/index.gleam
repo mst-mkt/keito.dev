@@ -13,15 +13,16 @@ import hinoto/body.{type Body}
 import layouts/base
 import lib/cn.{cn}
 import lib/emoji
+import lib/md
 import lib/ogp
 import lib/terminal
 import lustre/attribute
 import lustre/element.{type Element}
 import lustre/element/html
 import server/context.{type Context}
+import server/format.{Html, Markdown, Terminal}
 import server/middleware
 import server/respond
-import server/user_agent.{Browser, Terminal}
 
 const links = [
   #("GitHub", "mst-mkt", "github"),
@@ -30,29 +31,65 @@ const links = [
   #("mixi2", "mst_mkt", "mixi2"),
 ]
 
+const projects = [
+  #("Nuten", "https://nuten.keito.dev/"),
+  #(
+    "mixi2-application-sdk-ts",
+    "https://github.com/mst-mkt/mixi2-application-sdk-ts",
+  ),
+  #("autopair.nu", "https://github.com/mst-mkt/autopair.nu"),
+  #("omniwm.nix", "https://github.com/mst-mkt/omniwm.nix"),
+]
+
 pub fn handle(req: Request(Body), context: Context) -> Promise(Response(Body)) {
   use <- middleware.require_methods(req, [Get])
-  use client <- user_agent.detect(req)
+  use format <- format.negotiate(req)
 
-  case client {
+  case format {
+    Markdown -> promise.resolve(respond.markdown(200, markdown_view()))
     Terminal -> promise.resolve(respond.text(200, text_view()))
-    Browser -> {
+    Html -> {
       use profiles <- promise.map(store.list(context.env))
       respond.html(200, view(context, profiles))
     }
   }
 }
 
-fn text_view() -> String {
-  let projects = [
-    inline_link("Nuten", "https://nuten.keito.dev/"),
-    inline_link(
-      "mixi2-application-sdk-ts",
-      "https://github.com/mst-mkt/mixi2-application-sdk-ts",
+fn markdown_view() -> String {
+  let project_links =
+    list.map(projects, fn(project) { md.link(project.0, project.1) })
+
+  md.document([
+    "# mst-mkt",
+    "keito /keːto/",
+    md.paragraph([
+      "Software engineer.",
+      "Interested in web frontend, microblogging, JavaScript toolchains, Linux desktop, Nix, Nushell, and more.",
+    ]),
+    md.paragraph([
+      "Computer science undergraduate at "
+        <> md.link("INIAD", "https://www.iniad.org/")
+        <> ".",
+      "Working part-time at "
+        <> md.link("Hatena", "https://hatena.co.jp/")
+        <> ".",
+    ]),
+    "Building and maintaining "
+      <> string.join(project_links, ", ")
+      <> ", and more.",
+    md.list(
+      list.map(links, fn(entry) {
+        let #(service, account, id) = entry
+        md.link(service, link.short_url(id)) <> ": " <> account
+      }),
     ),
-    inline_link("autopair.nu", "https://github.com/mst-mkt/autopair.nu"),
-    inline_link("omniwm.nix", "https://github.com/mst-mkt/omniwm.nix"),
-  ]
+    md.link("More links", base.origin <> link.list_path),
+  ])
+}
+
+fn text_view() -> String {
+  let project_links =
+    list.map(projects, fn(project) { inline_link(project.0, project.1) })
 
   terminal.document([
     terminal.beside(emoji.yarn, [
@@ -74,7 +111,7 @@ fn text_view() -> String {
     ]),
     terminal.paragraph([
       "Building and maintaining "
-      <> string.join(projects, ", ")
+      <> string.join(project_links, ", ")
       <> ", and more.",
     ]),
     list.map(links, fn(entry) {
