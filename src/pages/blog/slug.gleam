@@ -22,11 +22,10 @@ import lustre/element.{type Element}
 import lustre/element/html
 import pages/blog/source
 import pages/not_found
-import server/accept
 import server/context.{type Context}
+import server/format.{Html, Markdown, Terminal}
 import server/middleware
 import server/respond
-import server/user_agent.{Browser, Terminal}
 
 pub fn handle(
   req: Request(Body),
@@ -34,12 +33,11 @@ pub fn handle(
   slug: String,
 ) -> Promise(Response(Body)) {
   use <- middleware.require_methods(req, [Get])
-  use client <- user_agent.detect(req)
-  use media_type <- accept.negotiate(req, ["text/html", "text/markdown"])
+  use format <- format.negotiate(req)
 
-  case client, media_type {
-    Terminal, _ | _, Ok("text/markdown") -> source.handle(req, context, slug)
-    Browser, _ -> handle_page(req, context, slug)
+  case format {
+    Markdown | Terminal -> source.handle(req, context, slug)
+    Html -> handle_page(req, context, slug)
   }
 }
 

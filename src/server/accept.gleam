@@ -1,24 +1,10 @@
 import gleam/float
 import gleam/http/request.{type Request}
-import gleam/http/response.{type Response}
 import gleam/int
-import gleam/javascript/promise.{type Promise}
 import gleam/list
 import gleam/result
 import gleam/string
-import hinoto/body.{type Body}
-import server/respond
 
-pub fn negotiate(
-  req: Request(Body),
-  types: List(String),
-  next: fn(Result(String, Nil)) -> Promise(Response(Body)),
-) -> Promise(Response(Body)) {
-  use res <- promise.map(next(preferred(req, types)))
-  respond.vary(res, "accept")
-}
-
-@internal
 pub fn preferred(
   req: Request(body),
   types: List(String),

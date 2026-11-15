@@ -1,9 +1,5 @@
 import gleam/http/request
-import gleam/http/response
-import gleam/javascript/promise
-import hinoto/body.{EmptyBody}
 import server/accept
-import server/respond
 
 fn preferred(header: String) -> Result(String, Nil) {
   request.new()
@@ -41,17 +37,4 @@ pub fn preferred_excluded_test() {
   let preferred = preferred(header)
 
   assert preferred == Error(Nil)
-}
-
-pub fn negotiate_vary_test() {
-  let req = request.new() |> request.set_body(EmptyBody)
-  let next = fn(_) {
-    respond.text(200, "OK")
-    |> response.set_header("vary", "user-agent")
-    |> promise.resolve
-  }
-
-  use res <- promise.map(accept.negotiate(req, ["text/html"], next))
-
-  assert response.get_header(res, "vary") == Ok("user-agent, accept")
 }
