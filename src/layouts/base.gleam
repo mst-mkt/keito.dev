@@ -56,9 +56,13 @@ fn page(
   head: List(Element(Nil)),
   body: List(Element(Nil)),
 ) -> Element(Nil) {
-  let title = case title {
+  let document_title = case title {
     "" -> "keito.dev"
     _ -> title <> " | keito.dev"
+  }
+  let og_title = case title {
+    "" -> "keito.dev"
+    _ -> title
   }
 
   html.html([attribute.lang("en")], [
@@ -72,8 +76,8 @@ fn page(
         attribute.name("color-scheme"),
         attribute.content("light dark"),
       ]),
-      html.title([], title),
-      ogp.property("og:title", title),
+      html.title([], document_title),
+      ogp.property("og:title", og_title),
       ogp.property("og:site_name", "keito.dev"),
       ogp.property("og:image", origin <> "/ogp.png"),
       ogp.property("og:image:width", "2400"),
