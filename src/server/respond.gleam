@@ -35,3 +35,18 @@ pub fn atom(status: Int, body: String) -> Response(Body) {
   |> response.set_header("content-type", "application/atom+xml; charset=utf-8")
   |> response.set_body(StringBody(body))
 }
+
+pub fn markdown(status: Int, body: String) -> Response(Body) {
+  response.new(status)
+  |> response.set_header("content-type", "text/markdown; charset=utf-8")
+  |> response.set_body(StringBody(body))
+}
+
+pub fn vary(res: Response(Body), header: String) -> Response(Body) {
+  let vary = case response.get_header(res, "vary") {
+    Ok(vary) -> vary <> ", " <> header
+    Error(Nil) -> header
+  }
+
+  response.set_header(res, "vary", vary)
+}

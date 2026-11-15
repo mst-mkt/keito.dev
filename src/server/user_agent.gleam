@@ -5,6 +5,7 @@ import gleam/list
 import gleam/result
 import gleam/string
 import hinoto/body.{type Body}
+import server/respond
 
 pub type Client {
   Browser
@@ -18,7 +19,7 @@ pub fn detect(
   next: fn(Client) -> Promise(Response(Body)),
 ) -> Promise(Response(Body)) {
   use res <- promise.map(next(from_request(req)))
-  response.set_header(res, "vary", "user-agent")
+  respond.vary(res, "user-agent")
 }
 
 pub fn from_request(req: Request(body)) -> Client {

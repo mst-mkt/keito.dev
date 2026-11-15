@@ -18,7 +18,9 @@ import lib/cn.{cn}
 import lustre/attribute.{type Attribute}
 import lustre/element.{type Element}
 import lustre/element/html
+import pages/blog/source
 import pages/not_found
+import server/accept
 import server/context.{type Context}
 import server/middleware
 import server/respond
@@ -31,18 +33,23 @@ pub fn handle(
 ) -> Promise(Response(Body)) {
   use <- middleware.require_methods(req, [Get])
   use client <- user_agent.detect(req)
+  use media_type <- accept.negotiate(req, ["text/html", "text/markdown"])
+
+  case client, media_type {
+    Terminal, _ | _, Ok("text/markdown") -> source.handle(req, context, slug)
+    Browser, _ -> handle_page(req, context, slug)
+  }
+}
+
+fn handle_page(
+  req: Request(Body),
+  context: Context,
+  slug: String,
+) -> Promise(Response(Body)) {
   use found <- promise.await(store.get(context, slug))
 
-  case found, client {
-    Ok(_), Terminal -> {
-      use source <- promise.map(store.source(context, slug))
-
-      case source {
-        Ok(source) -> respond.text(200, source)
-        Error(Nil) -> respond.text(503, "Service Unavailable")
-      }
-    }
-    Ok(entry), Browser -> {
+  case found {
+    Ok(entry) -> {
       let event_card = case entry.event {
         Some(event) -> embed.view(context, LinkCard(event.url))
         None -> promise.resolve(element.none())
@@ -56,7 +63,7 @@ pub fn handle(
         Error(Nil) -> respond.text(503, "Service Unavailable")
       }
     }
-    Error(Nil), _ -> not_found.handle(req, context)
+    Error(Nil) -> not_found.handle(req, context)
   }
 }
 
@@ -122,6 +129,11 @@ fn view(
     head: [
       base.canonical(post.page_path(entry.slug)),
       feed.link(),
+      html.link([
+        attribute.rel("alternate"),
+        attribute.type_("text/markdown"),
+        attribute.href(post.source_path(entry.slug)),
+      ]),
       html.link([
         attribute.rel("stylesheet"),
         attribute.href("/entry/markdown.css"),

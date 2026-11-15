@@ -1,10 +1,12 @@
 import gleam/http/request.{type Request}
 import gleam/http/response.{type Response}
 import gleam/javascript/promise.{type Promise}
+import gleam/string
 import hinoto/body.{type Body}
 import pages/blog
 import pages/blog/atom
 import pages/blog/slug as post_page
+import pages/blog/source
 import pages/index
 import pages/l/id as short_link
 import pages/links
@@ -28,7 +30,11 @@ pub fn route(req: Request(Body), context: Context) -> Promise(Response(Body)) {
     [] -> index.handle(req, context)
     ["blog"] -> blog.handle(req, context)
     ["blog", "atom.xml"] -> atom.handle(req, context)
-    ["blog", slug] -> post_page.handle(req, context, slug)
+    ["blog", slug] ->
+      case string.ends_with(slug, ".md") {
+        True -> source.handle(req, context, string.drop_end(slug, 3))
+        False -> post_page.handle(req, context, slug)
+      }
     ["l", id] -> short_link.handle(req, context, id)
     ["links"] -> links.handle(req, context)
     ["links", "new"] -> new.handle(req, context)

@@ -35,7 +35,7 @@ pub fn get(context: Context, slug: String) -> Promise(Result(Post, Nil)) {
 }
 
 pub fn source(context: Context, slug: String) -> Promise(Result(String, Nil)) {
-  use found <- promise.map(fetch_file(context, source_path(slug)))
+  use found <- promise.map(fetch_file(context, markdown_file(slug)))
 
   result.map(found, fn(found) { found.body })
 }
@@ -48,7 +48,7 @@ pub fn article(
   context: Context,
   slug: String,
 ) -> Promise(Result(Article, Nil)) {
-  use found <- promise.try_await(fetch_file(context, source_path(slug)))
+  use found <- promise.try_await(fetch_file(context, markdown_file(slug)))
   let content = case response.get_header(found, "etag") {
     Ok(etag) ->
       render_cached(context, "post:" <> slug <> ":" <> etag, found.body)
@@ -113,7 +113,7 @@ fn unwrap(result: Result(a, a)) -> a {
   }
 }
 
-fn source_path(slug: String) -> String {
+fn markdown_file(slug: String) -> String {
   "/" <> slug <> ".md"
 }
 
