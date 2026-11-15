@@ -72,6 +72,10 @@ fn event_decoder() -> Decoder(Event) {
   decode.success(Event(name:, url:))
 }
 
+pub fn last_updated(entry: Post) -> String {
+  option.unwrap(entry.updated_at, entry.published_at)
+}
+
 pub fn display_date(date: String) -> String {
   case string.split(date, "-") |> list.try_map(int.parse) {
     Ok([year, month, day]) ->

@@ -18,7 +18,7 @@ pub fn link() -> Element(msg) {
 
 pub fn atom(posts: List(Post)) -> String {
   let url = base.origin <> post.list_path
-  let updated = list.map(posts, last_updated) |> list.max(string.compare)
+  let updated = list.map(posts, post.last_updated) |> list.max(string.compare)
   let feed =
     node("feed", [], [
       text_node("title", "keito.dev"),
@@ -51,16 +51,12 @@ fn entry_node(entry: Post) -> Element(msg) {
     text_node("id", url),
     node("link", [attribute.href(url)], []),
     text_node("published", timestamp(entry.published_at)),
-    text_node("updated", timestamp(last_updated(entry))),
+    text_node("updated", timestamp(post.last_updated(entry))),
     case entry.description {
       Some(description) -> text_node("summary", description)
       None -> element.none()
     },
   ])
-}
-
-fn last_updated(entry: Post) -> String {
-  option.unwrap(entry.updated_at, entry.published_at)
 }
 
 fn timestamp(date: String) -> String {

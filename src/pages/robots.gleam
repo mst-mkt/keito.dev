@@ -4,11 +4,17 @@ import gleam/http/response.{type Response}
 import gleam/javascript/promise.{type Promise}
 import gleam/string
 import hinoto/body.{type Body}
+import layouts/base
 import server/context.{type Context}
 import server/middleware
 import server/respond
 
-const lines = ["User-agent: *", "Allow: /", "Disallow: /links/*/wallet"]
+const lines = [
+  "User-agent: *",
+  "Allow: /",
+  "Disallow: /links/*/wallet",
+  "Sitemap: " <> base.origin <> "/sitemap.xml",
+]
 
 pub fn handle(
   req: Request(Body),

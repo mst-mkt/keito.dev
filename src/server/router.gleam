@@ -17,6 +17,7 @@ import pages/links/id/wallet
 import pages/links/new
 import pages/not_found
 import pages/robots
+import pages/sitemap
 import pages/uuid
 import pages/uuid/source as uuid_source
 import pages/yarn
@@ -43,6 +44,7 @@ pub fn route(req: Request(Body), context: Context) -> Promise(Response(Body)) {
     ["links", id, "delete"] -> delete.handle(req, context, id)
     ["links", id, "wallet"] -> wallet.handle(req, context, id)
     ["robots.txt"] -> robots.handle(req, context)
+    ["sitemap.xml"] -> sitemap.handle(req, context)
     ["uuid"] -> uuid.handle(req, context)
     ["uuid", "source"] -> uuid_source.handle(req, context)
     ["yarn"] -> yarn.handle(req, context)
