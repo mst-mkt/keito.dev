@@ -25,6 +25,17 @@ pub fn enhance() -> Nil {
         element.add_event_listener(close_button, "click", fn(_) {
           close(nav, controls, restore_focus: True)
         })
+      let _ =
+        element.add_event_listener(nav, "click", fn(event) {
+          case element.cast(event.target(event)) {
+            Ok(target) ->
+              case element.closest(target, "dialog a") {
+                Ok(_) -> close(nav, controls, restore_focus: False)
+                Error(Nil) -> Nil
+              }
+            Error(_) -> Nil
+          }
+        })
 
       document.add_event_listener(
         "keydown",
