@@ -786,6 +786,14 @@ pub fn refresh(attributes: List(Attribute(msg))) -> Element(msg) {
   ])
 }
 
+pub fn rss_feed(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 24 24", attributes, [
+    svg.path([attribute.attribute("d", "M12 19C12 14.8 9.2 12 5 12")]),
+    svg.path([attribute.attribute("d", "M19 19C19 10.6 13.4 5 5 5")]),
+    svg.path([attribute.attribute("d", "M5 19.01L5.01 18.9989")]),
+  ])
+}
+
 pub fn star(attributes: List(Attribute(msg))) -> Element(msg) {
   icon("0 0 24 24", attributes, [
     svg.path([
