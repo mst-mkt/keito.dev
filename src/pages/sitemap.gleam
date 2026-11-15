@@ -1,6 +1,7 @@
 import features/blog/post.{type Post}
 import features/blog/store
 import features/links/link
+import features/uuid
 import gleam/http.{Get}
 import gleam/http/request.{type Request}
 import gleam/http/response.{type Response}
@@ -26,7 +27,8 @@ pub fn handle(req: Request(Body), context: Context) -> Promise(Response(Body)) {
 
 pub fn xml(posts: List(Post)) -> String {
   let page_urls =
-    list.map(["/", post.list_path, link.list_path], url_node(_, None))
+    ["/", post.list_path, link.list_path, uuid.page_path]
+    |> list.map(url_node(_, None))
   let post_urls =
     list.map(posts, fn(entry) {
       url_node(post.page_path(entry.slug), Some(post.last_updated(entry)))

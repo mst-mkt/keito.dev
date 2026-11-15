@@ -1,3 +1,5 @@
+import features/uuid as issued_uuid
+import gleam/bool
 import gleam/http/request.{type Request}
 import gleam/http/response.{type Response}
 import gleam/javascript/promise.{type Promise}
@@ -7,6 +9,7 @@ import pages/blog
 import pages/blog/atom
 import pages/blog/slug as post_page
 import pages/blog/source
+import pages/id
 import pages/index
 import pages/l/id as short_link
 import pages/links
@@ -20,12 +23,18 @@ import pages/robots
 import pages/sitemap
 import pages/uuid
 import pages/uuid/source as uuid_source
+import pages/well_known/uuid as well_known_uuid
 import pages/yarn
 import server/context.{type Context}
 import server/middleware
+import server/respond
 
 pub fn route(req: Request(Body), context: Context) -> Promise(Response(Body)) {
   use req <- middleware.apply(req)
+
+  use <- bool.lazy_guard(issued_uuid.is_host(req.host), fn() {
+    promise.resolve(respond.redirect(302, issued_uuid.page_url))
+  })
 
   case request.path_segments(req) {
     [] -> index.handle(req, context)
@@ -47,7 +56,10 @@ pub fn route(req: Request(Body), context: Context) -> Promise(Response(Body)) {
     ["sitemap.xml"] -> sitemap.handle(req, context)
     ["uuid"] -> uuid.handle(req, context)
     ["uuid", "source"] -> uuid_source.handle(req, context)
+    ["uuid.txt"] | [".well-known", "uuid"] ->
+      well_known_uuid.handle(req, context)
     ["yarn"] -> yarn.handle(req, context)
+    [segment] -> id.handle(req, context, segment)
     _ -> not_found.handle(req, context)
   }
 }

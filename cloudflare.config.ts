@@ -6,7 +6,7 @@ export default defineConfig({
     name: "keito-dev",
     compatibilityDate: "2026-10-06",
     entrypoint,
-    domains: ["keito.dev"],
+    domains: ["keito.dev", "uuid.keito.dev", "a6920af8-2f39-417b-b112-ced60f6d4ba7.keito.dev"],
     workersDev: false,
     previewUrls: false,
     observability: {

@@ -32,6 +32,7 @@ pub fn xml_test() {
     <> "<url><loc>https://keito.dev/</loc></url>"
     <> "<url><loc>https://keito.dev/blog</loc></url>"
     <> "<url><loc>https://keito.dev/links</loc></url>"
+    <> "<url><loc>https://keito.dev/a6920af8-2f39-417b-b112-ced60f6d4ba7</loc></url>"
     <> "<url><loc>https://keito.dev/blog/b</loc><lastmod>2025-12-07</lastmod></url>"
     <> "<url><loc>https://keito.dev/blog/a</loc><lastmod>2025-01-01</lastmod></url>"
     <> "</urlset>"
