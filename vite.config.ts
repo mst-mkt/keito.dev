@@ -57,11 +57,17 @@ export default defineConfig({
     client: {
       build: {
         rolldownOptions: {
-          input: { client: "entry/client.ts", style: "entry/style.css" },
+          input: {
+            client: "entry/client.ts",
+            style: "entry/style.css",
+            markdown: "entry/markdown.css",
+          },
           output: {
             entryFileNames: "assets/[name].js",
             assetFileNames: ({ names }) =>
-              names.includes("style.css") ? "entry/[name][extname]" : "assets/[name][extname]",
+              names.some((name) => name.endsWith(".css"))
+                ? "entry/[name][extname]"
+                : "assets/[name][extname]",
           },
         },
       },

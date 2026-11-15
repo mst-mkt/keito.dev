@@ -1,3 +1,4 @@
+import components/icons
 import features/blog/embed.{type Embed}
 import features/blog/markdown/code
 import features/blog/markdown/heading.{type Ids}
@@ -31,13 +32,7 @@ pub fn render(
   markdown: String,
   embed_view: fn(Embed) -> Promise(Element(msg)),
 ) -> Promise(List(Element(msg))) {
-  let document =
-    mork.configure()
-    |> mork.strip_frontmatter(True)
-    |> mork.tables(True)
-    |> mork.tasklists(True)
-    |> mork.autolinks(True)
-    |> mork.parse_with_options(markdown)
+  let document = parse(markdown)
   let renderer = Renderer(document:, embed_view:)
   let #(ids, blocks) = blocks_view(renderer, dict.new(), document.blocks, Loose)
   let notes = footnotes(renderer, ids)
@@ -45,6 +40,38 @@ pub fn render(
   use notes <- promise.map(notes)
 
   list.append(blocks, notes)
+}
+
+pub fn embeds(markdown: String) -> List(Embed) {
+  let document = parse(markdown)
+  let notes = dict.values(document.footnotes)
+
+  list.append(document.blocks, list.flat_map(notes, fn(note) { note.blocks }))
+  |> list.flat_map(block_embeds)
+}
+
+fn block_embeds(block: Block) -> List(Embed) {
+  case block {
+    HtmlBlock(raw) -> result.values([embedded(raw)])
+    Paragraph(inlines:, ..) ->
+      case visible(inlines) {
+        [RawHtml(raw)] -> result.values([embedded(raw)])
+        _ -> []
+      }
+    BlockQuote(blocks) -> list.flat_map(blocks, block_embeds)
+    BulletList(items:, ..) | OrderedList(items:, ..) ->
+      list.flat_map(items, fn(item) { list.flat_map(item.blocks, block_embeds) })
+    _ -> []
+  }
+}
+
+fn parse(markdown: String) -> Document {
+  mork.configure()
+  |> mork.strip_frontmatter(True)
+  |> mork.tables(True)
+  |> mork.tasklists(True)
+  |> mork.autolinks(True)
+  |> mork.parse_with_options(markdown)
 }
 
 fn blocks_view(
@@ -133,7 +160,7 @@ fn paragraph(
 ) -> Promise(List(Element(msg))) {
   let document = renderer.document
 
-  case list.filter(inlines, fn(inline) { inline != Text("") }) {
+  case visible(inlines) {
     [RawHtml(raw)] -> html_block(renderer, raw)
     [FullImage(..) as image, SoftBreak, Emphasis(caption)]
     | [RefImage(..) as image, SoftBreak, Emphasis(caption)] -> {
@@ -150,27 +177,32 @@ fn paragraph(
   }
 }
 
+fn visible(inlines: List(Inline)) -> List(Inline) {
+  list.filter(inlines, fn(inline) { inline != Text("") })
+}
+
 fn html_block(
   renderer: Renderer(msg),
   raw: String,
 ) -> Promise(List(Element(msg))) {
   use <- bool.guard(string.starts_with(raw, "<!--"), promise.resolve([]))
-  let raw = string.trim(raw)
-  let embedded = {
-    use #(name, attributes) <- result.try(
-      tag.parse(raw) |> result.replace_error(raw <> " is not an embed."),
-    )
 
-    embed.from_tag(name, attributes)
-  }
-
-  case embedded {
+  case embedded(raw) {
     Ok(embedded) -> renderer.embed_view(embedded) |> promise.map(list.wrap)
     Error(message) ->
       promise.resolve([
         html.p([attribute.class("text-sm text-danger")], [html.text(message)]),
       ])
   }
+}
+
+fn embedded(raw: String) -> Result(Embed, String) {
+  let raw = string.trim(raw)
+  use #(name, attributes) <- result.try(
+    tag.parse(raw) |> result.replace_error(raw <> " is not an embed."),
+  )
+
+  embed.from_tag(name, attributes)
 }
 
 fn footnotes(renderer: Renderer(msg), ids: Ids) -> Promise(List(Element(msg))) {
@@ -187,7 +219,7 @@ fn footnotes(renderer: Renderer(msg), ids: Ids) -> Promise(List(Element(msg))) {
             attribute.href("#fnref-" <> number),
             attribute.aria_label("Back to reference " <> number),
           ],
-          [html.text("↩\u{FE0E}")],
+          [icons.long_arrow_up_left([attribute.aria_hidden(True)])],
         )
       let #(ids, blocks) = blocks_view(renderer, ids, note.blocks, Loose)
       let item =

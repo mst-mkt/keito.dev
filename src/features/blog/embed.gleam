@@ -102,6 +102,17 @@ fn parse(
 }
 
 pub fn view(context: Context, embed: Embed) -> Promise(Element(msg)) {
+  use viewed <- promise.map(try_view(context, embed))
+
+  case viewed {
+    Ok(element) | Error(element) -> element
+  }
+}
+
+pub fn try_view(
+  context: Context,
+  embed: Embed,
+) -> Promise(Result(Element(msg), Element(msg))) {
   case embed {
     LinkCard(url:) ->
       render(link_card_api.fetch(context, url), url, link_card.view)
@@ -131,13 +142,13 @@ fn render(
   fetched: Promise(Result(a, Nil)),
   url: String,
   view: fn(a) -> Element(msg),
-) -> Promise(Element(msg)) {
+) -> Promise(Result(Element(msg), Element(msg))) {
   use fetched <- promise.map(fetched)
 
   case fetched {
-    Ok(data) -> view(data)
+    Ok(data) -> Ok(view(data))
     Error(Nil) ->
-      html.p([attribute.class("truncate")], [text_link.view(url, url)])
+      Error(html.p([attribute.class("truncate")], [text_link.view(url, url)]))
   }
 }
 

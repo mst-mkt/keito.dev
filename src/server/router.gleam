@@ -2,6 +2,8 @@ import gleam/http/request.{type Request}
 import gleam/http/response.{type Response}
 import gleam/javascript/promise.{type Promise}
 import hinoto/body.{type Body}
+import pages/blog
+import pages/blog/slug as post_page
 import pages/index
 import pages/l/id as short_link
 import pages/links
@@ -23,6 +25,8 @@ pub fn route(req: Request(Body), context: Context) -> Promise(Response(Body)) {
 
   case request.path_segments(req) {
     [] -> index.handle(req, context)
+    ["blog"] -> blog.handle(req, context)
+    ["blog", slug] -> post_page.handle(req, context, slug)
     ["l", id] -> short_link.handle(req, context, id)
     ["links"] -> links.handle(req, context)
     ["links", "new"] -> new.handle(req, context)

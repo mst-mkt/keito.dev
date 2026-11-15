@@ -1,3 +1,4 @@
+import components/icons
 import features/blog/markdown/inline
 import gleam/dict.{type Dict}
 import gleam/int
@@ -5,6 +6,7 @@ import gleam/regexp
 import gleam/string
 import lustre/attribute
 import lustre/element.{type Element}
+import lustre/element/html
 import mork/document.{type Document, type Inline}
 
 pub type Ids =
@@ -16,11 +18,19 @@ pub fn view(
   id: String,
   inlines: List(Inline),
 ) -> Element(msg) {
-  element.element(
-    "h" <> int.to_string(level),
-    [attribute.id(id)],
-    inline.view(document, inlines),
-  )
+  let anchor =
+    html.a(
+      [
+        attribute.href("#" <> id),
+        attribute.aria_label("Link to " <> inline.plain_text(inlines)),
+      ],
+      [icons.hashtag([attribute.aria_hidden(True)])],
+    )
+
+  element.element("h" <> int.to_string(level), [attribute.id(id)], [
+    html.span([], inline.view(document, inlines)),
+    anchor,
+  ])
 }
 
 pub fn id(ids: Ids, inlines: List(Inline)) -> #(Ids, String) {

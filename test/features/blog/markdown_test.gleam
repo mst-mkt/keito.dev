@@ -21,13 +21,34 @@ fn render(markdown: String) -> Promise(String) {
   list.map(elements, element.to_string) |> string.concat
 }
 
+fn heading(id: String) -> String {
+  let anchor = icons.hashtag([attribute.aria_hidden(True)])
+
+  "<h2 id=\""
+  <> id
+  <> "\"><span>Heading</span><a aria-label=\"Link to Heading\" href=\"#"
+  <> id
+  <> "\">"
+  <> element.to_string(anchor)
+  <> "</a></h2>"
+}
+
+pub fn embeds_test() {
+  let markdown =
+    "<LinkCard url=\"https://example.com/a\" />\n\n> <LinkCard url=\"https://example.com/b\" />\n\n<LinkCard />\n"
+
+  let embeds = markdown.embeds(markdown)
+
+  assert embeds
+    == [LinkCard("https://example.com/a"), LinkCard("https://example.com/b")]
+}
+
 pub fn render_duplicate_headings_test() {
   let markdown = "## Heading\n\n## Heading\n"
 
   use html <- promise.map(render(markdown))
 
-  assert html
-    == "<h2 id=\"heading\">Heading</h2><h2 id=\"heading-1\">Heading</h2>"
+  assert html == heading("heading") <> heading("heading-1")
 }
 
 pub fn render_nested_duplicate_headings_test() {
@@ -36,7 +57,10 @@ pub fn render_nested_duplicate_headings_test() {
   use html <- promise.map(render(markdown))
 
   assert html
-    == "<h2 id=\"heading\">Heading</h2><blockquote><h2 id=\"heading-1\">Heading</h2></blockquote>"
+    == heading("heading")
+    <> "<blockquote>"
+    <> heading("heading-1")
+    <> "</blockquote>"
 }
 
 pub fn render_soft_break_between_wide_characters_test() {
@@ -178,9 +202,12 @@ pub fn render_inline_html_test() {
 
 pub fn render_footnote_test() {
   let markdown = "a[^1]\n\n[^1]: b\n"
+  let back = icons.long_arrow_up_left([attribute.aria_hidden(True)])
 
   use html <- promise.map(render(markdown))
 
   assert html
-    == "<p>a<sup><a aria-label=\"Footnote 1\" href=\"#fn-1\" id=\"fnref-1\">1</a></sup></p><section aria-label=\"Footnotes\"><ol><li id=\"fn-1\"><p>b</p><a aria-label=\"Back to reference 1\" href=\"#fnref-1\">↩\u{FE0E}</a></li></ol></section>"
+    == "<p>a<sup><a aria-label=\"Footnote 1\" href=\"#fn-1\" id=\"fnref-1\">1</a></sup></p><section aria-label=\"Footnotes\"><ol><li id=\"fn-1\"><p>b</p><a aria-label=\"Back to reference 1\" href=\"#fnref-1\">"
+    <> element.to_string(back)
+    <> "</a></li></ol></section>"
 }
