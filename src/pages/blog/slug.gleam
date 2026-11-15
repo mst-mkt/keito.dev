@@ -1,6 +1,7 @@
 import components/icons
 import components/side_nav.{Item}
 import features/blog/embed.{LinkCard}
+import features/blog/feed
 import features/blog/post.{type Post}
 import features/blog/store
 import gleam/http.{Get}
@@ -101,6 +102,7 @@ fn view(
     dock: [],
     head: [
       base.canonical(post.page_path(entry.slug)),
+      feed.link(),
       html.link([
         attribute.rel("stylesheet"),
         attribute.href("/entry/markdown.css"),

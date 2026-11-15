@@ -1,5 +1,6 @@
 import components/icons
 import components/side_nav.{Item}
+import features/blog/feed
 import features/blog/post.{type Post}
 import features/blog/store
 import gleam/http.{Get}
@@ -68,9 +69,13 @@ fn view(context: Context, posts: List(Post)) -> Element(Nil) {
         }
       ]),
     ],
-    right: [],
+    right: [
+      side_nav.view("Feed", [
+        Item("Subscribe to feed", post.feed_path, icons.rss_feed),
+      ]),
+    ],
     dock: [],
-    head: [base.canonical(post.list_path)],
+    head: [base.canonical(post.list_path), feed.link()],
     client_entry: context.client_entry,
   )
 }

@@ -29,3 +29,9 @@ pub fn method_not_allowed(allowed: List(Method)) -> Response(Body) {
   text(405, "Method Not Allowed")
   |> response.set_header("allow", allow)
 }
+
+pub fn atom(status: Int, body: String) -> Response(Body) {
+  response.new(status)
+  |> response.set_header("content-type", "application/atom+xml; charset=utf-8")
+  |> response.set_body(StringBody(body))
+}

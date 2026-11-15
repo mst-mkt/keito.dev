@@ -23,6 +23,8 @@ pub type Event {
 
 pub const list_path = "/blog"
 
+pub const feed_path = "/blog/atom.xml"
+
 pub fn page_path(slug: String) -> String {
   list_path <> "/" <> slug
 }
