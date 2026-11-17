@@ -31,6 +31,10 @@ pub fn page_path(slug: String) -> String {
   list_path <> "/" <> slug
 }
 
+pub fn og_image_path(slug: String) -> String {
+  page_path(slug) <> "/og.png"
+}
+
 pub fn decoder() -> Decoder(Post) {
   use slug <- decode.field("slug", decode.string)
   use title <- decode.field("title", decode.string)
@@ -105,8 +109,18 @@ pub fn display_date(date: String) -> String {
   }
 }
 
-pub fn emoji_url(emoji: String) -> String {
-  "https://serenity.keito.dev/" <> uri.percent_encode(emoji) <> "/svg"
+pub type EmojiFormat {
+  Svg
+  Png(size: Int)
+}
+
+pub fn emoji_url(emoji: String, format: EmojiFormat) -> String {
+  let path = case format {
+    Svg -> "/svg"
+    Png(size:) -> "/png?size=" <> int.to_string(size)
+  }
+
+  "https://serenity.keito.dev/" <> uri.percent_encode(emoji) <> path
 }
 
 pub fn group_by_year(posts: List(Post)) -> List(#(String, List(Post))) {

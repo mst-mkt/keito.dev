@@ -48,6 +48,7 @@ pub fn handle(req: Request(Body), context: Context) -> Promise(Response(Body)) {
 fn view(context: Context, draft: Draft, errors: Errors) -> Element(Nil) {
   base.document(
     "New link",
+    og_image: base.og_image,
     left: [
       side_nav.view("Navigation", [
         Item("Back to top", "/", icons.fast_arrow_left),

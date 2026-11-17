@@ -76,8 +76,10 @@ fn view(
 ) -> Element(Nil) {
   let sections =
     list.filter(article.sections, fn(section) { section.level <= 3 })
+  let og_image = base.origin <> post.og_image_path(entry.slug)
   base.document(
     entry.title,
+    og_image:,
     left: [
       side_nav.view("Navigation", [
         Item("Back to top", "/", icons.fast_arrow_left),
@@ -129,13 +131,13 @@ fn view(
         attribute.rel("stylesheet"),
         attribute.href("/entry/markdown.css"),
       ]),
-      ..view_meta(entry)
+      ..view_meta(entry, og_image)
     ],
     client_entry: context.client_entry,
   )
 }
 
-fn view_meta(entry: Post) -> List(Element(Nil)) {
+fn view_meta(entry: Post, og_image: String) -> List(Element(Nil)) {
   option.values([
     Some(ogp.property("og:type", "article")),
     Some(ogp.property("og:url", base.origin <> post.page_path(entry.slug))),
@@ -150,7 +152,7 @@ fn view_meta(entry: Post) -> List(Element(Nil)) {
         json_ld.BlogPosting(
           headline: entry.title,
           url: base.origin <> post.page_path(entry.slug),
-          image: base.og_image,
+          image: og_image,
           language: "ja",
           published_at: entry.published_at,
           modified_at: post.last_updated(entry),
@@ -169,7 +171,7 @@ fn view_meta(entry: Post) -> List(Element(Nil)) {
 fn view_header(entry: Post, event_card: Element(Nil)) -> Element(Nil) {
   html.header([attribute.class("grid grid-cols-1 gap-y-4")], [
     html.img([
-      attribute.src(post.emoji_url(entry.emoji)),
+      attribute.src(post.emoji_url(entry.emoji, post.Svg)),
       attribute.alt(""),
       attribute.class("my-6 size-16"),
     ]),

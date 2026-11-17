@@ -60,6 +60,7 @@ fn text_view(posts: List(Post)) -> String {
 fn view(context: Context, posts: List(Post)) -> Element(Nil) {
   base.document(
     "Blog",
+    og_image: base.og_image,
     left: [
       side_nav.view("Navigation", [
         Item("Back to top", "/", icons.fast_arrow_left),

@@ -37,6 +37,7 @@ fn markdown_view() -> String {
 fn view(context: Context) -> Element(Nil) {
   base.document(
     "Not Found",
+    og_image: base.og_image,
     left: [],
     content: [html.h1([], [html.text("Not Found")])],
     right: [],

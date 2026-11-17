@@ -179,6 +179,7 @@ fn view(
 ) -> Element(Nil) {
   base.document(
     "",
+    og_image: base.og_image,
     left: [],
     content: [
       html.div([attribute.class("h-card grid enter gap-y-12")], [

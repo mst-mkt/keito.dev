@@ -14,6 +14,7 @@ pub fn canonical(path: String) -> Element(Nil) {
 
 pub fn document(
   title: String,
+  og_image og_image: String,
   left left: List(Element(Nil)),
   content content: List(Element(Nil)),
   right right: List(Element(Nil)),
@@ -21,7 +22,7 @@ pub fn document(
   head head: List(Element(Nil)),
   client_entry client_entry: String,
 ) -> Element(Nil) {
-  page(title, [client_script(client_entry, []), ..head], [
+  page(title, og_image, [client_script(client_entry, []), ..head], [
     html.div([attribute.class("flex justify-center gap-x-12 px-6 py-24")], [
       sidebar(left),
       html.main([attribute.class("w-full max-w-2xl min-w-0")], content),
@@ -40,7 +41,7 @@ pub fn shell(
   let script =
     client_script(client_entry, [attribute.attribute("blocking", "render")])
 
-  page(title, [script, ..head], body)
+  page(title, og_image, [script, ..head], body)
 }
 
 fn client_script(
@@ -55,6 +56,7 @@ fn client_script(
 
 fn page(
   title: String,
+  og_image: String,
   head: List(Element(Nil)),
   body: List(Element(Nil)),
 ) -> Element(Nil) {

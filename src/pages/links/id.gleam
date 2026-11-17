@@ -79,6 +79,7 @@ fn view(context: Context, current: Link) -> Element(Nil) {
 
   base.document(
     current.name,
+    og_image: base.og_image,
     left: [
       side_nav.view("Navigation", [
         Item("Back to top", "/", icons.fast_arrow_left),

@@ -2,7 +2,9 @@ import gleam/http.{type Method}
 import gleam/http/response.{type Response}
 import gleam/list
 import gleam/string
-import hinoto/body.{type Body, EmptyBody, StringBody}
+import hinoto/body.{
+  type Body, type JsTypedArray, EmptyBody, StringBody, TypedArrayBody,
+}
 import lustre/element.{type Element}
 
 pub fn html(status: Int, document: Element(Nil)) -> Response(Body) {
@@ -46,6 +48,12 @@ pub fn markdown(status: Int, body: String) -> Response(Body) {
   response.new(status)
   |> response.set_header("content-type", "text/markdown; charset=utf-8")
   |> response.set_body(StringBody(body))
+}
+
+pub fn png(status: Int, body: JsTypedArray) -> Response(Body) {
+  response.new(status)
+  |> response.set_header("content-type", "image/png")
+  |> response.set_body(TypedArrayBody(body))
 }
 
 pub fn link(

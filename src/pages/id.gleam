@@ -41,6 +41,7 @@ pub fn handle(
 fn view(context: Context) -> Element(Nil) {
   base.document(
     uuid.value,
+    og_image: base.og_image,
     left: [
       side_nav.view("Navigation", [
         Item("Back to top", "/", icons.fast_arrow_left),

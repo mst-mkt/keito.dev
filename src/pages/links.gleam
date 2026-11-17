@@ -68,6 +68,7 @@ fn text_view(links: List(Link)) -> String {
 fn view(context: Context, links: List(Link)) -> Element(Nil) {
   base.document(
     "Links",
+    og_image: base.og_image,
     left: [
       side_nav.view("Navigation", [
         Item("Back to top", "/", icons.fast_arrow_left),

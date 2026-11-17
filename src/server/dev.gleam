@@ -3,6 +3,7 @@ import gleam/http/request
 import gleam/javascript/promise.{type Promise}
 import hinoto.{type JsRequest, type JsResponse}
 import hinoto/runtime/workers.{type WorkersContext}
+import pages/blog/slug/og
 import pages/story
 import server
 import server/middleware
@@ -14,6 +15,10 @@ pub fn handler(
   use req, context <- server.serve(client_entry)
 
   case request.path_segments(req) {
+    ["story", "og.png"] -> {
+      use req <- middleware.apply(req)
+      og.preview(req)
+    }
     ["story", ..segments] -> {
       use req <- middleware.apply(req)
       story.handle(req, context, segments)

@@ -26,7 +26,7 @@ pub fn view(entry: Post) -> Element(msg) {
     [
       html.div([attribute.class("flex min-w-0 grow items-center gap-x-4")], [
         html.img([
-          attribute.src(post.emoji_url(entry.emoji)),
+          attribute.src(post.emoji_url(entry.emoji, post.Svg)),
           attribute.alt(""),
           attribute.class("size-8 shrink-0"),
         ]),
