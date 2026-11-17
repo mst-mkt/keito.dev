@@ -9,6 +9,7 @@
 packages = [
   { name = "argv", version = "1.1.0", build_tools = ["gleam"], requirements = [], otp_app = "argv", source = "hex", outer_checksum = "3277D100448BDB4A29B6D58C0F36F631CBC349E8BDD09766C6309DF202831140" },
   { name = "bigi", version = "4.1.1", build_tools = ["gleam"], requirements = ["gleam_stdlib"], otp_app = "bigi", source = "hex", outer_checksum = "44FEDF1DF5C1F426A80B67C32B976D0828D66524E11BDC2DD22B78D37C883BA7" },
+  { name = "budoux", version = "1.0.0", build_tools = ["gleam"], requirements = ["gleam_stdlib"], otp_app = "budoux", source = "hex", outer_checksum = "8598D46B00A9D8A2F093998750E7DB3112BCC4F3DD1990BE00D52F685EEB580D" },
   { name = "casefold", version = "2.2.0", build_tools = ["gleam"], requirements = ["gleam_stdlib"], otp_app = "casefold", source = "hex", outer_checksum = "6D097ACB08037DBA523199D9C8A3875D9F67FA35E06FC384BF3BE247A0658B6D" },
   { name = "exception", version = "2.1.1", build_tools = ["gleam"], requirements = ["gleam_stdlib"], otp_app = "exception", source = "hex", outer_checksum = "6BDEA95248093599391C3B5DF1835C5C6A86C353C2F99CE539B450E3432FE117" },
   { name = "glance", version = "7.0.0", build_tools = ["gleam"], requirements = ["gleam_stdlib", "glexer"], otp_app = "glance", source = "hex", outer_checksum = "EA52986965408D43003A1760E41457493EB96098DE193E6AD8646930EC190CB9" },
@@ -40,6 +41,7 @@ packages = [
 [requirements]
 argv = { version = ">= 1.1.0 and < 2.0.0" }
 bigi = { version = ">= 4.1.1 and < 5.0.0" }
+budoux = { version = ">= 1.0.0 and < 2.0.0" }
 glance = { version = ">= 7.0.0 and < 8.0.0" }
 gleam_fetch = { version = ">= 1.4.1 and < 2.0.0" }
 gleam_http = { version = ">= 4.5.0 and < 5.0.0" }

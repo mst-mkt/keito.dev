@@ -1,3 +1,4 @@
+import budoux
 import features/blog/post.{type Post}
 import gleam/int
 import gleam/option.{type Option, None, Some}
@@ -26,6 +27,8 @@ const color_subtle =
 const color_border =
   "color-mix(in oklch, " <> color_fg <> " 10%, " <> color_bg <> ")"
 
+const zero_width_space = "\u{200B}"
+
 pub fn from_post(entry: Post) -> OgCard {
   OgCard(title: entry.title, emoji: entry.emoji, description: entry.description)
 }
@@ -52,6 +55,7 @@ pub fn view(card: OgCard) -> Element(Nil) {
     Some(_) -> 2
     None -> 3
   }
+  let parser = budoux.ja()
 
   html.div(
     [
@@ -93,10 +97,11 @@ pub fn view(card: OgCard) -> Element(Nil) {
                 #("font-weight", "700"),
                 #("line-height", "1.4"),
                 #("line-clamp", int.to_string(title_lines)),
+                #("word-break", "keep-all"),
                 #("overflow-wrap", "anywhere"),
               ]),
             ],
-            [html.text(card.title)],
+            [html.text(insert_phrase_breaks(parser, card.title))],
           ),
           case description {
             Some(description) ->
@@ -108,10 +113,11 @@ pub fn view(card: OgCard) -> Element(Nil) {
                     #("line-height", "1.75"),
                     #("color", color_muted),
                     #("line-clamp", "2"),
+                    #("word-break", "keep-all"),
                     #("overflow-wrap", "anywhere"),
                   ]),
                 ],
-                [html.text(description)],
+                [html.text(insert_phrase_breaks(parser, description))],
               )
             None -> element.none()
           },
@@ -120,6 +126,11 @@ pub fn view(card: OgCard) -> Element(Nil) {
       view_footer(),
     ],
   )
+}
+
+fn insert_phrase_breaks(parser: budoux.Parser, text: String) -> String {
+  budoux.parse(parser, text)
+  |> string.join(zero_width_space)
 }
 
 fn view_footer() -> Element(Nil) {
