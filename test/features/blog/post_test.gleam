@@ -84,3 +84,23 @@ pub fn group_by_year_test() {
       #("2025", [new_post("b", "2025-12-31"), new_post("a", "2025-01-01")]),
     ]
 }
+
+pub fn recent_test() {
+  let posts = [
+    new_post("c", "2026-11-03"),
+    new_post("b", "2025-11-17"),
+    new_post("a", "2025-11-16"),
+  ]
+
+  let recent = post.recent(posts, at: "2026-11-17")
+
+  assert recent == [new_post("c", "2026-11-03"), new_post("b", "2025-11-17")]
+}
+
+pub fn recent_leap_day_test() {
+  let posts = [new_post("b", "2027-03-01"), new_post("a", "2027-02-28")]
+
+  let recent = post.recent(posts, at: "2028-02-29")
+
+  assert recent == [new_post("b", "2027-03-01")]
+}

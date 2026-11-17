@@ -1,6 +1,9 @@
 import components/avatar
 import components/icons
 import components/text_link
+import features/blog/post.{type Post}
+import features/blog/post_row
+import features/blog/store as blog_store
 import features/links/link.{type Link}
 import features/links/store
 import gleam/http.{Get}
@@ -8,6 +11,7 @@ import gleam/http/request.{type Request}
 import gleam/http/response.{type Response}
 import gleam/javascript/promise.{type Promise}
 import gleam/list
+import gleam/result
 import gleam/string
 import hinoto/body.{type Body}
 import layouts/base
@@ -21,6 +25,7 @@ import lustre/attribute
 import lustre/element.{type Element}
 import lustre/element/html
 import pages/sitemap
+import plinth/javascript/date
 import server/context.{type Context}
 import server/format.{Html, Markdown, Terminal}
 import server/middleware
@@ -48,12 +53,22 @@ pub fn handle(req: Request(Body), context: Context) -> Promise(Response(Body)) {
   use format <- format.negotiate(req)
 
   case format {
-    Markdown -> promise.resolve(respond.markdown(200, markdown_view()))
-    Terminal -> promise.resolve(respond.text(200, text_view()))
-    Html -> {
-      use profiles <- promise.map(store.list(context.env))
+    Markdown -> {
+      use posts <- promise.map(recent_posts(context))
 
-      respond.html(200, view(context, profiles))
+      respond.markdown(200, markdown_view(posts))
+    }
+    Terminal -> {
+      use posts <- promise.map(recent_posts(context))
+
+      respond.text(200, text_view(posts))
+    }
+    Html -> {
+      let posts = recent_posts(context)
+      use profiles <- promise.await(store.list(context.env))
+      use posts <- promise.map(posts)
+
+      respond.html(200, view(context, profiles, posts))
       |> respond.link(sitemap.path, [
         #("rel", "sitemap"),
         #("type", "application/xml"),
@@ -62,7 +77,17 @@ pub fn handle(req: Request(Body), context: Context) -> Promise(Response(Body)) {
   }
 }
 
-fn markdown_view() -> String {
+fn recent_posts(context: Context) -> Promise(List(Post)) {
+  use posts <- promise.map(blog_store.list(context))
+  let today = date.to_iso_string(date.now()) |> string.slice(0, 10)
+
+  result.unwrap(posts, [])
+  |> post.recent(at: today)
+  |> list.take(5)
+}
+
+@internal
+pub fn markdown_view(posts: List(Post)) -> String {
   let project_links =
     list.map(projects, fn(project) { md.link(project.0, project.1) })
 
@@ -91,10 +116,17 @@ fn markdown_view() -> String {
       }),
     ),
     md.link("More links", base.origin <> link.list_path),
+    ..case posts {
+      [] -> []
+      _ -> [
+        md.list(list.map(posts, post_row.markdown)),
+        md.link("More posts", base.origin <> post.list_path),
+      ]
+    }
   ])
 }
 
-fn text_view() -> String {
+fn text_view(posts: List(Post)) -> String {
   let project_links =
     list.map(projects, fn(project) { inline_link(project.0, project.1) })
 
@@ -129,6 +161,10 @@ fn text_view() -> String {
         terminal.link(terminal.dim(account), url),
       )
     }),
+    ..case posts {
+      [] -> []
+      _ -> [terminal.table(list.map(posts, post_row.text))]
+    }
   ])
 }
 
@@ -136,7 +172,11 @@ fn inline_link(text: String, url: String) -> String {
   terminal.link(terminal.underline(text), url)
 }
 
-fn view(context: Context, profiles: List(Link)) -> Element(Nil) {
+fn view(
+  context: Context,
+  profiles: List(Link),
+  posts: List(Post),
+) -> Element(Nil) {
   base.document(
     "",
     left: [],
@@ -232,26 +272,19 @@ fn view(context: Context, profiles: List(Link)) -> Element(Nil) {
               ])
             }),
           ),
-          html.a(
-            [
-              attribute.href(link.list_path),
-              attribute.class(
-                cn([
-                  "flex w-fit items-baseline gap-x-1 justify-self-end rounded-sm text-sm",
-                  "text-subtle transition-colors hover:text-fg focus-visible:text-fg",
-                  "outline-offset-4 focus-visible:outline-2 focus-visible:outline-fg",
-                ]),
-              ),
-            ],
-            [
-              html.text("more"),
-              icons.arrow_up_right([
-                attribute.aria_hidden(True),
-                attribute.class("size-3.5 cap-center"),
-              ]),
-            ],
-          ),
+          view_more("more", link.list_path),
         ]),
+        case posts {
+          [] -> element.none()
+          _ ->
+            html.div([attribute.class("grid gap-y-3")], [
+              html.ul(
+                [attribute.aria_label("Posts"), attribute.class("grid gap-y-3")],
+                list.map(posts, post_row.view),
+              ),
+              view_more("blog", post.list_path),
+            ])
+        },
         html.data(
           [
             attribute.class("u-url u-uid"),
@@ -307,5 +340,27 @@ fn view(context: Context, profiles: List(Link)) -> Element(Nil) {
       })
     ],
     client_entry: context.client_entry,
+  )
+}
+
+fn view_more(text: String, href: String) -> Element(Nil) {
+  html.a(
+    [
+      attribute.href(href),
+      attribute.class(
+        cn([
+          "flex w-fit items-baseline gap-x-1 justify-self-end rounded-sm text-sm",
+          "text-subtle transition-colors hover:text-fg focus-visible:text-fg",
+          "outline-offset-4 focus-visible:outline-2 focus-visible:outline-fg",
+        ]),
+      ),
+    ],
+    [
+      html.text(text),
+      icons.arrow_up_right([
+        attribute.aria_hidden(True),
+        attribute.class("size-3.5 cap-center"),
+      ]),
+    ],
   )
 }

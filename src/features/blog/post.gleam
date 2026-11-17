@@ -2,6 +2,8 @@ import gleam/dynamic/decode.{type Decoder}
 import gleam/int
 import gleam/list
 import gleam/option.{type Option, None, Some}
+import gleam/order
+import gleam/result
 import gleam/string
 import gleam/uri
 
@@ -70,6 +72,24 @@ fn event_decoder() -> Decoder(Event) {
 
 pub fn last_updated(entry: Post) -> String {
   option.unwrap(entry.updated_at, entry.published_at)
+}
+
+pub fn recent(posts: List(Post), at today: String) -> List(Post) {
+  list.filter(posts, is_recent(_, today))
+}
+
+fn is_recent(entry: Post, today: String) -> Bool {
+  string.compare(entry.published_at, one_year_before(today)) != order.Lt
+}
+
+fn one_year_before(date: String) -> String {
+  {
+    use #(year, rest) <- result.try(string.split_once(date, "-"))
+    use year <- result.map(int.parse(year))
+
+    int.to_string(year - 1) <> "-" <> rest
+  }
+  |> result.unwrap(date)
 }
 
 pub fn display_date(date: String) -> String {
