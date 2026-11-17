@@ -91,6 +91,10 @@ export default defineConfig({
         command: "vp dev",
         cache: false,
       },
+      "dev:local": {
+        command: "LOCAL_POSTS=1 vp dev",
+        cache: false,
+      },
       fmt: ["gleam run --no-print-progress -m sort_classes", "vp fmt", "gleam format src test dev"],
       check: {
         command: [

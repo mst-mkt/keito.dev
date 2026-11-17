@@ -19,7 +19,10 @@ export default defineConfig({
       LINKS: bindings.kv(),
       EMBED_CACHE: bindings.kv(),
       POST_CACHE: bindings.kv(),
-      POSTS: bindings.worker({ worker: "posts", dev: { remote: true } }),
+      POSTS: bindings.worker({
+        worker: "posts",
+        dev: { remote: process.env.LOCAL_POSTS !== "1" },
+      }),
       GOOGLE_WALLET_ISSUER_ID: bindings.text("3388000000023214309"),
       GOOGLE_WALLET_SERVICE_ACCOUNT: bindings.text(
         "wallet-issuer@vaulted-blend-513002-k6.iam.gserviceaccount.com",
