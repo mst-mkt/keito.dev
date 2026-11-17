@@ -273,7 +273,7 @@ fn view(
               ])
             }),
           ),
-          view_more("more", link.list_path),
+          view_more("links", link.list_path),
         ]),
         case posts {
           [] -> element.none()
