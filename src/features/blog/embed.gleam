@@ -5,6 +5,7 @@ import features/blog/embed/api/link_card as link_card_api
 import features/blog/embed/api/npm_package as npm_package_api
 import features/blog/embed/api/slide as slide_api
 import features/blog/embed/api/tweet as tweet_api
+import features/blog/embed/api/youtube as youtube_api
 import features/blog/embed/components/github_permalink.{
   type Lines, Range, WholeFile,
 }
@@ -13,6 +14,7 @@ import features/blog/embed/components/link_card
 import features/blog/embed/components/npm_package
 import features/blog/embed/components/slide
 import features/blog/embed/components/tweet
+import features/blog/embed/components/youtube
 import gleam/bool
 import gleam/int
 import gleam/javascript/promise.{type Promise}
@@ -40,12 +42,13 @@ pub type Embed {
   Tweet(url: String, id: String)
   SpeakerDeck(url: String)
   Docswell(url: String)
+  YouTube(url: String)
   NpmPackage(url: String, name: String)
 }
 
 const tags = [
   "LinkCard", "GitHubRepository", "GitHubPermalink", "Tweet", "SpeakerDeck",
-  "Docswell", "NpmPackage",
+  "Docswell", "YouTube", "NpmPackage",
 ]
 
 pub fn from_tag(
@@ -93,6 +96,12 @@ fn parse(
     -> Ok(Tweet(url:, id:))
     "SpeakerDeck", "speakerdeck.com", [_, _] -> Ok(SpeakerDeck(url))
     "Docswell", "www.docswell.com", ["s", _, _] -> Ok(Docswell(url))
+    "YouTube", "www.youtube.com", ["watch"]
+    | "YouTube", "youtube.com", ["watch"]
+    | "YouTube", "www.youtube.com", ["shorts", _]
+    | "YouTube", "youtube.com", ["shorts", _]
+    | "YouTube", "youtu.be", [_]
+    -> Ok(YouTube(url))
     "NpmPackage", "www.npmjs.com", ["package", "@" <> _ as scope, name] ->
       Ok(NpmPackage(url:, name: scope <> "/" <> name))
     "NpmPackage", "www.npmjs.com", ["package", name] ->
@@ -133,6 +142,7 @@ pub fn try_view(
     SpeakerDeck(url:) ->
       render(slide_api.speaker_deck(context, url), url, slide.view)
     Docswell(url:) -> render(slide_api.docswell(context, url), url, slide.view)
+    YouTube(url:) -> render(youtube_api.fetch(context, url), url, youtube.view)
     NpmPackage(url:, name:) ->
       render(npm_package_api.fetch(context, url, name), url, npm_package.view)
   }

@@ -1,8 +1,9 @@
 import features/blog/embed.{
   Docswell, GitHubPermalink, GitHubRepository, LinkCard, NpmPackage, SpeakerDeck,
-  Tweet,
+  Tweet, YouTube,
 }
 import features/blog/embed/components/github_permalink.{Range, WholeFile}
+import gleam/list
 
 pub fn from_tag_link_card_test() {
   let url = "https://nuten.keito.dev/"
@@ -67,6 +68,32 @@ pub fn from_tag_docswell_test() {
   let result = embed.from_tag("Docswell", [#("url", url)])
 
   assert result == Ok(Docswell(url))
+}
+
+pub fn from_tag_youtube_test() {
+  let urls = [
+    "https://www.youtube.com/watch?v=dQw4w9WgXcQ&t=30",
+    "https://youtube.com/watch?v=dQw4w9WgXcQ",
+    "https://www.youtube.com/shorts/tPEE9ZwTmy0",
+    "https://youtu.be/dQw4w9WgXcQ",
+  ]
+
+  list.each(urls, fn(url) {
+    let result = embed.from_tag("YouTube", [#("url", url)])
+
+    assert result == Ok(YouTube(url))
+  })
+}
+
+pub fn from_tag_youtube_channel_test() {
+  let url = "https://www.youtube.com/@RickAstleyYT"
+
+  let result = embed.from_tag("YouTube", [#("url", url)])
+
+  assert result
+    == Error(
+      "<YouTube> does not support https://www.youtube.com/@RickAstleyYT.",
+    )
 }
 
 pub fn from_tag_npm_package_test() {
