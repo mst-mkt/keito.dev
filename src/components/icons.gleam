@@ -525,6 +525,272 @@ pub fn hatena_mono(attributes: List(Attribute(msg))) -> Element(msg) {
   ])
 }
 
+// ## Hex
+// Source: https://github.com/hexpm/hexpm/blob/bc4d208200fb99cf8178356919a7b8144ce8bcf7/priv/static/images/hex-full.svg (fills changed to currentColor)
+// License: Apache-2.0
+//
+//                                  Apache License
+//                            Version 2.0, January 2004
+//                         http://www.apache.org/licenses/
+//
+//    TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+//
+//    1. Definitions.
+//
+//       "License" shall mean the terms and conditions for use, reproduction,
+//       and distribution as defined by Sections 1 through 9 of this document.
+//
+//       "Licensor" shall mean the copyright owner or entity authorized by
+//       the copyright owner that is granting the License.
+//
+//       "Legal Entity" shall mean the union of the acting entity and all
+//       other entities that control, are controlled by, or are under common
+//       control with that entity. For the purposes of this definition,
+//       "control" means (i) the power, direct or indirect, to cause the
+//       direction or management of such entity, whether by contract or
+//       otherwise, or (ii) ownership of fifty percent (50%) or more of the
+//       outstanding shares, or (iii) beneficial ownership of such entity.
+//
+//       "You" (or "Your") shall mean an individual or Legal Entity
+//       exercising permissions granted by this License.
+//
+//       "Source" form shall mean the preferred form for making modifications,
+//       including but not limited to software source code, documentation
+//       source, and configuration files.
+//
+//       "Object" form shall mean any form resulting from mechanical
+//       transformation or translation of a Source form, including but
+//       not limited to compiled object code, generated documentation,
+//       and conversions to other media types.
+//
+//       "Work" shall mean the work of authorship, whether in Source or
+//       Object form, made available under the License, as indicated by a
+//       copyright notice that is included in or attached to the work
+//       (an example is provided in the Appendix below).
+//
+//       "Derivative Works" shall mean any work, whether in Source or Object
+//       form, that is based on (or derived from) the Work and for which the
+//       editorial revisions, annotations, elaborations, or other modifications
+//       represent, as a whole, an original work of authorship. For the purposes
+//       of this License, Derivative Works shall not include works that remain
+//       separable from, or merely link (or bind by name) to the interfaces of,
+//       the Work and Derivative Works thereof.
+//
+//       "Contribution" shall mean any work of authorship, including
+//       the original version of the Work and any modifications or additions
+//       to that Work or Derivative Works thereof, that is intentionally
+//       submitted to Licensor for inclusion in the Work by the copyright owner
+//       or by an individual or Legal Entity authorized to submit on behalf of
+//       the copyright owner. For the purposes of this definition, "submitted"
+//       means any form of electronic, verbal, or written communication sent
+//       to the Licensor or its representatives, including but not limited to
+//       communication on electronic mailing lists, source code control systems,
+//       and issue tracking systems that are managed by, or on behalf of, the
+//       Licensor for the purpose of discussing and improving the Work, but
+//       excluding communication that is conspicuously marked or otherwise
+//       designated in writing by the copyright owner as "Not a Contribution."
+//
+//       "Contributor" shall mean Licensor and any individual or Legal Entity
+//       on behalf of whom a Contribution has been received by Licensor and
+//       subsequently incorporated within the Work.
+//
+//    2. Grant of Copyright License. Subject to the terms and conditions of
+//       this License, each Contributor hereby grants to You a perpetual,
+//       worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+//       copyright license to reproduce, prepare Derivative Works of,
+//       publicly display, publicly perform, sublicense, and distribute the
+//       Work and such Derivative Works in Source or Object form.
+//
+//    3. Grant of Patent License. Subject to the terms and conditions of
+//       this License, each Contributor hereby grants to You a perpetual,
+//       worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+//       (except as stated in this section) patent license to make, have made,
+//       use, offer to sell, sell, import, and otherwise transfer the Work,
+//       where such license applies only to those patent claims licensable
+//       by such Contributor that are necessarily infringed by their
+//       Contribution(s) alone or by combination of their Contribution(s)
+//       with the Work to which such Contribution(s) was submitted. If You
+//       institute patent litigation against any entity (including a
+//       cross-claim or counterclaim in a lawsuit) alleging that the Work
+//       or a Contribution incorporated within the Work constitutes direct
+//       or contributory patent infringement, then any patent licenses
+//       granted to You under this License for that Work shall terminate
+//       as of the date such litigation is filed.
+//
+//    4. Redistribution. You may reproduce and distribute copies of the
+//       Work or Derivative Works thereof in any medium, with or without
+//       modifications, and in Source or Object form, provided that You
+//       meet the following conditions:
+//
+//       (a) You must give any other recipients of the Work or
+//           Derivative Works a copy of this License; and
+//
+//       (b) You must cause any modified files to carry prominent notices
+//           stating that You changed the files; and
+//
+//       (c) You must retain, in the Source form of any Derivative Works
+//           that You distribute, all copyright, patent, trademark, and
+//           attribution notices from the Source form of the Work,
+//           excluding those notices that do not pertain to any part of
+//           the Derivative Works; and
+//
+//       (d) If the Work includes a "NOTICE" text file as part of its
+//           distribution, then any Derivative Works that You distribute must
+//           include a readable copy of the attribution notices contained
+//           within such NOTICE file, excluding those notices that do not
+//           pertain to any part of the Derivative Works, in at least one
+//           of the following places: within a NOTICE text file distributed
+//           as part of the Derivative Works; within the Source form or
+//           documentation, if provided along with the Derivative Works; or,
+//           within a display generated by the Derivative Works, if and
+//           wherever such third-party notices normally appear. The contents
+//           of the NOTICE file are for informational purposes only and
+//           do not modify the License. You may add Your own attribution
+//           notices within Derivative Works that You distribute, alongside
+//           or as an addendum to the NOTICE text from the Work, provided
+//           that such additional attribution notices cannot be construed
+//           as modifying the License.
+//
+//       You may add Your own copyright statement to Your modifications and
+//       may provide additional or different license terms and conditions
+//       for use, reproduction, or distribution of Your modifications, or
+//       for any such Derivative Works as a whole, provided Your use,
+//       reproduction, and distribution of the Work otherwise complies with
+//       the conditions stated in this License.
+//
+//    5. Submission of Contributions. Unless You explicitly state otherwise,
+//       any Contribution intentionally submitted for inclusion in the Work
+//       by You to the Licensor shall be under the terms and conditions of
+//       this License, without any additional terms or conditions.
+//       Notwithstanding the above, nothing herein shall supersede or modify
+//       the terms of any separate license agreement you may have executed
+//       with Licensor regarding such Contributions.
+//
+//    6. Trademarks. This License does not grant permission to use the trade
+//       names, trademarks, service marks, or product names of the Licensor,
+//       except as required for reasonable and customary use in describing the
+//       origin of the Work and reproducing the content of the NOTICE file.
+//
+//    7. Disclaimer of Warranty. Unless required by applicable law or
+//       agreed to in writing, Licensor provides the Work (and each
+//       Contributor provides its Contributions) on an "AS IS" BASIS,
+//       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+//       implied, including, without limitation, any warranties or conditions
+//       of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
+//       PARTICULAR PURPOSE. You are solely responsible for determining the
+//       appropriateness of using or redistributing the Work and assume any
+//       risks associated with Your exercise of permissions under this License.
+//
+//    8. Limitation of Liability. In no event and under no legal theory,
+//       whether in tort (including negligence), contract, or otherwise,
+//       unless required by applicable law (such as deliberate and grossly
+//       negligent acts) or agreed to in writing, shall any Contributor be
+//       liable to You for damages, including any direct, indirect, special,
+//       incidental, or consequential damages of any character arising as a
+//       result of this License or out of the use or inability to use the
+//       Work (including but not limited to damages for loss of goodwill,
+//       work stoppage, computer failure or malfunction, or any and all
+//       other commercial damages or losses), even if such Contributor
+//       has been advised of the possibility of such damages.
+//
+//    9. Accepting Warranty or Additional Liability. While redistributing
+//       the Work or Derivative Works thereof, You may choose to offer,
+//       and charge a fee for, acceptance of support, warranty, indemnity,
+//       or other liability obligations and/or rights consistent with this
+//       License. However, in accepting such obligations, You may act only
+//       on Your own behalf and on Your sole responsibility, not on behalf
+//       of any other Contributor, and only if You agree to indemnify,
+//       defend, and hold each Contributor harmless for any liability
+//       incurred by, or claims asserted against, such Contributor by reason
+//       of your accepting any such warranty or additional liability.
+//
+//    END OF TERMS AND CONDITIONS
+//
+//    Copyright 2015 Six Colors AB
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+pub fn hex(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 136 120", attributes, [
+    svg.path([
+      attribute.attribute(
+        "d",
+        "M57.2506 33.6721H78.2332C79.6228 33.6721 80.8734 34.0878 82.124 34.642L101.022 1.10854C99.4938 0.415704 97.8263 0 96.0198 0H39.464C37.3796 0 35.4342 0.554273 33.7667 1.52425L53.0819 34.642C54.3325 33.9492 55.7221 33.6721 57.2506 33.6721Z",
+      ),
+      attribute.attribute("fill", "currentColor"),
+      attribute.attribute("stroke", "none"),
+      attribute.attribute("stroke-width", "1"),
+      attribute.attribute("stroke-linecap", "butt"),
+      attribute.attribute("stroke-linejoin", "miter"),
+    ]),
+    svg.path([
+      attribute.attribute(
+        "d",
+        "M85.4591 37.829L95.8809 55.8428C96.5757 57.0899 96.9926 58.6142 96.9926 59.9999L135.623 60C135.623 58.0601 134.928 56.1199 133.955 54.4571L105.747 5.54258C104.635 3.60262 102.968 2.07838 101.022 1.1084L82.1183 34.6328C83.5079 35.4643 84.6254 36.4433 85.4591 37.829Z",
+      ),
+      attribute.attribute("fill", "currentColor"),
+      attribute.attribute("stroke", "none"),
+      attribute.attribute("stroke-width", "1"),
+      attribute.attribute("stroke-linecap", "butt"),
+      attribute.attribute("stroke-linejoin", "miter"),
+    ]),
+    svg.path([
+      attribute.attribute(
+        "d",
+        "M96.9925 60C96.9925 61.3857 96.5756 62.9099 95.8808 64.157L85.459 82.1709C84.7642 83.418 83.6526 84.5266 82.5409 85.2194L101.856 118.337C103.385 117.367 104.774 115.982 105.747 114.457L134.094 65.5427C135.067 63.8799 135.623 61.94 135.623 60H96.9925Z",
+      ),
+      attribute.attribute("fill", "currentColor"),
+      attribute.attribute("stroke", "none"),
+      attribute.attribute("stroke-width", "1"),
+      attribute.attribute("stroke-linecap", "butt"),
+      attribute.attribute("stroke-linejoin", "miter"),
+    ]),
+    svg.path([
+      attribute.attribute(
+        "d",
+        "M78.2333 86.3283H57.2507C55.8611 86.3283 54.6055 86.049 53.4938 85.4947L34.5991 118.893C36.1277 119.586 37.6576 120 39.3251 120H96.0199C98.1043 120 100.199 119.439 101.867 118.331L82.541 85.2197C81.1514 85.9126 79.7619 86.3283 78.2333 86.3283Z",
+      ),
+      attribute.attribute("fill", "currentColor"),
+      attribute.attribute("stroke", "none"),
+      attribute.attribute("stroke-width", "1"),
+      attribute.attribute("stroke-linecap", "butt"),
+      attribute.attribute("stroke-linejoin", "miter"),
+    ]),
+    svg.path([
+      attribute.attribute(
+        "d",
+        "M39.603 55.8431L50.0248 37.8293C50.7196 36.5821 51.972 35.3231 53.0837 34.6303L33.7668 1.52441C32.2382 2.49439 30.8486 3.88007 29.8759 5.54289L1.52854 54.4574C0.555831 56.1203 0 58.0602 0 60.0002H38.4913C38.4913 58.6145 38.9082 57.0902 39.603 55.8431Z",
+      ),
+      attribute.attribute("fill", "currentColor"),
+      attribute.attribute("stroke", "none"),
+      attribute.attribute("stroke-width", "1"),
+      attribute.attribute("stroke-linecap", "butt"),
+      attribute.attribute("stroke-linejoin", "miter"),
+    ]),
+    svg.path([
+      attribute.attribute(
+        "d",
+        "M50.0248 82.1709L39.603 64.157C38.9082 62.9099 38.4913 61.3857 38.4913 60H0C0 61.94 0.555831 63.8799 1.52854 65.5427L29.8759 114.457C30.9876 116.397 32.6551 117.921 34.6005 118.891L53.4988 85.4965C51.9702 84.6651 50.8586 83.5566 50.0248 82.1709Z",
+      ),
+      attribute.attribute("fill", "currentColor"),
+      attribute.attribute("stroke", "none"),
+      attribute.attribute("stroke-width", "1"),
+      attribute.attribute("stroke-linecap", "butt"),
+      attribute.attribute("stroke-linejoin", "miter"),
+    ]),
+  ])
+}
+
 // ## INIAD
 // Source: https://static-files.iniad.org/sites/1/2026/08/iniad32_ja.pdf
 
@@ -1568,6 +1834,271 @@ pub fn mixi2_application_sdk_ts(
       attribute.attribute("mask", "url(#mx-cut-right)"),
       attribute.attribute("stroke", "#3178C6"),
       attribute.attribute("stroke-width", "9"),
+      attribute.attribute("stroke-linecap", "butt"),
+      attribute.attribute("stroke-linejoin", "miter"),
+    ]),
+  ])
+}
+
+// ## mooncakes.io
+// Source: https://github.com/moonbitlang/mooncakes.io/blob/97f46eaf6197a60f5b4ae588e5879745b9f603a0/public/favicon.svg (fill changed to currentColor, mask id renamed)
+// License: Apache-2.0
+//
+//                                  Apache License
+//                            Version 2.0, January 2004
+//                         http://www.apache.org/licenses/
+//
+//    TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+//
+//    1. Definitions.
+//
+//       "License" shall mean the terms and conditions for use, reproduction,
+//       and distribution as defined by Sections 1 through 9 of this document.
+//
+//       "Licensor" shall mean the copyright owner or entity authorized by
+//       the copyright owner that is granting the License.
+//
+//       "Legal Entity" shall mean the union of the acting entity and all
+//       other entities that control, are controlled by, or are under common
+//       control with that entity. For the purposes of this definition,
+//       "control" means (i) the power, direct or indirect, to cause the
+//       direction or management of such entity, whether by contract or
+//       otherwise, or (ii) ownership of fifty percent (50%) or more of the
+//       outstanding shares, or (iii) beneficial ownership of such entity.
+//
+//       "You" (or "Your") shall mean an individual or Legal Entity
+//       exercising permissions granted by this License.
+//
+//       "Source" form shall mean the preferred form for making modifications,
+//       including but not limited to software source code, documentation
+//       source, and configuration files.
+//
+//       "Object" form shall mean any form resulting from mechanical
+//       transformation or translation of a Source form, including but
+//       not limited to compiled object code, generated documentation,
+//       and conversions to other media types.
+//
+//       "Work" shall mean the work of authorship, whether in Source or
+//       Object form, made available under the License, as indicated by a
+//       copyright notice that is included in or attached to the work
+//       (an example is provided in the Appendix below).
+//
+//       "Derivative Works" shall mean any work, whether in Source or Object
+//       form, that is based on (or derived from) the Work and for which the
+//       editorial revisions, annotations, elaborations, or other modifications
+//       represent, as a whole, an original work of authorship. For the purposes
+//       of this License, Derivative Works shall not include works that remain
+//       separable from, or merely link (or bind by name) to the interfaces of,
+//       the Work and Derivative Works thereof.
+//
+//       "Contribution" shall mean any work of authorship, including
+//       the original version of the Work and any modifications or additions
+//       to that Work or Derivative Works thereof, that is intentionally
+//       submitted to Licensor for inclusion in the Work by the copyright owner
+//       or by an individual or Legal Entity authorized to submit on behalf of
+//       the copyright owner. For the purposes of this definition, "submitted"
+//       means any form of electronic, verbal, or written communication sent
+//       to the Licensor or its representatives, including but not limited to
+//       communication on electronic mailing lists, source code control systems,
+//       and issue tracking systems that are managed by, or on behalf of, the
+//       Licensor for the purpose of discussing and improving the Work, but
+//       excluding communication that is conspicuously marked or otherwise
+//       designated in writing by the copyright owner as "Not a Contribution."
+//
+//       "Contributor" shall mean Licensor and any individual or Legal Entity
+//       on behalf of whom a Contribution has been received by Licensor and
+//       subsequently incorporated within the Work.
+//
+//    2. Grant of Copyright License. Subject to the terms and conditions of
+//       this License, each Contributor hereby grants to You a perpetual,
+//       worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+//       copyright license to reproduce, prepare Derivative Works of,
+//       publicly display, publicly perform, sublicense, and distribute the
+//       Work and such Derivative Works in Source or Object form.
+//
+//    3. Grant of Patent License. Subject to the terms and conditions of
+//       this License, each Contributor hereby grants to You a perpetual,
+//       worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+//       (except as stated in this section) patent license to make, have made,
+//       use, offer to sell, sell, import, and otherwise transfer the Work,
+//       where such license applies only to those patent claims licensable
+//       by such Contributor that are necessarily infringed by their
+//       Contribution(s) alone or by combination of their Contribution(s)
+//       with the Work to which such Contribution(s) was submitted. If You
+//       institute patent litigation against any entity (including a
+//       cross-claim or counterclaim in a lawsuit) alleging that the Work
+//       or a Contribution incorporated within the Work constitutes direct
+//       or contributory patent infringement, then any patent licenses
+//       granted to You under this License for that Work shall terminate
+//       as of the date such litigation is filed.
+//
+//    4. Redistribution. You may reproduce and distribute copies of the
+//       Work or Derivative Works thereof in any medium, with or without
+//       modifications, and in Source or Object form, provided that You
+//       meet the following conditions:
+//
+//       (a) You must give any other recipients of the Work or
+//           Derivative Works a copy of this License; and
+//
+//       (b) You must cause any modified files to carry prominent notices
+//           stating that You changed the files; and
+//
+//       (c) You must retain, in the Source form of any Derivative Works
+//           that You distribute, all copyright, patent, trademark, and
+//           attribution notices from the Source form of the Work,
+//           excluding those notices that do not pertain to any part of
+//           the Derivative Works; and
+//
+//       (d) If the Work includes a "NOTICE" text file as part of its
+//           distribution, then any Derivative Works that You distribute must
+//           include a readable copy of the attribution notices contained
+//           within such NOTICE file, excluding those notices that do not
+//           pertain to any part of the Derivative Works, in at least one
+//           of the following places: within a NOTICE text file distributed
+//           as part of the Derivative Works; within the Source form or
+//           documentation, if provided along with the Derivative Works; or,
+//           within a display generated by the Derivative Works, if and
+//           wherever such third-party notices normally appear. The contents
+//           of the NOTICE file are for informational purposes only and
+//           do not modify the License. You may add Your own attribution
+//           notices within Derivative Works that You distribute, alongside
+//           or as an addendum to the NOTICE text from the Work, provided
+//           that such additional attribution notices cannot be construed
+//           as modifying the License.
+//
+//       You may add Your own copyright statement to Your modifications and
+//       may provide additional or different license terms and conditions
+//       for use, reproduction, or distribution of Your modifications, or
+//       for any such Derivative Works as a whole, provided Your use,
+//       reproduction, and distribution of the Work otherwise complies with
+//       the conditions stated in this License.
+//
+//    5. Submission of Contributions. Unless You explicitly state otherwise,
+//       any Contribution intentionally submitted for inclusion in the Work
+//       by You to the Licensor shall be under the terms and conditions of
+//       this License, without any additional terms or conditions.
+//       Notwithstanding the above, nothing herein shall supersede or modify
+//       the terms of any separate license agreement you may have executed
+//       with Licensor regarding such Contributions.
+//
+//    6. Trademarks. This License does not grant permission to use the trade
+//       names, trademarks, service marks, or product names of the Licensor,
+//       except as required for reasonable and customary use in describing the
+//       origin of the Work and reproducing the content of the NOTICE file.
+//
+//    7. Disclaimer of Warranty. Unless required by applicable law or
+//       agreed to in writing, Licensor provides the Work (and each
+//       Contributor provides its Contributions) on an "AS IS" BASIS,
+//       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+//       implied, including, without limitation, any warranties or conditions
+//       of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
+//       PARTICULAR PURPOSE. You are solely responsible for determining the
+//       appropriateness of using or redistributing the Work and assume any
+//       risks associated with Your exercise of permissions under this License.
+//
+//    8. Limitation of Liability. In no event and under no legal theory,
+//       whether in tort (including negligence), contract, or otherwise,
+//       unless required by applicable law (such as deliberate and grossly
+//       negligent acts) or agreed to in writing, shall any Contributor be
+//       liable to You for damages, including any direct, indirect, special,
+//       incidental, or consequential damages of any character arising as a
+//       result of this License or out of the use or inability to use the
+//       Work (including but not limited to damages for loss of goodwill,
+//       work stoppage, computer failure or malfunction, or any and all
+//       other commercial damages or losses), even if such Contributor
+//       has been advised of the possibility of such damages.
+//
+//    9. Accepting Warranty or Additional Liability. While redistributing
+//       the Work or Derivative Works thereof, You may choose to offer,
+//       and charge a fee for, acceptance of support, warranty, indemnity,
+//       or other liability obligations and/or rights consistent with this
+//       License. However, in accepting such obligations, You may act only
+//       on Your own behalf and on Your sole responsibility, not on behalf
+//       of any other Contributor, and only if You agree to indemnify,
+//       defend, and hold each Contributor harmless for any liability
+//       incurred by, or claims asserted against, such Contributor by reason
+//       of your accepting any such warranty or additional liability.
+//
+//    END OF TERMS AND CONDITIONS
+//
+//    APPENDIX: How to apply the Apache License to your work.
+//
+//       To apply the Apache License to your work, attach the following
+//       boilerplate notice, with the fields enclosed by brackets "[]"
+//       replaced with your own identifying information. (Don't include
+//       the brackets!)  The text should be enclosed in the appropriate
+//       comment syntax for the file format. We also recommend that a
+//       file or class name and description of purpose be included on the
+//       same "printed page" as the copyright notice for easier
+//       identification within third-party archives.
+//
+//    Copyright [yyyy] [name of copyright owner]
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+pub fn mooncakes_io(attributes: List(Attribute(msg))) -> Element(msg) {
+  icon("0 0 64 64", attributes, [
+    svg.defs(
+      [
+        attribute.attribute("stroke", "none"),
+        attribute.attribute("stroke-width", "1"),
+        attribute.attribute("stroke-linecap", "butt"),
+        attribute.attribute("stroke-linejoin", "miter"),
+      ],
+      [
+        svg.mask([attribute.attribute("id", "mooncakes-io-cutout")], [
+          svg.rect([
+            attribute.attribute("width", "64"),
+            attribute.attribute("height", "64"),
+            attribute.attribute("fill", "white"),
+          ]),
+          svg.g(
+            [
+              attribute.attribute("transform", "translate(12 12.5) scale(1.32)"),
+              attribute.attribute("fill", "black"),
+            ],
+            [
+              svg.path([
+                attribute.attribute(
+                  "d",
+                  "M14.7916 37.4624C8.50107 37.4624 3.93384 33.822 3.93384 29.2657C3.93384 24.7095 7.23375 21.0159 14.7916 20.9627C22.3495 20.9095 25.756 24.7095 25.756 29.2657C25.756 33.822 20.7097 37.4624 14.7916 37.4624Z",
+                ),
+              ]),
+              svg.path([
+                attribute.attribute(
+                  "d",
+                  "M15.1897 21.1755L17.5316 5.31461C17.5316 5.31461 18.4364 0.790498 22.3218 0.843728C26.2072 0.896957 29.0281 6.80488 29.1346 11.5951C29.0584 17.7478 25.675 15.6796 23.8121 12.6596C23.8121 12.2871 19.2347 21.6013 19.2347 21.6013L15.1897 21.1755Z",
+                ),
+              ]),
+              svg.path([
+                attribute.attribute(
+                  "d",
+                  "M14.5505 21.1755L12.2086 5.31461C12.2086 5.31461 11.3038 0.790498 7.41846 0.843728C3.53302 0.896957 0.712093 6.80488 0.605713 11.5951C0.681833 17.7478 4.06532 15.6796 5.92811 12.6596C5.92811 12.2871 10.5055 21.6013 10.5055 21.6013L14.5505 21.1755Z",
+                ),
+              ]),
+            ],
+          ),
+        ]),
+      ],
+    ),
+    svg.circle([
+      attribute.attribute("cx", "32"),
+      attribute.attribute("cy", "32"),
+      attribute.attribute("r", "30"),
+      attribute.attribute("mask", "url(#mooncakes-io-cutout)"),
+      attribute.attribute("fill", "currentColor"),
+      attribute.attribute("stroke", "none"),
+      attribute.attribute("stroke-width", "1"),
       attribute.attribute("stroke-linecap", "butt"),
       attribute.attribute("stroke-linejoin", "miter"),
     ]),

@@ -21,6 +21,8 @@ pub type Brand {
   Mewst
   Twitch
   Zenn
+  Hex
+  MooncakesIo
 }
 
 const domains = [
@@ -37,6 +39,8 @@ const domains = [
   #(["mewst.com"], Mewst),
   #(["twitch.tv"], Twitch),
   #(["zenn.dev"], Zenn),
+  #(["hex.pm"], Hex),
+  #(["mooncakes.io"], MooncakesIo),
 ]
 
 pub fn from_url(url: String) -> Result(Brand, Nil) {
@@ -67,6 +71,8 @@ pub fn icon(url: String) -> fn(List(Attribute(msg))) -> Element(msg) {
     Ok(Mewst) -> icons.mewst
     Ok(Twitch) -> icons.twitch
     Ok(Zenn) -> icons.zenn
+    Ok(Hex) -> icons.hex
+    Ok(MooncakesIo) -> icons.mooncakes_io
     Error(_) -> icons.link
   }
 }
