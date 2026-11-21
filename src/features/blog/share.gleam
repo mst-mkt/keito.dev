@@ -20,7 +20,7 @@ pub fn view(entry: Post) -> Element(msg) {
   html.footer(
     [
       attribute.class(
-        "grid gap-y-3 rounded-lg bg-control px-5 py-4 sm:flex sm:items-center sm:gap-x-4",
+        "grid gap-y-4 rounded-lg bg-control p-5 sm:flex sm:items-center sm:gap-x-4 sm:py-4",
       ),
     ],
     [
@@ -40,7 +40,7 @@ pub fn view(entry: Post) -> Element(msg) {
           ),
         ]),
       ]),
-      html.div([attribute.class("-ml-2 flex gap-x-1 sm:ml-0 sm:shrink-0")], [
+      html.div([attribute.class("-m-2.5 flex gap-x-1 sm:m-0 sm:shrink-0")], [
         view_link(
           "Share on Twitter",
           intent_url("https://x.com/intent/post", entry),
