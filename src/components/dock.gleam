@@ -187,6 +187,7 @@ fn view_panel(panel: #(String, String, List(Element(msg)))) -> Element(msg) {
           attribute.class(
             cn([
               "grid max-h-[60dvh] gap-y-3 overflow-y-auto overscroll-contain px-5 pt-5 pb-3 text-sm",
+              "mask-t-from-[calc(100%-1.25rem)] mask-b-from-[calc(100%-0.75rem)]",
               "opacity-0 blur-sm transition-[opacity,filter] duration-200",
               "group-open:opacity-100 group-open:blur-none group-open:delay-200",
               "starting:group-open:opacity-0 starting:group-open:blur-sm",
