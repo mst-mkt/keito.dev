@@ -12,7 +12,7 @@ import lustre/element
 import lustre/element/html
 
 fn render(markdown: String) -> Promise(String) {
-  render_with(markdown, fn(src) { Image(src:, size: None) })
+  render_with(markdown, fn(src) { Image(src:, size: None, srcset: None) })
 }
 
 fn render_with(
@@ -157,13 +157,17 @@ pub fn render_image_caption_test() {
 pub fn render_image_test() {
   let markdown = "![a](./a.webp)"
   let image = fn(_) {
-    Image(src: "/blog/post/a.webp", size: Some(Size(width: 16, height: 9)))
+    Image(
+      src: "/blog/post/a.webp",
+      size: Some(Size(width: 16, height: 9)),
+      srcset: Some("/a.webp 16w"),
+    )
   }
 
   use html <- promise.map(render_with(markdown, image))
 
   assert html
-    == "<p><img alt=\"a\" height=\"9\" loading=\"lazy\" src=\"/blog/post/a.webp\" width=\"16\"></p>"
+    == "<p><img alt=\"a\" height=\"9\" loading=\"lazy\" sizes=\"auto, (min-width: 45rem) 42rem, calc(100vw - 3rem)\" src=\"/blog/post/a.webp\" srcset=\"/a.webp 16w\" width=\"16\"></p>"
 }
 
 pub fn render_external_link_test() {

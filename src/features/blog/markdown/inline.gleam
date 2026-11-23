@@ -18,7 +18,7 @@ import mork/document.{
 }
 
 pub type Image {
-  Image(src: String, size: Option(Size))
+  Image(src: String, size: Option(Size), srcset: Option(String))
 }
 
 const wide =
@@ -155,12 +155,22 @@ fn image_view(image: Image, text: List(Inline)) -> Element(msg) {
     ]
     None -> []
   }
+  let srcset = case image.srcset {
+    Some(srcset) -> [
+      attribute.attribute("srcset", srcset),
+      attribute.attribute(
+        "sizes",
+        "auto, (min-width: 45rem) 42rem, calc(100vw - 3rem)",
+      ),
+    ]
+    None -> []
+  }
 
   html.img([
     attribute.src(image.src),
     attribute.alt(plain_text(text)),
     attribute.loading("lazy"),
-    ..size
+    ..list.append(size, srcset)
   ])
 }
 

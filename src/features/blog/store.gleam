@@ -14,7 +14,7 @@ import gleam/http/response.{type Response, Response}
 import gleam/javascript/promise.{type Promise}
 import gleam/json
 import gleam/list
-import gleam/option.{Some}
+import gleam/option.{None, Some}
 import gleam/result
 import gleam/string
 import lib/duration
@@ -109,10 +109,14 @@ fn render(
   }
   use sizes <- promise.await(sizes)
   let image = fn(src) {
-    Image(
-      src: post.image_url(slug, src),
-      size: option.from_result(result.try(sizes, dict.get(_, src))),
-    )
+    let url = post.image_url(slug, src)
+    let size = option.from_result(result.try(sizes, dict.get(_, src)))
+    let srcset = case env.local_posts(context.env), size {
+      False, Some(size) -> Some(images.srcset(url, size))
+      _, _ -> None
+    }
+
+    Image(src: url, size:, srcset:)
   }
   use elements <- promise.map(markdown.render(source, image, embed_view))
   let content = list.map(elements, element.to_string) |> string.concat

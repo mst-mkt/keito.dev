@@ -23,6 +23,7 @@ export default defineConfig({
         worker: "posts",
         dev: { remote: process.env.LOCAL_POSTS !== "1" },
       }),
+      LOCAL_POSTS: bindings.json(process.env.LOCAL_POSTS === "1"),
       GOOGLE_WALLET_ISSUER_ID: bindings.text("3388000000023214309"),
       GOOGLE_WALLET_SERVICE_ACCOUNT: bindings.text(
         "wallet-issuer@vaulted-blend-513002-k6.iam.gserviceaccount.com",

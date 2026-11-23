@@ -5,14 +5,20 @@ import gleam/dynamic/decode
 import gleam/fetch.{type FetchBody}
 import gleam/http/request
 import gleam/http/response.{type Response, Response}
+import gleam/int
 import gleam/javascript/promise.{type Promise}
 import gleam/json
+import gleam/list
 import gleam/result
+import gleam/string
+import layouts/base
 import server/context.{type Context}
 
 pub type Size {
   Size(width: Int, height: Int)
 }
+
+const device_widths = [640, 750, 828, 1080, 1200, 1920]
 
 pub fn sizes(
   context: Context,
@@ -37,6 +43,25 @@ pub fn sizes(
     }
     _ -> promise.resolve(Error(Nil))
   }
+}
+
+pub fn srcset(url: String, size: Size) -> String {
+  device_widths
+  |> list.map(int.min(_, size.width))
+  |> list.unique
+  |> list.map(fn(width) {
+    let width = int.to_string(width)
+
+    base.origin
+    <> "/cdn-cgi/image/width="
+    <> width
+    <> ",format=auto"
+    <> url
+    <> " "
+    <> width
+    <> "w"
+  })
+  |> string.join(", ")
 }
 
 pub fn get(

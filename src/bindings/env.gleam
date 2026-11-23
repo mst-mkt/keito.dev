@@ -15,6 +15,9 @@ pub fn post_cache(env: Env) -> kv.Namespace
 @external(javascript, "./env.ffi.ts", "posts")
 pub fn posts(env: Env) -> service.Service
 
+@external(javascript, "./env.ffi.ts", "localPosts")
+pub fn local_posts(env: Env) -> Bool
+
 @external(javascript, "./env.ffi.ts", "googleWalletIssuerId")
 pub fn google_wallet_issuer_id(env: Env) -> String
 
