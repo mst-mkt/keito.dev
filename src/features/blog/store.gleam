@@ -2,8 +2,11 @@ import bindings/env
 import bindings/kv
 import bindings/service
 import features/blog/embed
+import features/blog/images
 import features/blog/markdown.{type Section}
+import features/blog/markdown/inline.{Image}
 import features/blog/post.{type Post}
+import gleam/dict
 import gleam/dynamic/decode
 import gleam/fetch
 import gleam/http/request
@@ -92,6 +95,7 @@ fn render(
   slug: String,
   source: String,
 ) -> Promise(Result(String, String)) {
+  let sizes = images.sizes(context, slug)
   let embeds = markdown.embeds(source)
   use viewed <- promise.await(
     list.map(embeds, embed.try_view(context, _)) |> promise.await_list,
@@ -103,14 +107,17 @@ fn render(
       Error(Nil) -> embed.view(context, embedded)
     }
   }
-  use elements <- promise.map(markdown.render(
-    source,
-    post.image_url(slug, _),
-    embed_view,
-  ))
+  use sizes <- promise.await(sizes)
+  let image = fn(src) {
+    Image(
+      src: post.image_url(slug, src),
+      size: option.from_result(result.try(sizes, dict.get(_, src))),
+    )
+  }
+  use elements <- promise.map(markdown.render(source, image, embed_view))
   let content = list.map(elements, element.to_string) |> string.concat
 
-  case list.all(viewed, result.is_ok) {
+  case list.all(viewed, result.is_ok) && result.is_ok(sizes) {
     True -> Ok(content)
     False -> Error(content)
   }

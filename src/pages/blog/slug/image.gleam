@@ -1,4 +1,5 @@
 import features/blog/images
+import gleam/dict
 import gleam/http.{Get}
 import gleam/http/request.{type Request}
 import gleam/http/response.{type Response, Response}
@@ -23,9 +24,9 @@ pub fn handle(
 ) -> Promise(Response(Body)) {
   use <- middleware.require_methods(req, [Get])
   let path = string.join(path, "/")
-  use listed <- promise.await(images.list(context, slug))
+  use sizes <- promise.await(images.sizes(context, slug))
 
-  case result.map(listed, list.contains(_, "./" <> path)) {
+  case result.map(sizes, dict.has_key(_, "./" <> path)) {
     Ok(True) -> serve(req, context, slug, path)
     _ -> not_found.handle(req, context)
   }

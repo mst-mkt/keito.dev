@@ -1,8 +1,9 @@
 import components/icons
+import features/blog/images.{type Size, Size}
 import gleam/dict
 import gleam/int
 import gleam/list
-import gleam/option
+import gleam/option.{type Option, None, Some}
 import gleam/regexp
 import gleam/string
 import lib/html_entity
@@ -16,6 +17,10 @@ import mork/document.{
   RefLink, Relative, SoftBreak, Strikethrough, Strong, Text,
 }
 
+pub type Image {
+  Image(src: String, size: Option(Size))
+}
+
 const wide =
   "^[\\p{sc=Han}\\p{sc=Hiragana}\\p{sc=Katakana}\\u3000-\\u303f\\u30fc\\uff01-\\uff60]$"
 
@@ -24,10 +29,10 @@ const punctuation =
 
 pub fn view(
   document: Document,
-  image_url: fn(String) -> String,
+  image: fn(String) -> Image,
   inlines: List(Inline),
 ) -> List(Element(msg)) {
-  join_lines(inlines) |> list.map(inline_view(document, image_url, _))
+  join_lines(inlines) |> list.map(inline_view(document, image, _))
 }
 
 fn join_lines(inlines: List(Inline)) -> List(Inline) {
@@ -62,29 +67,28 @@ fn matches(character: Result(String, Nil), pattern: String) -> Bool {
 
 fn inline_view(
   document: Document,
-  image_url: fn(String) -> String,
+  image: fn(String) -> Image,
   inline: Inline,
 ) -> Element(msg) {
   case inline {
     Text(text) -> html.text(html_entity.decode(text))
     CodeSpan(code) -> html.code([], [html.text(code)])
-    Emphasis(inlines) -> html.em([], view(document, image_url, inlines))
-    Strong(inlines) -> html.strong([], view(document, image_url, inlines))
-    Strikethrough(inlines) -> html.del([], view(document, image_url, inlines))
-    Highlight(inlines) -> html.mark([], view(document, image_url, inlines))
+    Emphasis(inlines) -> html.em([], view(document, image, inlines))
+    Strong(inlines) -> html.strong([], view(document, image, inlines))
+    Strikethrough(inlines) -> html.del([], view(document, image, inlines))
+    Highlight(inlines) -> html.mark([], view(document, image, inlines))
     FullLink(text:, data:) ->
-      link(destination(data.dest), view(document, image_url, text))
+      link(destination(data.dest), view(document, image, text))
     RefLink(text:, label:) ->
       case dict.get(document.links, label) {
-        Ok(data) ->
-          link(destination(data.dest), view(document, image_url, text))
-        Error(Nil) -> element.fragment(view(document, image_url, text))
+        Ok(data) -> link(destination(data.dest), view(document, image, text))
+        Error(Nil) -> element.fragment(view(document, image, text))
       }
-    FullImage(text:, data:) -> image(image_url(destination(data.dest)), text)
+    FullImage(text:, data:) -> image_view(image(destination(data.dest)), text)
     RefImage(text:, label:) ->
       case dict.get(document.links, label) {
-        Ok(data) -> image(image_url(destination(data.dest)), text)
-        Error(Nil) -> element.fragment(view(document, image_url, text))
+        Ok(data) -> image_view(image(destination(data.dest)), text)
+        Error(Nil) -> element.fragment(view(document, image, text))
       }
     Autolink(uri:, text:) -> link(uri, [html.text(option.unwrap(text, uri))])
     EmailAutolink(mail:) -> link("mailto:" <> mail, [html.text(mail)])
@@ -103,7 +107,7 @@ fn inline_view(
       ])
     }
     InlineHtml(children:, ..) ->
-      element.fragment(view(document, image_url, children))
+      element.fragment(view(document, image, children))
     RawHtml(raw) ->
       case string.starts_with(raw, "<!--") {
         True -> element.none()
@@ -143,11 +147,20 @@ fn link(href: String, children: List(Element(msg))) -> Element(msg) {
   }
 }
 
-fn image(src: String, text: List(Inline)) -> Element(msg) {
+fn image_view(image: Image, text: List(Inline)) -> Element(msg) {
+  let size = case image.size {
+    Some(Size(width:, height:)) -> [
+      attribute.width(width),
+      attribute.height(height),
+    ]
+    None -> []
+  }
+
   html.img([
-    attribute.src(src),
+    attribute.src(image.src),
     attribute.alt(plain_text(text)),
     attribute.loading("lazy"),
+    ..size
   ])
 }
 

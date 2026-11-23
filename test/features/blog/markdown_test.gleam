@@ -1,20 +1,23 @@
 import components/icons
 import features/blog/embed.{LinkCard}
+import features/blog/images.{Size}
 import features/blog/markdown.{Section}
+import features/blog/markdown/inline.{type Image, Image}
 import gleam/javascript/promise.{type Promise}
 import gleam/list
+import gleam/option.{None, Some}
 import gleam/string
 import lustre/attribute
 import lustre/element
 import lustre/element/html
 
 fn render(markdown: String) -> Promise(String) {
-  render_with(markdown, fn(src) { src })
+  render_with(markdown, fn(src) { Image(src:, size: None) })
 }
 
 fn render_with(
   markdown: String,
-  image_url: fn(String) -> String,
+  image: fn(String) -> Image,
 ) -> Promise(String) {
   let embed_view = fn(embed) {
     case embed {
@@ -23,7 +26,7 @@ fn render_with(
     }
     |> promise.resolve
   }
-  use elements <- promise.map(markdown.render(markdown, image_url, embed_view))
+  use elements <- promise.map(markdown.render(markdown, image, embed_view))
 
   list.map(elements, element.to_string) |> string.concat
 }
@@ -151,14 +154,16 @@ pub fn render_image_caption_test() {
     == "<figure><img alt=\"a\" loading=\"lazy\" src=\"https://example.com/a.png\"><figcaption>b</figcaption></figure>"
 }
 
-pub fn render_image_url_test() {
+pub fn render_image_test() {
   let markdown = "![a](./a.webp)"
-  let image_url = fn(src) { "/blog/post/" <> string.drop_start(src, 2) }
+  let image = fn(_) {
+    Image(src: "/blog/post/a.webp", size: Some(Size(width: 16, height: 9)))
+  }
 
-  use html <- promise.map(render_with(markdown, image_url))
+  use html <- promise.map(render_with(markdown, image))
 
   assert html
-    == "<p><img alt=\"a\" loading=\"lazy\" src=\"/blog/post/a.webp\"></p>"
+    == "<p><img alt=\"a\" height=\"9\" loading=\"lazy\" src=\"/blog/post/a.webp\" width=\"16\"></p>"
 }
 
 pub fn render_external_link_test() {

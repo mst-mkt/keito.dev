@@ -38,11 +38,11 @@ type Renderer(msg) {
 
 pub fn render(
   markdown: String,
-  image_url: fn(String) -> String,
+  image: fn(String) -> inline.Image,
   embed_view: fn(Embed) -> Promise(Element(msg)),
 ) -> Promise(List(Element(msg))) {
   let document = parse(markdown)
-  let view_inlines = inline.view(document, image_url, _)
+  let view_inlines = inline.view(document, image, _)
   let renderer = Renderer(document:, view_inlines:, embed_view:)
   let #(ids, blocks) = blocks_view(renderer, dict.new(), document.blocks, Loose)
   let notes = footnotes(renderer, ids)
