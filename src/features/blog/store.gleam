@@ -114,7 +114,7 @@ fn unwrap(result: Result(a, a)) -> a {
 }
 
 fn markdown_file(slug: String) -> String {
-  "/" <> slug <> ".md"
+  "/" <> slug <> "/index.md"
 }
 
 fn fetch_file(
