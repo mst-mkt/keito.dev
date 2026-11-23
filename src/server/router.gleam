@@ -8,6 +8,7 @@ import hinoto/body.{type Body}
 import pages/blog
 import pages/blog/atom
 import pages/blog/slug as post_page
+import pages/blog/slug/image
 import pages/blog/slug/og
 import pages/blog/source
 import pages/id
@@ -47,6 +48,7 @@ pub fn route(req: Request(Body), context: Context) -> Promise(Response(Body)) {
         False -> post_page.handle(req, context, slug)
       }
     ["blog", slug, "og.png"] -> og.handle(req, context, slug)
+    ["blog", slug, ..path] -> image.handle(req, context, slug, path)
     ["l", id] -> short_link.handle(req, context, id)
     ["links"] -> links.handle(req, context)
     ["links", "new"] -> new.handle(req, context)
