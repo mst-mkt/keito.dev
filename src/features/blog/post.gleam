@@ -35,6 +35,13 @@ pub fn og_image_path(slug: String) -> String {
   page_path(slug) <> "/og.png"
 }
 
+pub fn image_url(slug: String, src: String) -> String {
+  case src {
+    "./" <> path -> page_path(slug) <> "/" <> path
+    _ -> src
+  }
+}
+
 pub fn decoder() -> Decoder(Post) {
   use slug <- decode.field("slug", decode.string)
   use title <- decode.field("title", decode.string)

@@ -51,8 +51,8 @@ pub fn article(
   use found <- promise.try_await(fetch_file(context, markdown_file(slug)))
   let content = case response.get_header(found, "etag") {
     Ok(etag) ->
-      render_cached(context, "post:" <> slug <> ":" <> etag, found.body)
-    Error(Nil) -> render(context, found.body) |> promise.map(unwrap)
+      render_cached(context, "post:" <> slug <> ":" <> etag, slug, found.body)
+    Error(Nil) -> render(context, slug, found.body) |> promise.map(unwrap)
   }
   use content <- promise.map(content)
 
@@ -62,6 +62,7 @@ pub fn article(
 fn render_cached(
   context: Context,
   key: String,
+  slug: String,
   source: String,
 ) -> Promise(String) {
   let namespace = env.post_cache(context.env)
@@ -72,7 +73,7 @@ fn render_cached(
   case cached {
     Ok(#(content, _)) -> promise.resolve(content)
     Error(Nil) -> {
-      use rendered <- promise.map(render(context, source))
+      use rendered <- promise.map(render(context, slug, source))
 
       case rendered {
         Ok(content) ->
@@ -86,7 +87,11 @@ fn render_cached(
   }
 }
 
-fn render(context: Context, source: String) -> Promise(Result(String, String)) {
+fn render(
+  context: Context,
+  slug: String,
+  source: String,
+) -> Promise(Result(String, String)) {
   let embeds = markdown.embeds(source)
   use viewed <- promise.await(
     list.map(embeds, embed.try_view(context, _)) |> promise.await_list,
@@ -98,7 +103,11 @@ fn render(context: Context, source: String) -> Promise(Result(String, String)) {
       Error(Nil) -> embed.view(context, embedded)
     }
   }
-  use elements <- promise.map(markdown.render(source, embed_view))
+  use elements <- promise.map(markdown.render(
+    source,
+    post.image_url(slug, _),
+    embed_view,
+  ))
   let content = list.map(elements, element.to_string) |> string.concat
 
   case list.all(viewed, result.is_ok) {

@@ -29,15 +29,21 @@ pub type Section {
 }
 
 type Renderer(msg) {
-  Renderer(document: Document, embed_view: fn(Embed) -> Promise(Element(msg)))
+  Renderer(
+    document: Document,
+    view_inlines: fn(List(Inline)) -> List(Element(msg)),
+    embed_view: fn(Embed) -> Promise(Element(msg)),
+  )
 }
 
 pub fn render(
   markdown: String,
+  image_url: fn(String) -> String,
   embed_view: fn(Embed) -> Promise(Element(msg)),
 ) -> Promise(List(Element(msg))) {
   let document = parse(markdown)
-  let renderer = Renderer(document:, embed_view:)
+  let view_inlines = inline.view(document, image_url, _)
+  let renderer = Renderer(document:, view_inlines:, embed_view:)
   let #(ids, blocks) = blocks_view(renderer, dict.new(), document.blocks, Loose)
   let notes = footnotes(renderer, ids)
   use blocks <- promise.await(blocks)
@@ -136,7 +142,7 @@ fn block_view(
   case block {
     Heading(level:, inlines:, ..) -> {
       let #(ids, id) = heading.id(ids, inlines)
-      let heading = heading.view(renderer.document, level, id, inlines)
+      let heading = heading.view(renderer.view_inlines, level, id, inlines)
 
       #(ids, promise.resolve([heading]))
     }
@@ -167,7 +173,7 @@ fn block_view(
     }
     HtmlBlock(raw) -> #(ids, html_block(renderer, raw))
     Table(header:, rows:) -> {
-      let table = table.view(renderer.document, header, rows)
+      let table = table.view(renderer.view_inlines, header, rows)
 
       #(ids, promise.resolve([table]))
     }
@@ -197,21 +203,19 @@ fn paragraph(
   inlines: List(Inline),
   pack: ListPack,
 ) -> Promise(List(Element(msg))) {
-  let document = renderer.document
-
   case visible(inlines) {
     [RawHtml(raw)] -> html_block(renderer, raw)
     [FullImage(..) as image, SoftBreak, Emphasis(caption)]
     | [RefImage(..) as image, SoftBreak, Emphasis(caption)] -> {
-      let image = inline.view(document, [image])
-      let caption = html.figcaption([], inline.view(document, caption))
+      let image = renderer.view_inlines([image])
+      let caption = html.figcaption([], renderer.view_inlines(caption))
 
       promise.resolve([html.figure([], list.append(image, [caption]))])
     }
     inlines ->
       case pack {
-        Tight -> promise.resolve(inline.view(document, inlines))
-        Loose -> promise.resolve([html.p([], inline.view(document, inlines))])
+        Tight -> promise.resolve(renderer.view_inlines(inlines))
+        Loose -> promise.resolve([html.p([], renderer.view_inlines(inlines))])
       }
   }
 }

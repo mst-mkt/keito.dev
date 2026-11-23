@@ -9,6 +9,13 @@ import lustre/element
 import lustre/element/html
 
 fn render(markdown: String) -> Promise(String) {
+  render_with(markdown, fn(src) { src })
+}
+
+fn render_with(
+  markdown: String,
+  image_url: fn(String) -> String,
+) -> Promise(String) {
   let embed_view = fn(embed) {
     case embed {
       LinkCard(url:) -> html.a([attribute.href(url)], [])
@@ -16,7 +23,7 @@ fn render(markdown: String) -> Promise(String) {
     }
     |> promise.resolve
   }
-  use elements <- promise.map(markdown.render(markdown, embed_view))
+  use elements <- promise.map(markdown.render(markdown, image_url, embed_view))
 
   list.map(elements, element.to_string) |> string.concat
 }
@@ -142,6 +149,16 @@ pub fn render_image_caption_test() {
 
   assert html
     == "<figure><img alt=\"a\" loading=\"lazy\" src=\"https://example.com/a.png\"><figcaption>b</figcaption></figure>"
+}
+
+pub fn render_image_url_test() {
+  let markdown = "![a](./a.webp)"
+  let image_url = fn(src) { "/blog/post/" <> string.drop_start(src, 2) }
+
+  use html <- promise.map(render_with(markdown, image_url))
+
+  assert html
+    == "<p><img alt=\"a\" loading=\"lazy\" src=\"/blog/post/a.webp\"></p>"
 }
 
 pub fn render_external_link_test() {

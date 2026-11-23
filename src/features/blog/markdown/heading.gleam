@@ -7,13 +7,13 @@ import gleam/string
 import lustre/attribute
 import lustre/element.{type Element}
 import lustre/element/html
-import mork/document.{type Document, type Inline}
+import mork/document.{type Inline}
 
 pub type Ids =
   Dict(String, Int)
 
 pub fn view(
-  document: Document,
+  view_inlines: fn(List(Inline)) -> List(Element(msg)),
   level: Int,
   id: String,
   inlines: List(Inline),
@@ -28,7 +28,7 @@ pub fn view(
     )
 
   element.element("h" <> int.to_string(level), [attribute.id(id)], [
-    html.span([], inline.view(document, inlines)),
+    html.span([], view_inlines(inlines)),
     anchor,
   ])
 }

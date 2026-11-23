@@ -1,21 +1,19 @@
-import features/blog/markdown/inline
 import gleam/list
 import gleam/string
 import lustre/attribute.{type Attribute}
 import lustre/element.{type Element}
 import lustre/element/html
 import mork/document.{
-  type Alignment, type Cell, type Document, type Inline, type THead, Center,
-  Left, Right, Text,
+  type Alignment, type Cell, type Inline, type THead, Center, Left, Right, Text,
 }
 
 pub fn view(
-  document: Document,
+  view_inlines: fn(List(Inline)) -> List(Element(msg)),
   header: List(THead),
   rows: List(List(Cell)),
 ) -> Element(msg) {
   let aligns = list.map(header, fn(head) { head.align })
-  let content = fn(inlines) { inline.view(document, trim(inlines)) }
+  let content = fn(inlines) { view_inlines(trim(inlines)) }
   let head =
     list.map(header, fn(head) {
       html.th(align_attributes(head.align), content(head.inlines))

@@ -22,8 +22,12 @@ const wide =
 const punctuation =
   "^[\\u3000-\\u303f\\uff01-\\uff0f\\uff1a-\\uff20\\uff3b-\\uff40\\uff5b-\\uff65]$"
 
-pub fn view(document: Document, inlines: List(Inline)) -> List(Element(msg)) {
-  join_lines(inlines) |> list.map(inline_view(document, _))
+pub fn view(
+  document: Document,
+  image_url: fn(String) -> String,
+  inlines: List(Inline),
+) -> List(Element(msg)) {
+  join_lines(inlines) |> list.map(inline_view(document, image_url, _))
 }
 
 fn join_lines(inlines: List(Inline)) -> List(Inline) {
@@ -56,25 +60,31 @@ fn matches(character: Result(String, Nil), pattern: String) -> Bool {
   }
 }
 
-fn inline_view(document: Document, inline: Inline) -> Element(msg) {
+fn inline_view(
+  document: Document,
+  image_url: fn(String) -> String,
+  inline: Inline,
+) -> Element(msg) {
   case inline {
     Text(text) -> html.text(html_entity.decode(text))
     CodeSpan(code) -> html.code([], [html.text(code)])
-    Emphasis(inlines) -> html.em([], view(document, inlines))
-    Strong(inlines) -> html.strong([], view(document, inlines))
-    Strikethrough(inlines) -> html.del([], view(document, inlines))
-    Highlight(inlines) -> html.mark([], view(document, inlines))
-    FullLink(text:, data:) -> link(destination(data.dest), view(document, text))
+    Emphasis(inlines) -> html.em([], view(document, image_url, inlines))
+    Strong(inlines) -> html.strong([], view(document, image_url, inlines))
+    Strikethrough(inlines) -> html.del([], view(document, image_url, inlines))
+    Highlight(inlines) -> html.mark([], view(document, image_url, inlines))
+    FullLink(text:, data:) ->
+      link(destination(data.dest), view(document, image_url, text))
     RefLink(text:, label:) ->
       case dict.get(document.links, label) {
-        Ok(data) -> link(destination(data.dest), view(document, text))
-        Error(Nil) -> element.fragment(view(document, text))
+        Ok(data) ->
+          link(destination(data.dest), view(document, image_url, text))
+        Error(Nil) -> element.fragment(view(document, image_url, text))
       }
-    FullImage(text:, data:) -> image(destination(data.dest), text)
+    FullImage(text:, data:) -> image(image_url(destination(data.dest)), text)
     RefImage(text:, label:) ->
       case dict.get(document.links, label) {
-        Ok(data) -> image(destination(data.dest), text)
-        Error(Nil) -> element.fragment(view(document, text))
+        Ok(data) -> image(image_url(destination(data.dest)), text)
+        Error(Nil) -> element.fragment(view(document, image_url, text))
       }
     Autolink(uri:, text:) -> link(uri, [html.text(option.unwrap(text, uri))])
     EmailAutolink(mail:) -> link("mailto:" <> mail, [html.text(mail)])
@@ -92,7 +102,8 @@ fn inline_view(document: Document, inline: Inline) -> Element(msg) {
         ),
       ])
     }
-    InlineHtml(children:, ..) -> element.fragment(view(document, children))
+    InlineHtml(children:, ..) ->
+      element.fragment(view(document, image_url, children))
     RawHtml(raw) ->
       case string.starts_with(raw, "<!--") {
         True -> element.none()

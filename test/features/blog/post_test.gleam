@@ -61,6 +61,12 @@ pub fn decoder_defaults_test() {
   assert result == Ok(new_post("a", "2025-11-15"))
 }
 
+pub fn image_url_test() {
+  assert post.image_url("a", "./b.webp") == "/blog/a/b.webp"
+  assert post.image_url("a", "https://example.com/b.webp")
+    == "https://example.com/b.webp"
+}
+
 pub fn display_date_test() {
   let date = "2025-12-07"
 
