@@ -17,6 +17,7 @@ import gleam/list
 import gleam/option.{None, Some}
 import gleam/result
 import gleam/string
+import layouts/base
 import lib/duration
 import lib/workers_context
 import lustre/element
@@ -38,9 +39,16 @@ pub fn get(context: Context, slug: String) -> Promise(Result(Post, Nil)) {
 }
 
 pub fn source(context: Context, slug: String) -> Promise(Result(String, Nil)) {
-  use found <- promise.map(fetch_file(context, markdown_file(slug)))
+  let sizes = images.sizes(context, slug)
+  use found <- promise.try_await(fetch_file(context, markdown_file(slug)))
+  use sizes <- promise.map(sizes)
+  let paths = result.map(sizes, dict.keys) |> result.unwrap([])
 
-  result.map(found, fn(found) { found.body })
+  Ok(
+    markdown.replace_images(found.body, paths, fn(path) {
+      base.origin <> post.image_url(slug, path)
+    }),
+  )
 }
 
 pub type Article {

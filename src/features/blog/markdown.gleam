@@ -52,6 +52,16 @@ pub fn render(
   list.append(blocks, notes)
 }
 
+pub fn replace_images(
+  markdown: String,
+  paths: List(String),
+  url: fn(String) -> String,
+) -> String {
+  list.fold(paths, markdown, fn(markdown, path) {
+    string.replace(markdown, "](" <> path, "](" <> url(path))
+  })
+}
+
 pub fn embeds(markdown: String) -> List(Embed) {
   parse(markdown) |> all_blocks |> list.flat_map(block_embeds)
 }

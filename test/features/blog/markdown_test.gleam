@@ -251,3 +251,14 @@ pub fn render_footnote_test() {
     <> element.to_string(back)
     <> "</a></li></ol></section>"
 }
+
+pub fn replace_images_test() {
+  let markdown =
+    "![a](./b.webp)\n![c](./d.webp \"e\")\n![f](https://example.com/g.webp)"
+  let url = fn(path) {
+    "https://example.com/post/" <> string.drop_start(path, 2)
+  }
+
+  assert markdown.replace_images(markdown, ["./b.webp", "./d.webp"], url)
+    == "![a](https://example.com/post/b.webp)\n![c](https://example.com/post/d.webp \"e\")\n![f](https://example.com/g.webp)"
+}
