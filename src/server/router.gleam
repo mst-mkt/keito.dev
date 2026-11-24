@@ -40,9 +40,16 @@ pub fn route(req: Request(Body), context: Context) -> Promise(Response(Body)) {
 
   case request.path_segments(req) {
     [] -> index.handle(req, context)
-    ["_", "links", "new"] -> new.handle(req, context)
-    ["_", "links", id, "edit"] -> edit.handle(req, context, id)
-    ["_", "links", id, "delete"] -> delete.handle(req, context, id)
+    ["_", ..path] -> {
+      use <- middleware.require_access(req)
+
+      case path {
+        ["links", "new"] -> new.handle(req, context)
+        ["links", id, "edit"] -> edit.handle(req, context, id)
+        ["links", id, "delete"] -> delete.handle(req, context, id)
+        _ -> not_found.handle(req, context)
+      }
+    }
     ["blog"] -> blog.handle(req, context)
     ["blog", "atom.xml"] -> atom.handle(req, context)
     ["blog", slug] ->

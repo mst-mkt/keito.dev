@@ -5,6 +5,7 @@ import gleam/http/response.{type Response}
 import gleam/javascript/promise.{type Promise}
 import gleam/list
 import hinoto/body.{type Body}
+import lib/vite
 import server/respond
 
 pub fn apply(
@@ -30,6 +31,18 @@ pub fn require_methods(
   case list.contains(allowed, req.method) {
     True -> next()
     False -> promise.resolve(respond.method_not_allowed(allowed))
+  }
+}
+
+pub fn require_access(
+  req: Request(Body),
+  next: fn() -> Promise(Response(Body)),
+) -> Promise(Response(Body)) {
+  use <- bool.lazy_guard(vite.is_dev(), next)
+
+  case request.get_header(req, "cf-access-jwt-assertion") {
+    Ok(_) -> next()
+    Error(_) -> promise.resolve(respond.text(403, "Forbidden"))
   }
 }
 
