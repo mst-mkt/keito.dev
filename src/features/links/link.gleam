@@ -22,7 +22,9 @@ pub const no_errors = Errors(id: None, name: None, url: None)
 
 pub const list_path = "/links"
 
-pub const new_path = "/links/new"
+const admin_path = "/_"
+
+pub const new_path = admin_path <> list_path <> "/new"
 
 pub const origin = "https://keito.dev"
 
@@ -37,11 +39,11 @@ pub fn page_path(id: String) -> String {
 }
 
 pub fn edit_path(id: String) -> String {
-  page_path(id) <> "/edit"
+  admin_path <> page_path(id) <> "/edit"
 }
 
 pub fn delete_path(id: String) -> String {
-  page_path(id) <> "/delete"
+  admin_path <> page_path(id) <> "/delete"
 }
 
 pub fn wallet_path(id: String) -> String {

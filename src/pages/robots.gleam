@@ -14,6 +14,7 @@ const lines = [
   "User-agent: *",
   "Content-Signal: search=yes, ai-input=yes, ai-train=yes",
   "Allow: /",
+  "Disallow: /_/",
   "Disallow: /links/*/wallet",
   "Sitemap: " <> base.origin <> sitemap.path,
 ]
