@@ -1,6 +1,7 @@
 import components/dock
 import components/icons
 import components/side_nav.{Item}
+import components/text_link
 import features/links/link.{type Draft, type Errors, type Link}
 import features/links/link_form
 import features/links/store
@@ -74,9 +75,20 @@ fn view(
       ]),
     ],
     content: [
-      html.div([attribute.class("grid enter gap-y-12")], [
-        html.h1([attribute.class("text-2xl font-bold break-all")], [
+      html.div([attribute.class("grid enter gap-y-8")], [
+        html.h1([attribute.class("sr-only")], [
           html.text("Edit " <> current.name),
+        ]),
+        html.p([attribute.class("text-muted")], [
+          html.text("Editing "),
+          text_link.view(current.name, link.page_path(current.id)),
+          html.text(" "),
+          html.span([attribute.class("text-subtle")], [
+            html.text(
+              "(" <> link.display_url(link.short_url(current.id)) <> ")",
+            ),
+          ]),
+          html.text("."),
         ]),
         link_form.view(draft, errors, "Save changes"),
       ]),

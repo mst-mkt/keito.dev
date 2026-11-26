@@ -76,14 +76,7 @@ fn view(context: Context, links: List(Link)) -> Element(Nil) {
     ],
     content: [
       html.div([attribute.class("grid enter gap-y-12")], [
-        html.hgroup([attribute.class("grid")], [
-          html.p([attribute.class("text-sm text-subtle")], [
-            html.text("mst-mkt/"),
-          ]),
-          html.h1([attribute.class("text-2xl font-bold")], [
-            html.text("links"),
-          ]),
-        ]),
+        html.h1([attribute.class("sr-only")], [html.text("Links")]),
         case links {
           [] ->
             html.p([attribute.class("text-muted")], [html.text("No links.")])

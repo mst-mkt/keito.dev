@@ -1,6 +1,7 @@
 import components/dock
 import components/icons
 import components/side_nav.{Item}
+import components/text_link
 import features/links/link.{type Draft, type Errors}
 import features/links/link_form
 import features/links/submission
@@ -56,9 +57,16 @@ fn view(context: Context, draft: Draft, errors: Errors) -> Element(Nil) {
       ]),
     ],
     content: [
-      html.div([attribute.class("grid enter gap-y-12")], [
-        html.h1([attribute.class("text-2xl font-bold")], [
-          html.text("New link"),
+      html.div([attribute.class("grid enter gap-y-8")], [
+        html.h1([attribute.class("sr-only")], [html.text("New link")]),
+        html.p([attribute.class("text-muted")], [
+          html.text("Add a link to "),
+          text_link.view(link.list_path, link.list_path),
+          html.text(". It gets a short URL at "),
+          html.code([attribute.class("font-mono text-sm")], [
+            html.text(link.display_url(link.short_url("<id>"))),
+          ]),
+          html.text("."),
         ]),
         link_form.view(draft, errors, "Add link"),
       ]),

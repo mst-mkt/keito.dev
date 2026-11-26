@@ -52,26 +52,37 @@ fn view(context: Context, current: Link) -> Element(Nil) {
       ]),
     ],
     content: [
-      html.div([attribute.class("grid enter gap-y-12")], [
-        html.h1([attribute.class("text-2xl font-bold break-all")], [
+      html.div([attribute.class("grid enter gap-y-8")], [
+        html.h1([attribute.class("sr-only")], [
           html.text("Delete " <> current.name),
         ]),
         html.p([], [
-          html.code([], [html.text(link.redirect_path(current.id))]),
+          html.text("The short URL for " <> current.name <> ", "),
+          html.code([attribute.class("font-mono text-sm wrap-anywhere")], [
+            html.text(link.display_url(link.short_url(current.id))),
+          ]),
           html.text(
-            " will stop working, including QR codes that have already been shared.",
+            ", will stop working, including QR codes that have already been shared.",
           ),
         ]),
-        html.form([attribute.method("post"), attribute.class("flex gap-x-3")], [
-          button.new()
-            |> button.variant(button.Danger)
-            |> button.view([attribute.type_("submit")], [
-              icons.trash([attribute.aria_hidden(True)]),
-              html.text("Delete"),
-            ]),
-          button.new()
-            |> button.link(link.page_path(current.id), [], [html.text("Cancel")]),
-        ]),
+        html.form(
+          [attribute.method("post"), attribute.class("flex min-w-0 gap-x-3")],
+          [
+            button.new()
+              |> button.variant(button.Danger)
+              |> button.class("min-w-0")
+              |> button.view([attribute.type_("submit")], [
+                icons.trash([attribute.aria_hidden(True)]),
+                html.span([attribute.class("truncate")], [
+                  html.text("Delete " <> current.name),
+                ]),
+              ]),
+            button.new()
+              |> button.link(link.page_path(current.id), [], [
+                html.text("Cancel"),
+              ]),
+          ],
+        ),
       ]),
     ],
     right: [],

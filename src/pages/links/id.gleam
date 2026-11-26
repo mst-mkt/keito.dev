@@ -87,17 +87,48 @@ fn view(context: Context, current: Link) -> Element(Nil) {
       ]),
     ],
     content: [
-      html.div([attribute.class("grid enter gap-y-12")], [
-        html.hgroup([attribute.class("grid gap-y-1")], [
-          html.h1([attribute.class("text-2xl font-bold break-all")], [
-            html.text(current.name),
-          ]),
-          html.p([attribute.class("truncate text-sm text-subtle")], [
-            html.text(link.display_url(current.url)),
-          ]),
-        ]),
+      html.div([attribute.class("grid enter gap-y-8")], [
+        html.div(
+          [
+            attribute.class(
+              "flex flex-col gap-x-6 gap-y-4 sm:flex-row sm:items-center",
+            ),
+          ],
+          [
+            html.div([attribute.class("shrink-0 sm:w-50")], [
+              qr_code.view(short_url, "QR code for " <> short_url),
+            ]),
+            html.dl([attribute.class("grid gap-y-3")], [
+              html.div([], [
+                html.dt([attribute.class("text-xs text-subtle")], [
+                  html.text("Name"),
+                ]),
+                html.dd([], [
+                  html.h1([attribute.class("wrap-break-word")], [
+                    html.text(current.name),
+                  ]),
+                ]),
+              ]),
+              html.div([], [
+                html.dt([attribute.class("text-xs text-subtle")], [
+                  html.text("Destination"),
+                ]),
+                html.dd([attribute.class("wrap-anywhere")], [
+                  html.text(link.display_url(current.url)),
+                ]),
+              ]),
+              html.div([], [
+                html.dt([attribute.class("text-xs text-subtle")], [
+                  html.text("Short URL"),
+                ]),
+                html.dd([attribute.class("font-mono text-sm wrap-anywhere")], [
+                  html.text(link.display_url(short_url)),
+                ]),
+              ]),
+            ]),
+          ],
+        ),
         html.div([attribute.class("grid gap-y-3")], [
-          qr_code.view(short_url, "QR code for " <> short_url),
           html.div([attribute.class("flex flex-wrap gap-2")], [
             button.new()
               |> button.class("grow basis-36")

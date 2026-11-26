@@ -49,7 +49,7 @@ fn view(context: Context) -> Element(Nil) {
     ],
     content: [
       html.div([attribute.class("grid enter gap-y-8")], [
-        html.h1([attribute.class("font-mono text-2xl font-bold break-all")], [
+        html.h1([attribute.class("font-mono break-all")], [
           html.text(uuid.value),
         ]),
         html.dl(
